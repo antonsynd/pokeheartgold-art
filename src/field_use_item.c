@@ -665,12 +665,12 @@ static BOOL Task_ActivateDowsingMchnUI(TaskManager *taskManager) {
 
     switch (*state_p) {
     case 0:
-        FieldSystem_SwitchBottomScreenApp(fieldSystem, 4, NULL);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_DOWSING_MCHN, NULL);
         fieldSystem->suppressBottomScreenDim = TRUE;
         (*state_p)++;
         break;
     case 1:
-        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
+        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
             MapObjectManager_UnpauseAllMovement(fieldSystem->mapObjectManager);
             return TRUE;
         }
@@ -772,7 +772,7 @@ int UseRegisteredItemButtonInField(FieldSystem *fieldSystem, u16 slot) {
     if (Save_VarsFlags_CheckBugContestFlag(Save_VarsFlags_Get(fieldSystem->saveData)) == TRUE) {
         return 0;
     }
-    if (FieldSystem_GetBottomScreenAppState(fieldSystem) != TRUE) {
+    if (FieldSystem_GetBottomScreenAppState(fieldSystem) != BOTTOM_SCREEN_APP_STATE_RUNNING) {
         return 0;
     }
     if (slot == 1) {
@@ -780,7 +780,7 @@ int UseRegisteredItemButtonInField(FieldSystem *fieldSystem, u16 slot) {
     } else {
         itemId = Bag_GetRegisteredItem2(Save_Bag_Get(fieldSystem->saveData));
     }
-    if (itemId == ITEM_DOWSING_MCHN && FieldSystem_GetBottomScreenAppId(fieldSystem) == 4) {
+    if (itemId == ITEM_DOWSING_MCHN && FieldSystem_GetBottomScreenAppId(fieldSystem) == BOTTOM_SCREEN_APP_DOWSING_MCHN) {
         return 0;
     }
     funcType = GetItemAttr(itemId, ITEMATTR_FIELDUSEFUNC, HEAP_ID_FIELD2);

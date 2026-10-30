@@ -5085,9 +5085,9 @@ s32 WifiClub_StartMatch(WifiClubApp *app, s32 friendIndex, s32 status) {
     LinkSync_Init(HEAP_ID_15);
     WifiConnection_SetVoiceChatEnabled(app->clubData->own.voiceChat);
     if (WifiClub_IsGroupActivityStatus(status) == 1) {
-        WifiConnection_SetExtraHeapEnabled(1, 128);
+        WifiConnection_SetExtraHeapEnabled(TRUE, HEAP_ID_128);
     } else {
-        WifiConnection_SetExtraHeapEnabled(0, 128);
+        WifiConnection_SetExtraHeapEnabled(FALSE, HEAP_ID_128);
     }
     WifiClubComm_RegisterCommandsNoContext();
     return CommState_StartWifiMatch(friendIndex);

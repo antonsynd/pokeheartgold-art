@@ -4931,12 +4931,12 @@ BOOL NativeScript_WaitTouchscreenMenuHidden(ScriptContext *ctx);
 
 BOOL ScrCmd_TouchscreenMenuHide(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == 3) {
+    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == BOTTOM_SCREEN_APP_CHOICE_MENU) {
         return FALSE;
     }
-    FieldSystem_SwitchBottomScreenApp(fieldSystem, 3, 0);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, 0);
     SetupNativeScript(ctx, NativeScript_WaitTouchscreenMenuHidden);
-    fieldSystem->savedBottomScreenAppId = 3;
+    fieldSystem->savedBottomScreenAppId = BOTTOM_SCREEN_APP_CHOICE_MENU;
     return TRUE;
 }
 
@@ -4945,7 +4945,7 @@ BOOL NativeScript_WaitTouchscreenMenuHidden(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
     int appId = FieldSystem_GetBottomScreenAppId(fieldSystem);
     int appState = FieldSystem_GetBottomScreenAppState(fieldSystem);
-    if (appId == 3 && appState == 1) {
+    if (appId == BOTTOM_SCREEN_APP_CHOICE_MENU && appState == BOTTOM_SCREEN_APP_STATE_RUNNING) {
         return TRUE;
     } else {
         return FALSE;
@@ -4956,9 +4956,9 @@ BOOL NativeScript_WaitTouchscreenMenuShown(ScriptContext *ctx);
 
 BOOL ScrCmd_TouchscreenMenuShow(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, 0);
     SetupNativeScript(ctx, NativeScript_WaitTouchscreenMenuShown);
-    fieldSystem->savedBottomScreenAppId = 0;
+    fieldSystem->savedBottomScreenAppId = BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU;
     return TRUE;
 }
 
@@ -4967,7 +4967,7 @@ BOOL NativeScript_WaitTouchscreenMenuShown(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
     int appId = FieldSystem_GetBottomScreenAppId(fieldSystem);
     int appState = FieldSystem_GetBottomScreenAppState(fieldSystem);
-    if (appId == 0 && appState == 1) {
+    if (appId == BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU && appState == BOTTOM_SCREEN_APP_STATE_RUNNING) {
         return TRUE;
     } else {
         return FALSE;
@@ -4987,7 +4987,7 @@ BOOL ScrCmd_GetMenuChoice(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 var_ret = ScriptReadHalfword(ctx);
     ctx->data[0] = var_ret;
-    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 3, &ctx->data[1]);
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, TOUCHSCREEN_CHOICE_MENU_STATE_SHOW_YES_NO, &ctx->data[1]);
     SetupNativeScript(ctx, NativeScript_WaitTouchscreenMenuChoice);
     return TRUE;
 }
@@ -4997,7 +4997,7 @@ BOOL NativeScript_WaitTouchscreenMenuChoice(ScriptContext *ctx) {
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
     int appId = FieldSystem_GetBottomScreenAppId(fieldSystem);
     int menuState = FieldSystem_GetTouchscreenChoiceMenuState(fieldSystem);
-    if (appId == 3 && menuState == 6) {
+    if (appId == BOTTOM_SCREEN_APP_CHOICE_MENU && menuState == TOUCHSCREEN_CHOICE_MENU_STATE_DONE) {
         *p_ret = ctx->data[1];
         return TRUE;
     } else {
@@ -5031,7 +5031,7 @@ BOOL ScrCmd_MenuExec(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     struct ScriptMenu **p_menu = FieldSystem_GetTouchscreenChoiceMenuList(fieldSystem);
     u16 *p_ret = GetVarPointer(fieldSystem, ctx->data[0]);
-    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, p_ret);
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, TOUCHSCREEN_CHOICE_MENU_STATE_SHOW_LIST, p_ret);
     FieldSystem_SetTouchscreenChoiceMenuCallback(fieldSystem, MenuExec_PrintItemHelp, *p_menu);
     SetupNativeScript(ctx, NativeScript_WaitMenuExec);
     return TRUE;
@@ -5088,7 +5088,7 @@ BOOL ScrCmd_BankTransaction(ScriptContext *ctx) {
     work->mode = mode;
     work->sub->max = GetMaxBankTransactionAmount(ctx->fieldSystem, mode);
     work->sub->selected = -1;
-    FieldSystem_SwitchBottomScreenApp(ctx->fieldSystem, 5, work->sub);
+    FieldSystem_SwitchBottomScreenApp(ctx->fieldSystem, BOTTOM_SCREEN_APP_NUMBER_ENTRY, work->sub);
     ctx->data[0] = var_ret;
     SetupNativeScript(ctx, NativeScript_WaitBankTransaction);
     return TRUE;

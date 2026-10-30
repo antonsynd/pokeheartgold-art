@@ -284,7 +284,7 @@ void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void
 }
 
 // The choice menu app: TOUCHSCREEN_CHOICE_MENU_STATE_SHOW_YES_NO / SHOW_LIST; the answer is written to *result.
-void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int appId, int state, void *result) {
+void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, enum BottomScreenAppId appId, enum TouchscreenChoiceMenuState state, void *result) {
     BottomScreenAppManager *manager = SysTask_GetData(fieldSystem->bottomScreenTask);
     TouchscreenChoiceMenuData *menu = SysTask_GetData(manager->app);
     if (appId != FieldSystem_GetBottomScreenAppId(fieldSystem)) {
@@ -294,7 +294,7 @@ void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int app
     menu->result = result;
 }
 
-int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem) {
+enum TouchscreenChoiceMenuState FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem) {
     BottomScreenAppManager *manager = SysTask_GetData(fieldSystem->bottomScreenTask);
     TouchscreenChoiceMenuData *menu = SysTask_GetData(manager->app);
     return menu->state;

@@ -1103,7 +1103,7 @@ s32 WifiClubGameEntry_Leader_Start(WifiClubGameEntry *gameEntry, WifiClubGameEnt
         WifiClubGameEntry_EnableVoiceChat(gameEntry);
     }
     WifiConnection_SetDisconnectWhenAlone(0);
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     WifiClubGameEntry_AddMemberAvatar(gameEntry, Comm_GetLocalNetId(), heapID);
     gameEntry->state = 1;
     return 0;
@@ -1338,7 +1338,7 @@ s32 WifiClubGameEntry_Leader_CheckStatuses(WifiClubGameEntry *gameEntry, WifiClu
 }
 
 s32 WifiClubGameEntry_Leader_StartFinalSync(WifiClubGameEntry *gameEntry, WifiClubGameEntryArgs *args, enum HeapID heapID) {
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     LinkSync_StartSync(18);
     gameEntry->state = 18;
     return 0;
@@ -1450,7 +1450,7 @@ s32 WifiClubGameEntry_Leader_Cancel(WifiClubGameEntry *gameEntry, WifiClubGameEn
     CommState_LeaveWifiMatch();
     WifiClubGameEntry_ReleaseAllMembers(gameEntry);
     CommState_SetWifiClubLinkMode();
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     return 1;
 }
 
@@ -1488,7 +1488,7 @@ s32 WifiClubGameEntry_Leader_EndAfterMemberDropped(WifiClubGameEntry *gameEntry,
     CommState_SetWifiClubLinkMode();
     WifiClubGameEntry_ReleaseAllMembers(gameEntry);
     gameEntry->result = 0;
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     return 1;
 }
 
@@ -1533,7 +1533,7 @@ s32 WifiClubGameEntry_Leader_HandleVoiceChatYesNo(WifiClubGameEntry *gameEntry, 
 
 s32 WifiClubGameEntry_Member_Start(WifiClubGameEntry *gameEntry, WifiClubGameEntryArgs *args, enum HeapID heapID) {
     CommPlayerInfo_SendLocal();
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     WifiClubGameEntry_StartTimeout(gameEntry);
     gameEntry->state = 1;
     return 0;
@@ -1621,7 +1621,7 @@ s32 WifiClubGameEntry_Member_EndRefused(WifiClubGameEntry *gameEntry, WifiClubGa
         return 0;
     }
     gameEntry->result = 0;
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     return 1;
 }
 
@@ -1721,7 +1721,7 @@ s32 WifiClubGameEntry_Member_CheckStatuses(WifiClubGameEntry *gameEntry, WifiClu
 }
 
 s32 WifiClubGameEntry_Member_StartFinalSync(WifiClubGameEntry *gameEntry, WifiClubGameEntryArgs *args, enum HeapID heapID) {
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     LinkSync_StartSync(18);
     gameEntry->state = 14;
     return 0;
@@ -1761,7 +1761,7 @@ s32 WifiClubGameEntry_Member_EndAfterDropped(WifiClubGameEntry *gameEntry, WifiC
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
     gameEntry->result = 0;
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     return 1;
 }
 
@@ -1942,6 +1942,6 @@ s32 WifiClubGameEntry_Member_Cancel(WifiClubGameEntry *gameEntry, WifiClubGameEn
     CommState_LeaveWifiMatch();
     CommState_SetWifiClubLinkMode();
     gameEntry->result = 0;
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     return 1;
 }

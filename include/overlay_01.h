@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_OVERLAY_01_H
 #define POKEHEARTGOLD_OVERLAY_01_H
 
+#include "constants/bottom_screen_app.h"
+
 #include "field/map_prop_animation.h"
 #include "field/rock_smash_item.h"
 
@@ -40,7 +42,7 @@ struct FishingRodWork *CreateFishingRodTaskEnv(FieldSystem *fieldSystem, enum He
 void FieldSystem_TryStorePlayerLocation(FieldSystem *fieldSystem);
 void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void *args);
 u8 FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
-int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
+enum TouchscreenChoiceMenuState FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
 u8 FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
 FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, enum FollowMonBallKind kind);
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 direction);
@@ -98,7 +100,7 @@ void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
 void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int kind);
 void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem);
 void MapObject_SetPositionNextTo(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, u32 direction, u32 facing);
-void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, int appId, int state, void *result);
+void FieldSystem_SetTouchscreenChoiceMenuState(FieldSystem *fieldSystem, enum BottomScreenAppId appId, enum TouchscreenChoiceMenuState state, void *result);
 
 typedef BOOL (*TouchscreenChoiceMenuCallback)(struct ScriptMenu *menu, int idx);
 

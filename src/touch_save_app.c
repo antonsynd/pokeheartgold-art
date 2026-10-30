@@ -263,7 +263,7 @@ static void TouchSaveApp_Task(SysTask *task, TouchSaveAppData *data) {
     } else {
         if (data->fieldSystem->startMenuState == 2 && sTouchSaveAppStateFuncs[data->state](data) == TRUE) {
             data->fieldSystem->startMenuState = 3;
-            FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, 0);
+            FieldSystem_SwitchBottomScreenApp(data->fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, 0);
         }
     }
 }

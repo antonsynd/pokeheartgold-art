@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_FIELD_TOUCHSCREEN_CHOICE_MENU_H
 #define POKEHEARTGOLD_FIELD_TOUCHSCREEN_CHOICE_MENU_H
 
+#include "constants/bottom_screen_app.h"
+
 #include "bg_window.h"
 #include "field_system.h"
 #include "message_format.h"
@@ -14,7 +16,7 @@
 
 // The task data of the touch YES/NO buttons and the touch multichoice list (BOTTOM_SCREEN_APP_CHOICE_MENU).
 typedef struct TouchscreenChoiceMenuData {
-    u32 state;
+    enum TouchscreenChoiceMenuState state;
     u16 *result;
     u32 unk_08;
     struct ScriptMenu *menu; // ScrCmd_MenuExec list

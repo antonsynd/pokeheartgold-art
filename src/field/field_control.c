@@ -111,7 +111,7 @@ static void FieldInput_Clear(FieldInput *fieldInput) {
 }
 
 static BOOL FieldSystem_IsBottomScreenAppReady(FieldSystem *fieldSystem) {
-    return FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE;
+    return FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING;
 }
 
 static void FieldControl_RequestRegisteredItemAnim(FieldSystem *fieldSystem, int item) {
@@ -149,7 +149,7 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
             fieldInput->switchBottomScreen = TRUE;
             fieldSystem->lastTouchMenuInput = 0;
         } else if (newKeys & PAD_BUTTON_X || fieldSystem->lastTouchMenuInput) {
-            if (FieldSystem_GetBottomScreenAppId(fieldSystem) == 4) {
+            if (FieldSystem_GetBottomScreenAppId(fieldSystem) == BOTTOM_SCREEN_APP_DOWSING_MCHN) {
                 MenuInputStateMgr_SetState(&fieldSystem->menuInputState, MENU_INPUT_STATE_BUTTONS);
                 fieldInput->switchBottomScreen = TRUE;
                 fieldInput->menu = TRUE;
@@ -312,7 +312,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     }
 
     if (fieldInput->switchBottomScreen) {
-        FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, 0);
+        FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, 0);
         return 2;
     }
 

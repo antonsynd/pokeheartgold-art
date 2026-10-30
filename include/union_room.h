@@ -14,12 +14,12 @@ void UnionRoom_SendTalkResponse(struct UnionRoom *fieldSystem_unk80, int mode, i
 int UnionRoom_GetTalkReply(struct UnionRoom *fieldSystem_unk80);
 int UnionRoom_TrySendTalkCancel(struct UnionRoom *fieldSystem_unk80, int ret);
 void UnionRoom_RecvUnusedProfile(void);
-void UnionRoom_RecvTalkReply(int, int, const u8 *, FieldSystem *);
+void UnionRoom_RecvTalkReply(int netId, int size, const u8 *data, FieldSystem *fieldSystem);
 void UnionRoom_RecvUnused(void);
-void UnionRoom_RecvRestartSearch(int, int, void *, FieldSystem *);
-void Colosseum_RecvMixBattleMons(int, int, void *, FieldSystem *);
+void UnionRoom_RecvRestartSearch(int netId, int size, void *data, FieldSystem *fieldSystem);
+void Colosseum_RecvMixBattleMons(int netId, int size, void *data, FieldSystem *fieldSystem);
 u32 Colosseum_GetMixBattleMonsSize(void);
 void Colosseum_GetMixBattleMonsBuffer(void);
-void Colosseum_RecvMixBattleChoice(int, int, const u8 *, FieldSystem *);
+void Colosseum_RecvMixBattleChoice(int netId, int size, const u8 *data, FieldSystem *fieldSystem);
 
 #endif // POKEHEARTGOLD_UNION_ROOM_H

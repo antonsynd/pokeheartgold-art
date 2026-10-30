@@ -301,7 +301,7 @@ BOOL ScrCmd_MoveTutorChooseMove(ScriptContext *ctx) {
         ScriptMenu_AddListItem(*unk, 2, 0xff, 0xfffd);
     }
     ScriptMenu_AddListItem(*unk, 3, 0xff, 0xfffe);
-    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, 3, 7, GetVarPointer(fieldSystem, ctx->data[0]));
+    FieldSystem_SetTouchscreenChoiceMenuState(fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, TOUCHSCREEN_CHOICE_MENU_STATE_SHOW_LIST, GetVarPointer(fieldSystem, ctx->data[0]));
     SetupNativeScript(ctx, NativeScript_WaitMoveTutorMenu);
     u16 *unused = GetVarPointer(fieldSystem, ctx->data[0]); // yes, this is needed here to match
     return TRUE;

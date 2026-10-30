@@ -391,14 +391,14 @@ static void CommClub_CreateParentList() {
         sCommClubManager->buttonCount = 2;
         sCommClubManager->buttonSelection = 0xFFFF;
         sCommClubManager->buttonCloseRequest = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, BOTTOM_SCREEN_APP_COMM_CLUB_BUTTONS, &sCommClubManager->buttonMsgIds);
         CommClub_SetState(&CommClub_HandleParentList);
     }
 }
 
 static void CommClub_HandleParentList(void *task, CommClubManager *commClubManager) {
     CommClub_PrintOwnProfile(commClubManager);
-    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
+    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
         if (Comm_HasLinkError()) {
             sCommClubManager->retCode = 3;
             CommClub_ExitLink();
@@ -541,9 +541,9 @@ static void CommClub_WaitHostReply(void *task, CommClubManager *commClubManager)
             sCommClubManager->buttonCount = 1;
             sCommClubManager->buttonSelection = 0xFFFF;
             sCommClubManager->buttonCloseRequest = 0;
-            FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
+            FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, BOTTOM_SCREEN_APP_COMM_CLUB_BUTTONS, &sCommClubManager->buttonMsgIds);
             commClubManager->buttonsShown = 1;
-        } else if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
+        } else if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
             if (CommClub_HandleHostReply(task, commClubManager)) {
                 commClubManager->buttonCloseRequest = 2;
             } else if (PAD_BUTTON_B & gSystem.newKeys || commClubManager->buttonSelection == 0) {
@@ -578,7 +578,7 @@ static void CommClub_HandleLeaveGroupChoice(void *task, CommClubManager *commClu
     if (CommClub_IsYesNoReady(commClubManager)) {
         if (CommClub_HandleHostReply(task, commClubManager)) {
             CommClub_CloseYesNoButtons(commClubManager);
-        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
+        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == TOUCHSCREEN_CHOICE_MENU_STATE_DONE) {
             if (commClubManager->choiceResult == 0) {
                 CommClub_CloseMenus(task, commClubManager);
                 CommClub_PrintMessage(6, FALSE);
@@ -801,12 +801,12 @@ static void CommClub_CreateMemberList(s32 arg0_unused, CommClubManager *commClub
         }
         sCommClubManager->buttonSelection = 0xFFFF;
         sCommClubManager->buttonCloseRequest = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, BOTTOM_SCREEN_APP_COMM_CLUB_BUTTONS, &sCommClubManager->buttonMsgIds);
     }
 }
 
 static void CommClub_HandleMemberList(void *task, CommClubManager *commClubManager) {
-    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) != 1) {
+    if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) != BOTTOM_SCREEN_APP_STATE_RUNNING) {
         return;
     }
 
@@ -957,7 +957,7 @@ static void CommClub_HandleContactChoice(void *task, CommClubManager *commClubMa
         CommPlayerInfo_ClearPlayer(commClubManager->contactNetId);
         CommClub_PrintMessage(0, FALSE);
         CommClub_SetState(&CommClub_WaitProblemAckThenReopen);
-    } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
+    } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == TOUCHSCREEN_CHOICE_MENU_STATE_DONE) {
         if (commClubManager->choiceResult == 0) {
             if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && CommPlayerInfo_RulesetsMatch() == 0) {
                 CommClub_PrintMessage(116, FALSE);
@@ -1028,7 +1028,7 @@ static void CommClub_ReopenMemberList(void *arg0_unused, CommClubManager *commCl
         }
         sCommClubManager->buttonSelection = 0xFFFF;
         sCommClubManager->buttonCloseRequest = 0;
-        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
+        FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, BOTTOM_SCREEN_APP_COMM_CLUB_BUTTONS, &sCommClubManager->buttonMsgIds);
     }
 }
 
@@ -1106,7 +1106,7 @@ static void CommClub_HandleConfirmGroupChoice(void *task, CommClubManager *commC
             CommClub_CloseYesNoButtons(commClubManager);
             CommClub_SetState(&CommClub_GroupCancelled);
         } else {
-            if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
+            if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == TOUCHSCREEN_CHOICE_MENU_STATE_DONE) {
                 if (commClubManager->choiceResult == 0) {
                     if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                         for (int i = 1; i < Comm_CountConnected(); i++) {
@@ -1270,7 +1270,7 @@ static void CommClub_HandleCancelGroupChoice(void *task, CommClubManager *commCl
             CommClub_CloseYesNoButtons(commClubManager);
             CommClub_PrintAwaitingContact();
             CommClub_SetState(&CommClub_ReopenMemberList);
-        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == 6) {
+        } else if (FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) == TOUCHSCREEN_CHOICE_MENU_STATE_DONE) {
             if (commClubManager->choiceResult == 0) {
                 CommClub_ExitLink();
                 CommClub_CloseMenus(task, commClubManager);
@@ -1548,7 +1548,7 @@ static BOOL CommClub_HasErrorDummy() {
 }
 
 static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager) {
-    FieldSystem_SwitchBottomScreenApp(commClubManager->fieldSystem, 3, NULL);
+    FieldSystem_SwitchBottomScreenApp(commClubManager->fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, NULL);
     commClubManager->buttonsShown = 0;
     commClubManager->choiceResult = 0;
 }
@@ -1556,17 +1556,17 @@ static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager) {
 static BOOL CommClub_InitYesNoButtons(CommClubManager *commClubManager) {
     int appId = FieldSystem_GetBottomScreenAppId(commClubManager->fieldSystem);
     BOOL appState = FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem);
-    if (appId == 3 && appState == TRUE) {
-        FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 3, &commClubManager->choiceResult);
+    if (appId == BOTTOM_SCREEN_APP_CHOICE_MENU && appState == BOTTOM_SCREEN_APP_STATE_RUNNING) {
+        FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, TOUCHSCREEN_CHOICE_MENU_STATE_SHOW_YES_NO, &commClubManager->choiceResult);
         return TRUE;
     }
     return FALSE;
 }
 
 static BOOL CommClub_IsYesNoReady(CommClubManager *commClubManager) {
-    return FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) >= 4;
+    return FieldSystem_GetTouchscreenChoiceMenuState(commClubManager->fieldSystem) >= TOUCHSCREEN_CHOICE_MENU_STATE_YES_NO_INPUT;
 }
 
 static void CommClub_CloseYesNoButtons(CommClubManager *commClubManager) {
-    FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 11, &commClubManager->choiceResult);
+    FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, TOUCHSCREEN_CHOICE_MENU_STATE_CANCEL_YES_NO, &commClubManager->choiceResult);
 }

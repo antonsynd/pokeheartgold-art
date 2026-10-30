@@ -338,7 +338,7 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
     case START_MENU_STATE_INIT:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
         if (FieldSystem_GetBottomScreenAppId(fieldSystem)) {
-            FieldSystem_SwitchBottomScreenApp(fieldSystem, 0, NULL);
+            FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCHSCREEN_MENU, NULL);
             startMenu->state = START_MENU_STATE_2;
             break;
         }
@@ -351,10 +351,10 @@ static BOOL Task_StartMenu(TaskManager *taskManager) {
         startMenu->state = START_MENU_STATE_HANDLE_INPUT;
         break;
     case START_MENU_STATE_2:
-        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 6) {
+        if (FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_START_NEXT) {
             Task_StartMenu_DrawCursor(taskManager);
             fieldSystem->startMenuState = 1;
-        } else if (FieldSystem_GetBottomScreenAppState(fieldSystem) == 1) {
+        } else if (FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
             ItemCheckUseData_Init(fieldSystem, &startMenu->itemCheckUseData);
             FieldMove_InitCheckData(fieldSystem, &startMenu->fieldMoveCheckData);
             startMenu->state = START_MENU_STATE_HANDLE_INPUT;
@@ -565,7 +565,7 @@ static BOOL Task_StartMenu_HandleInput(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
+    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
         if (gSystem.newKeys & PAD_BUTTON_A) {
             if (!StartMenu_HandleKeyInput(taskManager, fieldSystem, startMenu)) {
                 return FALSE;
@@ -1127,7 +1127,7 @@ static BOOL Task_StartMenu_HandleSelection_Save(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
-    FieldSystem_SwitchBottomScreenApp(fieldSystem, 1, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_TOUCH_SAVE, NULL);
     startMenu->state = START_MENU_STATE_SAVE;
     return TRUE;
 }
@@ -1136,7 +1136,7 @@ static void Task_StartMenu_WaitSaveAppOpen(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == TRUE) {
+    if (FieldSystem_GetBottomScreenAppId(fieldSystem) == BOTTOM_SCREEN_APP_TOUCH_SAVE) {
         startMenu->state = START_MENU_STATE_7;
     }
 }
@@ -1145,7 +1145,7 @@ static void Task_StartMenu_WaitSaveAppClose(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == TRUE) {
+    if (!FieldSystem_GetBottomScreenAppId(fieldSystem) && FieldSystem_GetBottomScreenAppState(fieldSystem) == BOTTOM_SCREEN_APP_STATE_RUNNING) {
         if (fieldSystem->lastTouchMenuInput == 1) {
             fieldSystem->lastTouchMenuInput = 0;
             startMenu->state = START_MENU_STATE_CLOSE;
@@ -1159,7 +1159,7 @@ static BOOL StartMenu_SelectUnionChatLog(TaskManager *taskManager) {
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
-    FieldSystem_SwitchBottomScreenApp(fieldSystem, 8, NULL);
+    FieldSystem_SwitchBottomScreenApp(fieldSystem, BOTTOM_SCREEN_APP_UNION_CHAT_LOG, NULL);
     startMenu->state = START_MENU_STATE_19;
     return TRUE;
 }
