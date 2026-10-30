@@ -1071,9 +1071,9 @@ static void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapO
     FollowMon_GetCoordsInDirection(object, interaction->savedFacing, &x, &z);
     behavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
-        TallGrass_SpawnAt(object, 0, x, z, 1);
+        TallGrass_SpawnAt(object, FALSE, x, z, TRUE);
     } else if (MetatileBehavior_IsVeryTallGrass(behavior) == TRUE) {
-        VeryTallGrass_SpawnAt(object, 0, x, z, 1);
+        VeryTallGrass_SpawnAt(object, FALSE, x, z, TRUE);
     }
 }
 

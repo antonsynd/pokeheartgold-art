@@ -3,6 +3,7 @@
 
 #include "battle/battle_setup.h"
 #include "field/field_3d_object_task.h"
+#include "field/field_move_cut_in.h"
 #include "field/headbutt.h"
 
 #include "heap.h"
@@ -54,7 +55,7 @@ Field3dObjectTask *RockDebris_Create(FieldSystem *fieldSystem);
 Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem);
 void RockDebris_Delete(Field3dObjectTask *task);
 
-SysTask *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int kind, Pokemon *mon, u32 gender);
+SysTask *FieldMoveCutIn_Start(FieldSystem *fieldSystem, enum FieldMoveCutInKind kind, Pokemon *mon, u32 gender);
 BOOL FieldMoveCutIn_IsFinished(SysTask *work);
 void FieldMoveCutIn_Delete(SysTask *work);
 SysTask *FieldMoveCutIn_StartFlyWithObject(FieldSystem *fieldSystem, Pokemon *mon, LocalMapObject *object, LocalMapObject *otherObject);

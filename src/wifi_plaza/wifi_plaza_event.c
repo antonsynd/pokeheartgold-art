@@ -569,7 +569,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
 
         nextStep = WiFiPlazaPlayerState_AllocWork(state, 4);
         PlaySE(SEQ_SE_DP_SELECT);
-        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(player, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(player, FIELD2D_OBJECT_PARAM_DIRECTION));
         WiFiPlazaObj_SetHandler(objManager, special, WIFI_PLAZA_OBJ_HANDLER_IDLE);
         WiFiPlazaObj_SetAvatarMode(special, 0);
         WiFiPlazaObj_SetDirection(special, direction);

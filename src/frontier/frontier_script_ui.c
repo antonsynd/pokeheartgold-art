@@ -621,7 +621,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
             return;
         }
     case MOVEMENT_TASK_RUN:
-        if (Field2DObject_GetParam(data->object->object, 5) != 0) {
+        if (Field2DObject_GetParam(data->object->object, FIELD2D_OBJECT_PARAM_ACTION) != 0) {
             return;
         }
         if (opcode >= 0x20 && opcode <= 0x26) {
@@ -658,7 +658,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
         data->state = MOVEMENT_TASK_CHECK_END;
         return;
     case MOVEMENT_TASK_FINISH:
-        if (Field2DObject_GetParam(data->object->object, 5) == 0) {
+        if (Field2DObject_GetParam(data->object->object, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             (*data->runningCount)--;
             data->object->movementTask = NULL;
             Heap_Free(data);

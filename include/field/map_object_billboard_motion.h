@@ -5,7 +5,7 @@
 
 struct BillboardObject;
 
-void *MapObject_GetBillboard(LocalMapObject *object);
+struct BillboardObject *MapObject_GetBillboard(LocalMapObject *object);
 void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object);
 struct BillboardObject *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 

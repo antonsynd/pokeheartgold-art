@@ -625,7 +625,7 @@ BOOL ScrCmd_SetOtherObjectsFlag13(ScriptContext *ctx) {
     MapObjectManager *mapObjectManager;
     LocalMapObject *playerObj;
     LocalMapObject *curObj;
-    Sprite *sprite;
+    BillboardObject *sprite;
     s32 y;
     VecFx32 vec;
 

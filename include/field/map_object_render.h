@@ -21,7 +21,7 @@ Billboard *MapObjectRender_GetBillboards(MapObjectRender *render);
 BOOL MapObject_IsBillboardPending(LocalMapObject *object);
 void MapObject_ChangeBillboardSprite(LocalMapObject *object, u32 spriteId);
 // Returns 0; the callers ignore it.
-int MapObject_UpdateBillboardPosition(LocalMapObject *object, void *billboard);
+int MapObject_UpdateBillboardPosition(LocalMapObject *object, BillboardObject *billboard);
 void MapObjectRender_ReleaseSpriteResources(MapObjectManager *manager, u32 spriteId, LocalMapObject *skip);
 int MapObject_RequestBillboard(LocalMapObject *object, BillboardObject **billboard, u32 spriteId);
 void MapObject_CreateBillboard(LocalMapObject *object, BillboardObject **billboard);

@@ -574,8 +574,8 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_END);
             break;
         }
-        partnerIndex = WiFiPlazaObj_GetParam(partnerObj, 4);
-        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownObj, 6));
+        partnerIndex = WiFiPlazaObj_GetParam(partnerObj, FIELD2D_OBJECT_PARAM_ID);
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownObj, FIELD2D_OBJECT_PARAM_DIRECTION));
         WiFiPlazaWork_ResetTalk(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         talk->partnerObj = partnerObj;
@@ -696,7 +696,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         case 1:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_START_CHAT);
-            WiFiPlaza_SendChatNews(lobby, playerIndex, WiFiPlazaObj_GetParam(talk->partnerObj, 4));
+            WiFiPlaza_SendChatNews(lobby, playerIndex, WiFiPlazaObj_GetParam(talk->partnerObj, FIELD2D_OBJECT_PARAM_ID));
             done = TRUE;
             break;
         case 2:
@@ -750,7 +750,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
 
             WiFiPlazaWork_AdvanceTalk(lobby, 3);
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_RECEIVE_TAP_TOY);
-            partnerIndex2 = WiFiPlazaObj_GetParam(talk->partnerObj, 4);
+            partnerIndex2 = WiFiPlazaObj_GetParam(talk->partnerObj, FIELD2D_OBJECT_PARAM_ID);
             WiFiPlaza_SendTapToyTradeNews(lobby, playerIndex, partnerIndex2, WiFiPlazaPlayer_GetTapToy(partner));
             done = TRUE;
             break;
@@ -990,7 +990,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         if (talk->partnerObj != NULL) {
             WiFiPlazaObj_SetAvatarMode(talk->partnerObj, 1);
-            WiFiPlazaPlayerState_SetActive(stateManager, WiFiPlazaObj_GetParam(talk->partnerObj, 4), 1);
+            WiFiPlazaPlayerState_SetActive(stateManager, WiFiPlazaObj_GetParam(talk->partnerObj, FIELD2D_OBJECT_PARAM_ID), 1);
             WiFiPlazaRoom_ShowOwnCard(room);
         }
         WiFiPlazaTalk_Free(talk);

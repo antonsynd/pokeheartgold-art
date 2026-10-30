@@ -412,10 +412,10 @@ void FrontierMap_SaveObjects(FrontierMap *map) {
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         object = Frontier_GetMapObject(map->frontier, i);
         if (object->object != NULL) {
-            object->template.direction = Field2DObject_GetParam(object->object, 6);
-            object->template.action = Field2DObject_GetParam(object->object, 5);
-            object->template.x = Field2DObject_GetParam(object->object, 0);
-            object->template.y = Field2DObject_GetParam(object->object, 1);
+            object->template.direction = Field2DObject_GetParam(object->object, FIELD2D_OBJECT_PARAM_DIRECTION);
+            object->template.action = Field2DObject_GetParam(object->object, FIELD2D_OBJECT_PARAM_ACTION);
+            object->template.x = Field2DObject_GetParam(object->object, FIELD2D_OBJECT_PARAM_X);
+            object->template.y = Field2DObject_GetParam(object->object, FIELD2D_OBJECT_PARAM_Y);
             object->template.visible = Field2DObjectSprite_IsVisible(object->objectSprite);
         }
     }

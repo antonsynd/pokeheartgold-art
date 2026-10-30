@@ -888,7 +888,7 @@ static BOOL Task_WarpPanel(TaskManager *taskManager) {
         if (FollowMon_IsActive(fieldSystem)
             && !FollowMon_CheckVisibleFlag(fieldSystem)
             && PlayerAvatar_GetState(fieldSystem->playerAvatar) != 1) {
-            env->followMonBall = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 1);
+            env->followMonBall = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), FOLLOW_MON_BALL_RECALL_WHITE);
         }
         env->state++;
         break;

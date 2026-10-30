@@ -74,7 +74,7 @@ extern const FieldMoveCutInStep gFieldMoveCutInFlySteps[];
 extern const FieldMoveCutInStep gFieldMoveCutInFlyWithObjectSteps[];
 
 // The trainer graphics are the gender's.
-SysTask *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int kind, Pokemon *mon, u32 gender) {
+SysTask *FieldMoveCutIn_Start(FieldSystem *fieldSystem, enum FieldMoveCutInKind kind, Pokemon *mon, u32 gender) {
     FieldMoveCutIn *cutIn = FieldMoveCutIn_New(fieldSystem);
     cutIn->mon = mon;
     cutIn->playerGender = gender;

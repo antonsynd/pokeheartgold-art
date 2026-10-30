@@ -470,8 +470,7 @@ VecFx32 *BillboardObject_GetScale(BillboardObject *object) {
     return &object->scale;
 }
 
-void BillboardObject_SetVisible(void *billboard, u8 visible) {
-    BillboardObject *object = billboard;
+void BillboardObject_SetVisible(BillboardObject *object, u8 visible) {
     GF_ASSERT(object != NULL);
     object->visible = visible;
 }

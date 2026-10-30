@@ -78,7 +78,7 @@ Field2DObject *Field2DObjectManager_AddObject(Field2DObjectManager *objectManage
     object->action = template->action;
     object->direction = template->direction;
     object->spriteId = template->spriteId;
-    object->active = 1;
+    object->active = TRUE;
     return object;
 }
 
@@ -88,7 +88,7 @@ void Field2DObject_Delete(Field2DObject *object) {
 
 Field2DObject *Field2DObjectManager_FindById(Field2DObjectManager *objectManager, u8 id) {
     for (int i = 0; i < objectManager->capacity; i++) {
-        if ((objectManager->objects[i].active == 1) && (id == objectManager->objects[i].id)) {
+        if ((objectManager->objects[i].active == TRUE) && (id == objectManager->objects[i].id)) {
             return &objectManager->objects[i];
         }
     }
@@ -98,7 +98,7 @@ Field2DObject *Field2DObjectManager_FindById(Field2DObjectManager *objectManager
 Field2DObject *Field2DObjectManager_GetSlot(Field2DObjectManager *objectManager, u16 index) {
     GF_ASSERT(objectManager);
     GF_ASSERT(index < objectManager->capacity);
-    if (objectManager->objects[index].active == 1) {
+    if (objectManager->objects[index].active == TRUE) {
         return &objectManager->objects[index];
     }
     return NULL;
@@ -112,7 +112,7 @@ Field2DObject *Field2DObjectManager_GetByIndex(Field2DObjectManager *objectManag
     return Field2DObjectManager_GetSlot(objectManager, index);
 }
 
-s32 Field2DObject_GetParam(Field2DObject *object, s32 param) {
+s32 Field2DObject_GetParam(Field2DObject *object, enum Field2DObjectParam param) {
     s32 value;
     GF_ASSERT(object);
     switch (param) {
@@ -155,7 +155,7 @@ s32 Field2DObject_GetParam(Field2DObject *object, s32 param) {
     return value;
 }
 
-void Field2DObject_SetParam(Field2DObject *object, u32 param, s32 value) {
+void Field2DObject_SetParam(Field2DObject *object, enum Field2DObjectParam param, s32 value) {
     GF_ASSERT(object);
     switch (param) {
     case FIELD2D_OBJECT_PARAM_X:
@@ -210,7 +210,7 @@ u8 Field2D_GetOppositeDirection(s32 direction) {
 
 Field2DObject *Field2DObjectManager_GetFreeSlot(Field2DObjectManager *objectManager) {
     for (int i = 0; i < objectManager->capacity; i++) {
-        if (objectManager->objects[i].active == 0) {
+        if (objectManager->objects[i].active == FALSE) {
             return &objectManager->objects[i];
         }
     }

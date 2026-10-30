@@ -1496,9 +1496,9 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
             metatile = GetMetatileBehavior(fieldSystem, x, y);
             if (rvsDir == 2 || rvsDir == 3) {
                 if (MetatileBehavior_IsTallGrass(metatile) == TRUE) {
-                    TallGrass_SpawnAt(*p_lastInteracted, 0, x, y, 1);
+                    TallGrass_SpawnAt(*p_lastInteracted, FALSE, x, y, TRUE);
                 } else if (MetatileBehavior_IsVeryTallGrass(metatile) == TRUE) {
-                    VeryTallGrass_SpawnAt(*p_lastInteracted, 0, x, y, 1);
+                    VeryTallGrass_SpawnAt(*p_lastInteracted, FALSE, x, y, TRUE);
                 }
             }
             if (MetatileBehavior_IsTallGrass(metatile) == FALSE
@@ -2309,7 +2309,7 @@ BOOL ScrCmd_PlayFieldMoveCutIn(ScriptContext *ctx) {
     u16 partyIdx = ScriptGetVar(ctx);
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx->fieldSystem->saveData), partyIdx);
     u32 playerGender = PlayerAvatar_GetGender(ctx->fieldSystem->playerAvatar);
-    *p_work = FieldMoveCutIn_Start(ctx->fieldSystem, 0, mon, playerGender);
+    *p_work = FieldMoveCutIn_Start(ctx->fieldSystem, FIELD_MOVE_CUT_IN_BANNER, mon, playerGender);
     SetupNativeScript(ctx, NativeScript_WaitFieldMoveCutIn);
     return TRUE;
 }

@@ -166,7 +166,7 @@ static void FollowMonBall_FreeModels(FollowMonBall *ball) {
     Field3dModelAnimation_Unload(&ball->burstAnimation, &ball->allocator);
 }
 
-FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, int kind) {
+FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, enum FollowMonBallKind kind) {
     VecFx32 position;
     FollowMonBallEffectArgs args;
     u32 priority;

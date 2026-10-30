@@ -262,7 +262,7 @@ static inline void BillboardMotion_Walk(LocalMapObject *object, BillboardObject 
     }
 }
 
-void *MapObject_GetBillboard(LocalMapObject *object) {
+BillboardObject *MapObject_GetBillboard(LocalMapObject *object) {
     int spriteId = MapObject_GetSpriteID(object);
 
     switch (spriteId) {

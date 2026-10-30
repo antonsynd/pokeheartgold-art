@@ -343,7 +343,7 @@ static void WiFiPlazaInstrument_StartEffect(WiFiPlazaInstrumentManager *manager,
     WiFiPlazaInstrument_ClearEffect(manager, effect);
     effect->obj = obj;
     effect->type = type;
-    effect->polygonID = WiFiPlazaObj_GetParam(obj, 5) + 0x28;
+    effect->polygonID = WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_ACTION) + 0x28;
     gWiFiPlazaInstrumentInitFuncs[effect->type](manager, effect);
     WiFiPlazaInstrument_PlaySE(manager, effect, gWiFiPlazaInstrumentStartSEs[effect->type]);
 }
@@ -521,7 +521,7 @@ void WiFiPlazaInstrument_InitPop01(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     model0Pos.y += FX32_CONST(16);
     effect->work.fade.fade[0] = 8;
 
-    switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
+    switch (WiFiPlazaObj_GetParam(effect->obj, FIELD2D_OBJECT_PARAM_DIRECTION)) {
     case DIR_NORTH:
         model1Pos.z -= FX32_CONST(28);
         model0Pos.z -= FX32_CONST(14);
@@ -565,7 +565,7 @@ void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     effect->work.fade.fade[0] = 8;
     effect->work.fade.fade[1] = 8;
 
-    switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
+    switch (WiFiPlazaObj_GetParam(effect->obj, FIELD2D_OBJECT_PARAM_DIRECTION)) {
     case DIR_NORTH:
         model1Pos.z -= FX32_CONST(28);
         model0Pos.z -= FX32_CONST(14);
@@ -622,7 +622,7 @@ void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     model0Pos = model1Pos;
     model0Pos.y += FX32_CONST(16);
 
-    switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
+    switch (WiFiPlazaObj_GetParam(effect->obj, FIELD2D_OBJECT_PARAM_DIRECTION)) {
     case DIR_NORTH:
         model1Pos.z -= FX32_CONST(28);
         model0Pos.z -= FX32_CONST(14);
@@ -1266,7 +1266,7 @@ static BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *ma
             WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
             effect->work.hop.stage = WIFI_PLAZA_BALLOON_FALL;
             effect->work.hop.timer = 0;
-            WiFiPlazaObj_SetDirection(effect->obj, WiFiPlazaObj_GetParam(effect->obj, 6));
+            WiFiPlazaObj_SetDirection(effect->obj, WiFiPlazaObj_GetParam(effect->obj, FIELD2D_OBJECT_PARAM_DIRECTION));
         }
         break;
     case WIFI_PLAZA_BALLOON_FALL:
@@ -1358,7 +1358,7 @@ static BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *ma
             WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
             effect->work.hop.stage = WIFI_PLAZA_BALLOON_FALL;
             effect->work.hop.timer = 0;
-            result = WiFiPlazaObj_GetParam(effect->obj, 6);
+            result = WiFiPlazaObj_GetParam(effect->obj, FIELD2D_OBJECT_PARAM_DIRECTION);
             WiFiPlazaObj_SetDirection(effect->obj, result);
         }
         break;

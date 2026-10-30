@@ -278,7 +278,7 @@ WiFiPlazaObj *WiFiPlazaObj_FindById(WiFiPlazaObjManager *manager, int id) {
     for (i = 0; i < manager->count; i++) {
         gridObj = manager->objs[i].gridObj;
         if (gridObj != NULL) {
-            objId = Field2DObject_GetParam(gridObj, 4);
+            objId = Field2DObject_GetParam(gridObj, FIELD2D_OBJECT_PARAM_ID);
             if (objId == id) {
                 return &manager->objs[i];
             }
@@ -299,12 +299,12 @@ void WiFiPlazaObj_SetGridPos(WiFiPlazaObj *obj, Field2DPoint pos) {
     GF_ASSERT(obj->gridObj != NULL);
     Field2DObject_SetPos(obj->gridObj, pos);
     Field2DObject_SetPrevPos(obj->gridObj, pos);
-    Field2DObject_SetParam(obj->gridObj, 5, 0);
+    Field2DObject_SetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_STAND);
 }
 
 void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, Field2DPoint pos, s32 direction) {
     WiFiPlazaObj_SetGridPos(obj, pos);
-    Field2DObject_SetParam(obj->gridObj, 6, direction);
+    Field2DObject_SetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
 }
 
 Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
@@ -312,14 +312,14 @@ Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
     return Field2DObject_GetDrawPos(obj->gridObj);
 }
 
-s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param) {
+s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, enum Field2DObjectParam param) {
     GF_ASSERT(obj->gridObj != NULL);
     return Field2DObject_GetParam(obj->gridObj, param);
 }
 
 void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 command, s32 direction) {
-    GF_ASSERT(Field2DObject_GetParam(obj->gridObj, 5) == 0);
-    WiFiPlazaObj_QueueMove(manager, command, direction, Field2DObject_GetParam(obj->gridObj, 4));
+    GF_ASSERT(Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ACTION) == 0);
+    WiFiPlazaObj_QueueMove(manager, command, direction, Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ID));
 }
 
 void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u32 kind) {
@@ -328,7 +328,7 @@ void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u1
     data.startPos = Field2DObject_GetPos(obj->gridObj);
     data.action = value;
     data.direction = kind;
-    data.objectId = Field2DObject_GetParam(obj->gridObj, 4);
+    data.objectId = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ID);
     Field2DObjectManager_StartMove(manager->gridObjs, &data);
 }
 
@@ -355,13 +355,13 @@ u8 WiFiPlazaObj_GetHandler(WiFiPlazaObj *obj) {
 
 // Returns the object on the cell obj is facing.
 WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj) {
-    s32 direction = Field2DObject_GetParam(obj->gridObj, 6);
+    s32 direction = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_DIRECTION);
     Field2DObject *facing = Field2DObject_FindObjectInDirection(obj->gridObj, manager->gridObjs, direction);
 
     if (facing == NULL) {
         return NULL;
     } else {
-        return WiFiPlazaObj_FindById(manager, Field2DObject_GetParam(facing, 4));
+        return WiFiPlazaObj_FindById(manager, Field2DObject_GetParam(facing, FIELD2D_OBJECT_PARAM_ID));
     }
 }
 
@@ -612,9 +612,9 @@ static void WiFiPlazaObj_HandlerIdle(WiFiPlazaObj *obj, WiFiPlazaObjManager *man
 
 // D-pad: walk (run while B is held) when already facing that way, otherwise turn.
 static void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    int facing = Field2DObject_GetParam(obj->gridObj, 6);
-    int id = Field2DObject_GetParam(obj->gridObj, 4);
-    int moving = Field2DObject_GetParam(obj->gridObj, 5);
+    int facing = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_DIRECTION);
+    int id = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ID);
+    int moving = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ACTION);
     int command;
     u32 input;
 
@@ -676,8 +676,8 @@ static void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *m
         }
         break;
     case WIFI_PLAZA_WANDER_PICK_MOVE:
-        id = Field2DObject_GetParam(obj->gridObj, 4);
-        facing = Field2DObject_GetParam(obj->gridObj, 6);
+        id = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ID);
+        facing = Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_DIRECTION);
         obj->work.wander.direction = WiFiPlazaObj_RandomPick(sWiFiPlazaObjWanderDirections, 4);
         if (WiFiPlazaObj_IsTagInDirection(manager, obj, obj->work.wander.direction, id + 4) == TRUE) {
             if (facing == obj->work.wander.direction) {
@@ -693,13 +693,13 @@ static void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *m
         }
         break;
     case WIFI_PLAZA_WANDER_WAIT_TURN:
-        if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
+        if (Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaObj_QueueCommand(manager, obj, 2, obj->work.wander.direction);
             obj->step++;
         }
         break;
     case WIFI_PLAZA_WANDER_WAIT_MOVE:
-        if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
+        if (Field2DObject_GetParam(obj->gridObj, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             obj->step = WIFI_PLAZA_WANDER_START_WAIT;
         }
         break;

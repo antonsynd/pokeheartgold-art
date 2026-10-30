@@ -4,6 +4,7 @@
 #include "field/map_prop_animation.h"
 #include "field/rock_smash_item.h"
 
+#include "field_follow_mon_ball.h"
 #include "field_system.h"
 #include "script.h"
 #include "field_warp_reset.h"
@@ -41,7 +42,7 @@ void FieldSystem_SwitchBottomScreenApp(FieldSystem *fieldSystem, int appId, void
 u8 FieldSystem_GetBottomScreenAppId(FieldSystem *fieldSystem);
 int FieldSystem_GetTouchscreenChoiceMenuState(FieldSystem *fieldSystem);
 u8 FieldSystem_GetBottomScreenAppState(FieldSystem *fieldSystem);
-FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, int kind);
+FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, enum FollowMonBallKind kind);
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 direction);
 void FollowMon_SpawnReleaseBall(LocalMapObject *object);
 BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem);

@@ -188,7 +188,7 @@ WifiClubRoomPerson *WifiClubRoom_AddFriend(WifiClubRoom *room, s16 spriteId, s16
 }
 
 void WifiClubRoom_StartPersonLeave(WifiClubRoom *room, WifiClubRoomPerson *person) {
-    Field2DObject_GetParam(person->object, 6);
+    Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_DIRECTION);
     person->update = WifiClubRoomPerson_UpdateWarpOut;
     person->animate = WifiClubRoomPerson_AnimateWarp;
     person->mode = 2;
@@ -205,11 +205,11 @@ void WifiClubRoomPerson_Delete(WifiClubRoomPerson *person) {
 }
 
 u8 WifiClubRoomPerson_GetId(WifiClubRoomPerson *person) {
-    return Field2DObject_GetParam(person->object, 4);
+    return Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID);
 }
 
 s32 WifiClubRoomPerson_GetOppositeDirection(WifiClubRoomPerson *person) {
-    return Field2D_GetOppositeDirection(Field2DObject_GetParam(person->object, 6));
+    return Field2D_GetOppositeDirection(Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_DIRECTION));
 }
 
 void WifiClubRoom_StartTalk(WifiClubRoom *room, WifiClubRoomPerson *person, s32 direction) {
@@ -217,11 +217,11 @@ void WifiClubRoom_StartTalk(WifiClubRoom *room, WifiClubRoomPerson *person, s32 
     person->update = WifiClubRoomPerson_UpdateTalking;
     person->savedMode = person->mode;
     person->mode = 5;
-    WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, 4));
+    WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID));
     Field2DObjectSprite_SetAutoUpdate(person->drawer, 0);
     Field2DObjectSprite_FaceDirection(person->drawer, direction);
 
-    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_X), Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_Y) };
     Field2DObjectSprite_SetPosition(person->drawer, pos);
 }
 
@@ -271,7 +271,7 @@ void WifiClubRoom_DeleteAllPersons(WifiClubRoom *room) {
 }
 
 s32 WifiClubRoom_IsPlayerIdle(WifiClubRoom *room) {
-    if (Field2DObject_GetParam(room->player->object, 5) == 0) {
+    if (Field2DObject_GetParam(room->player->object, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
         return 1;
     }
     return 0;
@@ -279,7 +279,7 @@ s32 WifiClubRoom_IsPlayerIdle(WifiClubRoom *room) {
 
 s32 WifiClubRoom_IsPlayerFacingCounter(WifiClubRoom *room) {
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
-    u32 direction = Field2DObject_GetParam(room->player->object, 6);
+    u32 direction = Field2DObject_GetParam(room->player->object, FIELD2D_OBJECT_PARAM_DIRECTION);
     pos = Field2D_StepInDirection(pos, direction);
     s32 tag = Field2DMap_GetTag(room->map, pos.x / 16, pos.y / 16);
     if ((direction == 0) && (tag == 2)) {
@@ -489,7 +489,7 @@ s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *room) {
         return 0;
     }
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
-    u32 direction = Field2DObject_GetParam(room->player->object, 6);
+    u32 direction = Field2DObject_GetParam(room->player->object, FIELD2D_OBJECT_PARAM_DIRECTION);
     if (Field2DMap_GetTag(room->map, pos.x / 16, pos.y / 16) == 0xF && direction == 1) {
         return 1;
     }
@@ -620,7 +620,7 @@ void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *room, WifiClubRoomPerson *pers
     if (Field2DObjectSprite_IsVisible(person->drawer) == 0) {
         Field2DObjectSprite_SetVisible(person->drawer, 1);
     }
-    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_X), Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_Y) };
     Field2DPoint shadowPos = pos;
 
     s64 offset = (s64)GF_SinDegNoWrap(person->timer) * (signed)0xFFF40000;
@@ -634,7 +634,7 @@ void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *room, WifiClubRoomPerson *pers
 }
 
 void WifiClubRoomPerson_AnimateHop(WifiClubRoom *room, WifiClubRoomPerson *person) {
-    Field2DPoint pos = { Field2DObject_GetParam(person->object, 0), Field2DObject_GetParam(person->object, 1) };
+    Field2DPoint pos = { Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_X), Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_Y) };
     Field2DPoint shadowPos = pos;
 
     s16 hopTimer = person->timer - 16;
@@ -652,16 +652,16 @@ void WifiClubRoomPerson_AnimateHop(WifiClubRoom *room, WifiClubRoomPerson *perso
 }
 
 s32 WifiClubRoomPerson_UpdatePlayer(WifiClubRoom *room, WifiClubRoomPerson *person) {
-    u32 direction = Field2DObject_GetParam(person->object, 6);
-    u32 id = Field2DObject_GetParam(person->object, 4);
-    if (Field2DObject_GetParam(person->object, 5) != 0) {
+    u32 direction = Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_DIRECTION);
+    u32 id = Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID);
+    if (Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ACTION) != 0) {
         return 0;
     }
     if (gSystem.newKeys & PAD_BUTTON_A) {
         WifiClubRoomPerson *partner = WifiClubRoom_GetPersonInDirection(room, person, direction);
         if (partner != NULL) {
             if (WifiClubRoomPerson_CanTalk(partner) == 1) {
-                person->talkPartnerId = Field2DObject_GetParam(partner->object, 4);
+                person->talkPartnerId = Field2DObject_GetParam(partner->object, FIELD2D_OBJECT_PARAM_ID);
             } else {
                 person->talkPartnerId = 0;
             }
@@ -709,8 +709,8 @@ s32 WifiClubRoomPerson_UpdateWarpIn(WifiClubRoom *room, WifiClubRoomPerson *pers
     if (person->timer <= 0) {
         Field2DObjectSprite_SyncAnim(person->drawer);
         Field2DObjectSprite_SetAutoUpdate(person->drawer, 1);
-        u32 playerId = Field2DObject_GetParam(room->player->object, 4);
-        u32 id = Field2DObject_GetParam(person->object, 4);
+        u32 playerId = Field2DObject_GetParam(room->player->object, FIELD2D_OBJECT_PARAM_ID);
+        u32 id = Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID);
         if (id == playerId) {
             WifiClubRoom_SetPersonModePlayer(room, person);
         } else {
@@ -733,7 +733,7 @@ s32 WifiClubRoomPerson_UpdateWander(WifiClubRoom *room, WifiClubRoomPerson *pers
     if (person->timer <= 0) {
         person->timer = (1023 & MTRandom()) + 256;
         u32 direction = MTRandom() & 3;
-        WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, 4));
+        WifiClubRoom_QueueMoveCommand(room, 0, direction, Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID));
     }
     return 0;
 }
@@ -760,8 +760,8 @@ void WifiClubRoom_QueueMoveCommand(WifiClubRoom *room, s16 action, u32 direction
 }
 
 void WifiClubRoom_QueuePersonCommand(WifiClubRoom *room, s16 action, WifiClubRoomPerson *person) {
-    u32 direction = Field2DObject_GetParam(person->object, 6);
-    WifiClubRoom_QueueMoveCommand(room, action, direction, Field2DObject_GetParam(person->object, 4));
+    u32 direction = Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_DIRECTION);
+    WifiClubRoom_QueueMoveCommand(room, action, direction, Field2DObject_GetParam(person->object, FIELD2D_OBJECT_PARAM_ID));
 }
 
 s32 WifiClubRoomPerson_IsNotWarping(WifiClubRoomPerson *person) {

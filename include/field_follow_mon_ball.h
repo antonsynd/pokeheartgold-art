@@ -13,7 +13,7 @@ enum FollowMonBallKind {
     FOLLOW_MON_BALL_RECALL,       // as FOLLOW_MON_BALL_RECALL_WHITE without the white palette; the Pokemon is hidden once it has shrunk
 };
 
-FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, int kind);
+FieldEffect *FollowMonBall_Spawn(LocalMapObject *obj, enum FollowMonBallKind kind);
 
 FollowMonBall *FollowMonBall_New(FieldEffectManager *manager);
 void FollowMonBall_Free(FollowMonBall *ball);

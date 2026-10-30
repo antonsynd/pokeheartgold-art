@@ -157,7 +157,7 @@ void FollowPlayerMovement_Reset(LocalMapObject *object) {
 
 static inline void FollowMon_SpawnStepEffects(LocalMapObject *object) {
     if (FollowMon_IsReleaseBallPending(object)) {
-        FollowMonBall_Spawn(object, 0);
+        FollowMonBall_Spawn(object, FOLLOW_MON_BALL_RELEASE);
         FollowMon_SetReleaseBallPending(object, 0);
     } else {
         FollowMon_HideUntilStep(object, FALSE);

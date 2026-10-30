@@ -998,7 +998,7 @@ static BOOL WiFiPlazaPlayerState_OwnArrival(WiFiPlazaPlayerState *state, WiFiPla
         WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ARRIVAL_WAIT_MOVE);
         break;
     case WIFI_PLAZA_ARRIVAL_WAIT_MOVE:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaPlayerState_SetStep(state, work->nextStep);
         }
         break;
@@ -1195,7 +1195,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromAttraction(WiFiPlazaPlayerState *s
         }
         break;
     case WIFI_PLAZA_RETURN_WAIT_STEP_OUT:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaRoom_SetMode(room, 1);
             if (WiFiPlazaWork_DidAppQuitForClosing(lobby) == 1) {
                 WiFiPlazaPlayerState_NextStep(state);
@@ -1254,7 +1254,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromMinigame(WiFiPlazaPlayerState *sta
         }
         break;
     case WIFI_PLAZA_RETURN_WAIT_STEP_OUT:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaRoom_SetMode(room, 1);
             if (WiFiPlazaWork_GetGameConnectionLost(lobby) == TRUE) {
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RETURN_PRINT_NOTICE);
@@ -1304,7 +1304,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromSurvey(WiFiPlazaPlayerState *state
         }
         break;
     case WIFI_PLAZA_RETURN_WAIT_STEP_OUT:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaRoom_SetMode(room, 1);
             if (WiFiPlazaWork_DidAppQuitForClosing(lobby) == 1) {
                 WiFiPlazaPlayerState_NextStep(state);
@@ -1370,8 +1370,8 @@ static BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaR
             }
         }
         ownPlayer = WiFiPlazaObj_GetOwnPlayer(objManager);
-        moveState = WiFiPlazaObj_GetParam(ownPlayer, 5);
-        direction = WiFiPlazaObj_GetParam(ownPlayer, 6);
+        moveState = WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION);
+        direction = WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION);
         pos = WiFiPlazaObj_GetGridPos(ownPlayer);
         frontPos = Field2D_StepInDirection(pos, direction);
         tile = WiFiPlazaMap_GetTileAttr(map, pos.x / 16, pos.y / 16);
@@ -1418,8 +1418,8 @@ static BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaR
         if (gSystem.newKeys & PAD_BUTTON_A) {
             WiFiPlazaObj *facing = WiFiPlazaObj_FindFacing(objManager, ownPlayer);
             if (facing) {
-                int facingMoveState = WiFiPlazaObj_GetParam(facing, 5);
-                int id = WiFiPlazaObj_GetParam(facing, 4);
+                int facingMoveState = WiFiPlazaObj_GetParam(facing, FIELD2D_OBJECT_PARAM_ACTION);
+                int id = WiFiPlazaObj_GetParam(facing, FIELD2D_OBJECT_PARAM_ID);
                 if (id != 254) {
                     u8 busy = WiFiPlazaRoom_IsPlayerBusy(room, (u8)id);
                     if (!facingMoveState && !busy) {
@@ -1431,7 +1431,7 @@ static BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaR
                     }
                 }
             }
-            if (WiFiPlazaMap_IsPropTile(frontTile) == TRUE && !WiFiPlazaObj_GetParam(ownPlayer, 6)) {
+            if (WiFiPlazaMap_IsPropTile(frontTile) == TRUE && !WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION)) {
                 WiFiPlazaModels_TouchPropsAt(models, frontX, frontY);
                 WiFiPlazaRoom_SetActionTile(room, frontTile);
                 WiFiPlazaRoom_SetPanelButtonDisabled(room, 1);
@@ -1456,7 +1456,7 @@ static BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaR
             }
             facing = WiFiPlazaObj_FindFacing(objManager, ownPlayer);
             if (facing) {
-                int id = WiFiPlazaObj_GetParam(facing, 4);
+                int id = WiFiPlazaObj_GetParam(facing, FIELD2D_OBJECT_PARAM_ID);
                 if (id != 254 && !WiFiPlazaRoom_IsPlayerCardShown(room) && !WiFiPlazaRoom_IsCardBlocked(room, (u8)id)) {
                     WiFiPlazaRoom_ShowPlayerCard(room, id, 1);
                     *savedHandler = WiFiPlazaObj_GetHandler(facing);
@@ -1485,7 +1485,7 @@ static BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaR
 }
 
 static BOOL WiFiPlazaPlayerState_OwnWalkLate(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
-    if (WiFiPlazaObj_GetParam(WiFiPlazaObj_GetOwnPlayer(WiFiPlazaRoom_GetObjManager(room)), 5)) {
+    if (WiFiPlazaObj_GetParam(WiFiPlazaObj_GetOwnPlayer(WiFiPlazaRoom_GetObjManager(room)), FIELD2D_OBJECT_PARAM_ACTION)) {
         WiFiPlazaRoom_SetPanelButtonDisabled(room, 1);
     }
     return FALSE;
@@ -1571,7 +1571,7 @@ static BOOL WiFiPlazaPlayerState_OwnExit(WiFiPlazaPlayerState *state, WiFiPlazaR
         objManager = WiFiPlazaRoom_GetObjManager(room);
         state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room);
         ownPlayer = WiFiPlazaObj_GetOwnPlayer(objManager);
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
             WiFiPlazaPlayerState_Set((WiFiPlazaPlayerStateManager *)state, index, &sWiFiPlazaPlayerStateOwnWalk, NULL);
         }
@@ -1690,7 +1690,7 @@ static BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state,
             break;
         }
         WiFiPlazaWork_MarkActivityDone(lobby, count);
-        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_DIRECTION));
         entry = WiFiPlazaRoom_GetStartParams(room);
         pos = WiFiPlazaObj_GetGridPos(obj);
         entry->entryMode = WIFI_PLAZA_ENTRY_FROM_ATTRACTION;
@@ -1703,7 +1703,7 @@ static BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state,
     }
     case WIFI_PLAZA_ATTRACTION_SLIDE_BACK: {
         int handler;
-        switch ((u8)WiFiPlazaObj_GetParam(obj, 6)) {
+        switch ((u8)WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_DIRECTION)) {
         case DIR_NORTH:
             handler = WIFI_PLAZA_OBJ_HANDLER_SLIDE_DOWN;
             break;
@@ -1731,13 +1731,13 @@ static BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state,
         }
         break;
     case WIFI_PLAZA_ATTRACTION_STEP_BACK: {
-        u8 direction = ((int (*)(s32))Field2D_GetOppositeDirection)((u8)WiFiPlazaObj_GetParam(obj, 6));
+        u8 direction = ((int (*)(s32))Field2D_GetOppositeDirection)((u8)WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_DIRECTION));
         WiFiPlazaObj_RunCommand(objManager, obj, 2, direction);
         WiFiPlazaPlayerState_NextStep(state);
         break;
     }
     case WIFI_PLAZA_ATTRACTION_WAIT_STEP_BACK:
-        if (!WiFiPlazaObj_GetParam(obj, 5)) {
+        if (!WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_ACTION)) {
             work->timer = 8;
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ATTRACTION_PRINT_REFUSAL);
         }
@@ -1831,7 +1831,7 @@ static BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, W
         WiFiPlazaRoom_SetResult(room, value);
         IncrementGameStat119(lobby);
         WiFiPlazaWork_MarkActivityDone(lobby, choice);
-        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6));
+        direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION));
         entry = WiFiPlazaRoom_GetStartParams(room);
         packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(ownPlayer);
         current.x = packed;
@@ -1847,11 +1847,11 @@ static BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, W
         return TRUE;
     }
     case WIFI_PLAZA_GAME_BOOTH_STEP_BACK:
-        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6)));
+        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION)));
         WiFiPlazaPlayerState_NextStep(state);
         break;
     case WIFI_PLAZA_GAME_BOOTH_WAIT_STEP_BACK:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaPlayerState_NextStep(state);
         }
         break;
@@ -1956,7 +1956,7 @@ static BOOL WiFiPlazaPlayerState_OwnUseSurveyMonitor(WiFiPlazaPlayerState *state
         WiFiPlazaRoom_SetFinished(room, 1);
         WiFiPlazaRoom_SetResult(room, value);
         WiFiPlazaWork_AddHistory(lobby, 23, -1);
-        value = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6));
+        value = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION));
         entry = WiFiPlazaRoom_GetStartParams(room);
         packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(ownPlayer);
         current.x = packed;
@@ -1970,11 +1970,11 @@ static BOOL WiFiPlazaPlayerState_OwnUseSurveyMonitor(WiFiPlazaPlayerState *state
         WiFiPlazaPlayerState_FreeWork(state);
         return TRUE;
     case WIFI_PLAZA_SURVEY_MONITOR_STEP_BACK:
-        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, 6)));
+        WiFiPlazaObj_RunCommand(objManager, ownPlayer, 2, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_DIRECTION)));
         WiFiPlazaPlayerState_NextStep(state);
         break;
     case WIFI_PLAZA_SURVEY_MONITOR_WAIT_STEP_BACK:
-        if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
+        if (WiFiPlazaObj_GetParam(ownPlayer, FIELD2D_OBJECT_PARAM_ACTION) == 0) {
             WiFiPlazaPlayerState_NextStep(state);
         }
         break;
@@ -2236,7 +2236,7 @@ static BOOL WiFiPlazaPlayerState_OwnRideMover(WiFiPlazaPlayerState *state, WiFiP
         WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RIDE_WAIT_STEP_BACK);
         break;
     case WIFI_PLAZA_RIDE_WAIT_STEP_BACK:
-        if (!WiFiPlazaObj_GetParam(ride->obj, 5)) {
+        if (!WiFiPlazaObj_GetParam(ride->obj, FIELD2D_OBJECT_PARAM_ACTION)) {
             WiFiPlazaPlayerState_SetStep(state, ride->nextStep);
         }
         break;
@@ -2723,7 +2723,7 @@ static BOOL WiFiPlazaPlayerState_OtherDoActivity(WiFiPlazaPlayerState *state, Wi
         leave = FALSE;
         if (placement->besideOwnPlayer == TRUE && !WiFiPlazaWork_HasTalkPartnerArrived(lobby) && WiFiPlazaPlayer_GetActivity(WiFiPlazaWork_GetMyPlayer(lobby)) == WIFI_PLAZA_ACTIVITY_TALK) {
             WiFiPlazaWork_SetTalkPartnerArrived(lobby);
-            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 0, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, 6)));
+            WiFiPlazaObj_RunCommand(objManager, ownPlayer, 0, Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_DIRECTION)));
         }
         obj = WiFiPlazaWork_GetPlayer(lobby, index);
         if (obj == NULL) {
@@ -2781,7 +2781,7 @@ static BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *place
     objManager = WiFiPlazaRoom_GetObjManager(room);
     ownPlayer = WiFiPlazaObj_GetOwnPlayer(objManager);
     map = WiFiPlazaRoom_GetMap(room);
-    id = WiFiPlazaObj_GetParam(obj, 4);
+    id = WiFiPlazaObj_GetParam(obj, FIELD2D_OBJECT_PARAM_ID);
     direction = DIR_SOUTH;
 
     switch (kind) {

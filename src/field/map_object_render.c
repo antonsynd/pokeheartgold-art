@@ -1128,7 +1128,7 @@ static MapObjectRender *MapObject_GetRender(LocalMapObject *object) {
     return MapObjectManager_GetRender(MapObject_GetManager(object));
 }
 
-int MapObject_UpdateBillboardPosition(LocalMapObject *object, void *billboard) {
+int MapObject_UpdateBillboardPosition(LocalMapObject *object, BillboardObject *billboard) {
     VecFx32 position;
     MapObject_GetDrawPosition(object, &position);
     position.z += FX32_CONST(6);

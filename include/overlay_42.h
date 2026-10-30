@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "field2d/field2d_object.h"
+
 #include "bg_window.h"
 #include "palette.h"
 #include "sprite.h"
@@ -59,7 +61,7 @@ typedef struct Field2DMoveQueue {
 } Field2DMoveQueue;
 
 typedef struct Field2DObject {
-    u32 active;
+    BOOL active;
     Field2DPoint pos;
     Field2DPoint prevPos;
     u16 id;
@@ -264,8 +266,8 @@ Field2DObject *Field2DObjectManager_FindById(Field2DObjectManager *objectManager
 Field2DObject *Field2DObjectManager_GetSlot(Field2DObjectManager *objectManager, u16 index);
 Field2DObject *Field2DObjectManager_GetById(Field2DObjectManager *objectManager, u8 id);
 Field2DObject *Field2DObjectManager_GetByIndex(Field2DObjectManager *objectManager, u16 index);
-s32 Field2DObject_GetParam(Field2DObject *object, s32 param);
-void Field2DObject_SetParam(Field2DObject *object, u32 param, s32 value);
+s32 Field2DObject_GetParam(Field2DObject *object, enum Field2DObjectParam param);
+void Field2DObject_SetParam(Field2DObject *object, enum Field2DObjectParam param, s32 value);
 Field2DPoint Field2D_StepInDirection(Field2DPoint pos, s32 direction);
 u8 Field2D_GetOppositeDirection(s32 direction);
 Field2DObject *Field2DObjectManager_GetFreeSlot(Field2DObjectManager *objectManager);

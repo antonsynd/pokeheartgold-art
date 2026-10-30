@@ -1021,7 +1021,7 @@ void WifiClubGameEntry_AvatarStartSpin(WifiClubGameEntry *gameEntry, WifiClubGam
     Field2DObjectSprite_StartLoopAnim(avatar->drawer);
     Field2DObjectSprite_SetVisible(avatar->drawer, 1);
     avatar->state = 2;
-    s32 idx = Field2DObject_GetParam(avatar->object, 6);
+    s32 idx = Field2DObject_GetParam(avatar->object, FIELD2D_OBJECT_PARAM_DIRECTION);
     avatar->timer = sWifiClubGameEntryAvatarSpinFrames[idx] + 16;
 }
 

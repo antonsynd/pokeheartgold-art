@@ -187,7 +187,7 @@ BOOL Task_FieldTransition(TaskManager *man) {
             LocalMapObject *followMon = FollowMon_GetMapObject(fieldSystem);
             int species = FollowMon_GetSpecies(followMon);
             if (!FollowMon_GetPermissionBySpeciesAndMap(species, env->location.mapId)) {
-                env->followMonBall = FollowMonBall_Spawn(followMon, 1);
+                env->followMonBall = FollowMonBall_Spawn(followMon, FOLLOW_MON_BALL_RECALL_WHITE);
             }
         }
         env->state++;
