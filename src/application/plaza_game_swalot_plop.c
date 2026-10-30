@@ -635,7 +635,7 @@ BOOL SwalotPlop_Exit(OverlayManager *man, int *state) {
         SwalotPlop_FreeSharedData(app);
         OverlayManager_FreeData(man);
         Heap_Destroy(HEAP_ID_106);
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         if (connectionLost == TRUE) {
             return TRUE;
         }

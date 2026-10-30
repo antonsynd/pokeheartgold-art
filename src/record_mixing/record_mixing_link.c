@@ -162,7 +162,7 @@ static void RecordMixingLink_RecvStartMixing(int sender, int size, void *data, v
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
     RecordMixing_StartFlash(room);
     RecordMixing_SetStateFromLink(room, 25, (u8)sender);
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     PlaySE(0x657);
 }
 

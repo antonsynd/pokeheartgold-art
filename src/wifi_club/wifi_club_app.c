@@ -1501,7 +1501,7 @@ s32 WifiClub_State_Start(WifiClubApp *app, s32 mainState) {
             app->state = WIFI_CLUB_STATE_WAIT_THEN_REENTER_ROOM;
         } else {
             WifiClub_PrintMessage(app, msg_0778_00077, 0);
-            CommState_SetErrorWatch(1, 1);
+            CommState_SetErrorWatch(TRUE, TRUE);
             LinkSync_StartSync(16);
             app->state = WIFI_CLUB_STATE_CREATE_REMATCH_PROMPT;
         }
@@ -2160,7 +2160,7 @@ s32 WifiClub_State_EnterRoom(WifiClubApp *app, s32 mainState) {
     GfGfx_SwapDisplay();
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_53);
     app->state = WIFI_CLUB_STATE_ROOM;
-    CommState_SetErrorWatch(0, 0);
+    CommState_SetErrorWatch(FALSE, FALSE);
     return mainState;
 }
 
@@ -2891,7 +2891,7 @@ s32 WifiClub_State_StartRecruiting(WifiClubApp *app, s32 mainState) {
         app->state = WIFI_CLUB_STATE_ROOM;
     }
     if (CommState_IsWifiInLobby()) {
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         Comm_SetWifiContinuousSend(0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
         app->isRematch = 0;
@@ -3363,7 +3363,7 @@ s32 WifiClub_State_WaitMatchAccepted(WifiClubApp *app, s32 mainState) {
         } else if (Comm_IsNetIdConnected(0) == 1) {
             WifiClub_CloseMessage(app);
             CommPlayerInfo_Init(app->saveData, 0);
-            CommState_SetErrorWatch(0, 1);
+            CommState_SetErrorWatch(FALSE, TRUE);
             WifiClub_SetLinkModeForStatus(ownStatus);
             app->exitChoice = WifiClub_GetGroupActivityChoice(ownStatus);
             Comm_SetWifiContinuousSend(0);
@@ -3552,7 +3552,7 @@ s32 WifiClub_State_ReceiveStatus(WifiClubApp *app, s32 mainState) {
 s32 WifiClub_State_SendPlayerInfo(WifiClubApp *app, s32 mainState) {
     if ((WifiClub_CheckMatchLost(app) == 0) && (LinkSync_IsSynced(15) != 0)) {
         CommPlayerInfo_SendLocal();
-        CommState_SetErrorWatch(1, 1);
+        CommState_SetErrorWatch(TRUE, TRUE);
         LinkSync_StartSync(18);
         app->state = WIFI_CLUB_STATE_START_ACTIVITY;
     }
@@ -3746,7 +3746,7 @@ s32 WifiClub_State_CreateRematchPrompt(WifiClubApp *app, s32 mainState) {
     if (!LinkSync_IsSynced(16)) {
         return mainState;
     }
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         if (((reg_GX_POWCNT & REG_GX_POWCNT_DSEL_MASK) >> REG_GX_POWCNT_DSEL_SHIFT) == GX_DISP_SELECT_MAIN_SUB) {
             app->yesNoMenu = Std_CreateYesNoMenu(app->bgConfig, &sYesNoMenuWindowTemplate, 473, 11, HEAP_ID_53);

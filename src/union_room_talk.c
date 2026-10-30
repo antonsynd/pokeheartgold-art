@@ -19,6 +19,7 @@
 #include "msgdata.h"
 #include "player_data.h"
 #include "trainer_card_data.h"
+#include "union_room.h"
 #include "union_room_avatar.h"
 #include "union_room_internal.h"
 
@@ -27,7 +28,6 @@
 
 void CommState_SetLinkMode13RequestMode0(void);
 
-int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret);
 static int UnionRoom_GetGroupOfMemberSlot(int slot);
 static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
 static int UnionRoom_GetSentTalkReplyMsg(int reply, int gender, MessageFormat *msgFmt);
@@ -231,7 +231,7 @@ int UnionRoom_GetTalkMsg(struct UnionRoom *unionRoom, int objId, int kind, Messa
     }
     profile = CommWireless_GetParentProfile(objId - 1);
     if (profile == NULL) {
-        CommState_SetErrorWatch(1, 1);
+        CommState_SetErrorWatch(TRUE, TRUE);
         CommState_SetError(1);
         return 0;
     }

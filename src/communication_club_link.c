@@ -87,7 +87,7 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
 
     FillScreenWithColor(0, 0);
     FillScreenWithColor(1, 0);
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     if (CommState_Exists()) {
         if (gCommClubLink == NULL) {
             CommClubLink_Init(fieldSystem);
@@ -121,7 +121,7 @@ BOOL CommClubLink_CardExchangeFinished(void) {
 
 void CommClubLink_Exit(void) {
     if (gCommClubLink) {
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         CommClubLink_SetState(CommClubLink_DeletePlayers, 5);
     }
 }
@@ -513,7 +513,7 @@ void CommClubLink_EnterRoom(void) {
 
 void CommClubLink_WaitExitSync(void) {
     if (LinkSync_IsSynced(91)) {
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         CommPlayerManager_Delete(1);
         CommClubLink_SetState(CommClubLink_Shutdown, 5);
     }

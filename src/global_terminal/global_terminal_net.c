@@ -116,7 +116,7 @@ enum GlobalTerminalNetStepResult {
     GLOBAL_TERMINAL_NET_STEP_RESTART,
 };
 
-static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form);
+static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const SaveFashionDataSub *record, GlobalTerminalNetDressUpForm *form);
 static void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value);
 static void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const FrontierCard *src, void *dst);
 static int GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net, void *stepWork);
@@ -169,12 +169,12 @@ static const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[3] = {
 
 static OSHeapHandle sGlobalTerminalNetOsHeap;
 
-static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form) {
+static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const SaveFashionDataSub *record, GlobalTerminalNetDressUpForm *form) {
     GlobalTerminalNet_DressUpToUploadForm(record, form);
     form->crc = SaveArray_CalcCRC16(saveData, form, offsetof(GlobalTerminalNetDressUpForm, crc));
 }
 
-void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, GlobalTerminalNetDressUpRecord *record) {
+void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, SaveFashionDataSub *record) {
     GlobalTerminalNet_UploadFormToDressUp(form, record);
 }
 
@@ -290,7 +290,7 @@ static int GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net, void *stepWor
     return GLOBAL_TERMINAL_NET_STEP_WAIT;
 }
 
-BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const FrontierCard *header, const GlobalTerminalNetDressUpRecord *record) {
+BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const FrontierCard *header, const SaveFashionDataSub *record) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }

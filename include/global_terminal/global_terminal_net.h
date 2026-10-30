@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "fashion_case.h"
 #include "frontier_card.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -95,29 +96,6 @@ typedef struct GlobalTerminalNetDressUpForm {
     u16 crc;
     u16 unk_5E;
 } GlobalTerminalNetDressUpForm;
-
-// the layout of SaveFashionDataSub
-typedef struct GlobalTerminalNetDressUpRecord {
-    u32 magic;
-    u32 personality;
-    u32 otId;
-    u16 species;
-    u16 nickname[11];
-    u16 secondText[8];
-    s8 z;
-    u8 x;
-    u8 y;
-    u8 form;
-    u8 unk_38[4];
-    u32 itemMask;
-    u16 mailMsgBank;
-    u16 mailMsgNo;
-    u16 mailField0;
-    u16 mailField1;
-    u8 items[10][4];
-    u8 backdrop;
-    u8 language;
-} GlobalTerminalNetDressUpRecord;
 
 // box as sent to the server
 typedef struct GlobalTerminalNetBoxForm {
@@ -292,13 +270,13 @@ typedef struct GlobalTerminalNetResponse {
     u16 result;
 } GlobalTerminalNetResponse;
 
-void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, GlobalTerminalNetDressUpRecord *record);
+void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, SaveFashionDataSub *record);
 void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form, enum HeapID heapID);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, FrontierCard *dst);
 void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst);
 BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args);
 void GlobalTerminalNet_Free(GlobalTerminalNet *net);
-BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const FrontierCard *header, const GlobalTerminalNetDressUpRecord *record);
+BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const FrontierCard *header, const SaveFashionDataSub *record);
 BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, int arg);
 BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const FrontierCard *header, PCStorage *storage, int box);
 BOOL GlobalTerminalNet_RequestBoxDownload(GlobalTerminalNet *net, int arg);
@@ -324,7 +302,7 @@ u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out);
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max);
 
 // dress-up form converters
-void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord *src, GlobalTerminalNetDressUpForm *dst);
-void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, GlobalTerminalNetDressUpRecord *dst);
+void GlobalTerminalNet_DressUpToUploadForm(const SaveFashionDataSub *src, GlobalTerminalNetDressUpForm *dst);
+void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, SaveFashionDataSub *dst);
 
 #endif // POKEHEARTGOLD_GLOBAL_TERMINAL_NET_H

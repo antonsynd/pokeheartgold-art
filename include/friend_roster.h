@@ -1,29 +1,12 @@
 #ifndef POKEHEARTGOLD_FRIEND_ROSTER_H
 #define POKEHEARTGOLD_FRIEND_ROSTER_H
 
+#include "constants/friend_roster.h"
+
 #include "pm_string.h"
 #include "save.h"
 
 #define FRIEND_ROSTER_MAX 32
-
-// FRIEND_ROSTER_FIELD_GENDER before the friend's gender is known (else PLAYER_GENDER_MALE / PLAYER_GENDER_FEMALE)
-#define FRIEND_ROSTER_GENDER_UNKNOWN 2
-
-enum FriendRosterField {
-    FRIEND_ROSTER_FIELD_TRAINER_ID,
-    FRIEND_ROSTER_FIELD_WINS,
-    FRIEND_ROSTER_FIELD_LOSSES,
-    FRIEND_ROSTER_FIELD_TRADES,
-    FRIEND_ROSTER_FIELD_YEAR,
-    FRIEND_ROSTER_FIELD_MONTH,
-    FRIEND_ROSTER_FIELD_DAY,
-    FRIEND_ROSTER_FIELD_AVATAR,
-    FRIEND_ROSTER_FIELD_GENDER,
-    FRIEND_ROSTER_FIELD_POFFIN_SESSIONS,
-    FRIEND_ROSTER_FIELD_PLAZA_GAME0_PLAYS,
-    FRIEND_ROSTER_FIELD_PLAZA_GAME1_PLAYS,
-    FRIEND_ROSTER_FIELD_PLAZA_GAME2_PLAYS,
-};
 
 typedef struct FriendRoster FriendRoster;
 
@@ -44,7 +27,7 @@ void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value);
 void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value);
 int FriendRoster_GetUsedSlotCount(FriendRoster *data);
 void FriendRoster_RemoveFriend(FriendRoster *data, int index);
-void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
+void FriendRoster_SetEntryField(FriendRoster *data, int index, enum FriendRosterField field, u8 value);
 void Save_FriendRoster_Init(FriendRoster *data);
 u32 Save_FriendRoster_sizeof(void);
 void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);

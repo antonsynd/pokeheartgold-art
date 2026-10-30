@@ -1480,7 +1480,7 @@ static void CommClub_WaitAckThenParentList(SysTask *task, void *commClubManager)
 static void CommClub_FinishGroup(CommClubManager *commClubManager_unused) {
     CommState_SetEntry(0);
     sCommClubManager->retCode = 2;
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     CommPlayerInfo_SendLocal();
     CommWireless_SetLostWhenAlone(1);
 }

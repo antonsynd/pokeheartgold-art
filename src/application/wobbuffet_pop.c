@@ -240,7 +240,7 @@ BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state) {
         }
         break;
     case WOBBUFFET_POP_APP_START_SYNC:
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         LinkSync_StartSync(222);
         (*state)++;
         break;

@@ -496,7 +496,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         }
         break;
     case WIFI_PLAZA_REGISTER_START_GAME:
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
             WiFiPlazaWork_GetGameMembers(lobby, memberIds);
             WiFiPlaza_SendActivityNews(lobby, param->game, WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot), memberIds[0], memberIds[1], memberIds[2], memberIds[3], 1);
@@ -624,7 +624,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
 BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case WIFI_PLAZA_END_LINK_START:
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         if (!CommState_IsWifiInLobby()) {
             CommPlayerInfo_Free();
             CommState_EndPlazaMatch();

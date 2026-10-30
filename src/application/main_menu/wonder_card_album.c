@@ -1332,13 +1332,13 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     case ALBUM_STATE_WAIT_SAVE:
         if (MainMenuUtil_GetSaveState() == 4) {
             LinkSync_StartSync(147);
-            CommState_SetErrorWatch(1, 1);
+            CommState_SetErrorWatch(TRUE, TRUE);
             *state = ALBUM_STATE_WAIT_RECEIVERS;
         }
         break;
     case ALBUM_STATE_WAIT_RECEIVERS:
         if (WonderCardAlbum_CountReceivers() == 0 || LinkSync_IsSynced(147) == TRUE) {
-            CommState_SetErrorWatch(0, 0);
+            CommState_SetErrorWatch(FALSE, FALSE);
             MainMenuUtil_ResumeSave();
             WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 18, 640);
             WaitingIcon_Delete(album->waitingIcon);

@@ -285,7 +285,7 @@ static void DrawingSessionLink_ReceiveJoinNotice(int value, int size, void *data
             work->firstJoinSeen = 1;
         }
     }
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
 }
 
 static void DrawingSessionLink_ReceiveSetJoinState1(int netId, int size, void *data, void *context) {

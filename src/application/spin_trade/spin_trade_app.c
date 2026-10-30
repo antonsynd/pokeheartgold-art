@@ -587,7 +587,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     int i, slot, myNetId;
     SpinTradeMachine *machine;
 
-    CommState_SetErrorWatch(1, 1);
+    CommState_SetErrorWatch(TRUE, TRUE);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     Sys_SetSoftResetDisableFlag(2);
@@ -1336,7 +1336,7 @@ BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
 BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
     if (!app->unk_018) {
         if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
-            CommState_SetErrorWatch(0, 0);
+            CommState_SetErrorWatch(FALSE, FALSE);
             CommState_SetMaxEntries(1);
             CommState_ResumeAlternateSearch();
             app->state = SPIN_TRADE_STATE_WAIT_DISCONNECT;
@@ -1346,7 +1346,7 @@ BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
         if (app->timer >= 120) {
             app->timer = 0;
             if (app->menu->unk3C == 0) {
-                CommState_SetErrorWatch(0, 0);
+                CommState_SetErrorWatch(FALSE, FALSE);
                 CommState_SetMaxEntries(1);
                 CommState_ResumeAlternateSearch();
             }

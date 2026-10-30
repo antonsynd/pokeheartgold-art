@@ -152,7 +152,7 @@ BOOL CTRDG_IsExisting(void);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
-extern void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
+extern void CommState_SetErrorWatch(BOOL watchMembers, BOOL reportErrors);
 
 static MysteryGiftLinkState sMysteryGiftLinkState;
 
@@ -1962,7 +1962,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (result && Comm_IsNetIdConnected((u16)result)) {
             if (LinkSync_IsSynced(171) == TRUE) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-                CommState_SetErrorWatch(1, 1);
+                CommState_SetErrorWatch(TRUE, TRUE);
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
                 MysteryGiftApp_SetSpriteAnim(data, 1);
                 MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
@@ -2000,7 +2000,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     case MYSTERY_GIFT_STATE_SAVE_FRIEND_GIFT:
         card = MysteryGiftApp_GetReceivedCard(manager);
         MainMenuUtil_ShowCardSubScreen(data->bgConfig, card);
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         MysteryGiftApp_SaveReceivedGift(manager);
         *state = MYSTERY_GIFT_STATE_WAIT_FRIEND_SAVE;
         break;

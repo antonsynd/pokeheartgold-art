@@ -184,7 +184,7 @@ static int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
 void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);
-s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, s32 arg1, s32 *state);
 
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state);
 int RecordMixing_GetMemberCount(void);
@@ -706,7 +706,7 @@ static void RecordMixing_RemoveWindows(RecordMixingApp *app) {
 }
 
 static int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_CountConnected() >= 2) {
             RecordMixing_PrintMessage(app, msg_0422_00002, FALSE);
@@ -1074,7 +1074,7 @@ static int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
-    if (Comm_SyncedSave(app->args->saveData, 2, (u32 *)&app->saveState)) {
+    if (Comm_SyncedSave(app->args->saveData, 2, &app->saveState)) {
         StopSE(SEQ_SE_DP_F209, 8);
         RecordMixing_PrintMessage(app, msg_0422_00013, FALSE);
         RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_WAIT_AFTER_SAVE);
@@ -1179,7 +1179,7 @@ static int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state) {
 
 static int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
     if (LinkSync_IsSynced(201)) {
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
         state = RECORD_MIXING_MAIN_WAIT_FADE_OUT;
     }

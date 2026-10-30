@@ -101,7 +101,7 @@ s32 FriendRoster_GetEntryField(FriendRoster *data, s32 index, s32 field) {
     return value;
 }
 
-void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value) {
+void FriendRoster_SetEntryField(FriendRoster *data, int index, enum FriendRosterField field, u8 value) {
     GF_ASSERT(index < FRIEND_ROSTER_MAX);
     switch (field) {
     case FRIEND_ROSTER_FIELD_TRAINER_ID:

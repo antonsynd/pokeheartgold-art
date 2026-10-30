@@ -116,33 +116,32 @@ int WVR_StartUpAsync(int mode, void (*callback)(void *, int), void *arg);
 int WVR_TerminateAsync(void (*callback)(void *), void *arg);
 
 int CommState_GetLinkMode(void);
-int CommState_GetBeaconId(void);
+u8 CommState_GetBeaconId(void);
 void CommState_ShowErrorAndHalt(u32);
-int Comm_GetMaxChildren(u16);
-void Comm_RecvChildFrameCallback(void);
-void Comm_RecvParentFrameCallback(void);
+void Comm_RecvChildFrameCallback(int netId, const u8 *data, int size);
+void Comm_RecvParentFrameCallback(int netId, const u8 *data, int size);
 
 u32 Wireless_GetWorkSize(void);
-void Wireless_Init(void *buffer, int mode);
-void Wireless_SetGgid(void *ggid);
-void Wireless_SetParentGameInfo(void *gameInfo, u32 length);
+BOOL Wireless_Init(void *buffer, int mode);
+void Wireless_SetGgid(u32 ggid);
+void Wireless_SetParentGameInfo(void *gameInfo, u16 length);
 void Wireless_ClearBeaconCount(void);
-void Wireless_SetReceiveCallback(void (*callback)(void), int port);
+void Wireless_SetReceiveCallback(void *callback, int port);
 BOOL Wireless_StartMeasureChannels(void);
-BOOL Wireless_StartScan(void (*callback)(void *), const void *bssid, int channel);
+BOOL Wireless_StartScan(void (*callback)(void *), const void *bssid, u16 channel);
 BOOL Wireless_IsScanning(void);
-void Wireless_StopScan(void);
+BOOL Wireless_StopScan(void);
 BOOL Wireless_IsBusy(void);
 BOOL Wireless_HasError(void);
-int Wireless_IsIdle();
-int Wireless_GetConnectedBitmap();
-int Wireless_GetState();
+BOOL Wireless_IsIdle();
+u16 Wireless_GetConnectedBitmap();
+u32 Wireless_GetState();
 void Wireless_Stop(void);
-void Wireless_ScanAndConnect(int mode, void *bssid, int channel);
-void Wireless_StartChild(int mode, void *parentInfo);
-int Wireless_IsEntryLocked(void);
-void Wireless_UpdateGameInfo(void *gameInfo, int length, void *ggid, u16 tgid);
-int Wireless_GetAid(void);
+BOOL Wireless_ScanAndConnect(int mode, void *bssid, u16 channel);
+BOOL Wireless_StartChild(int mode, const void *parentInfo);
+u8 Wireless_IsEntryLocked(void);
+void Wireless_UpdateGameInfo(const void *gameInfo, int length, u32 ggid, int tgid);
+u16 Wireless_GetAid(void);
 u32 Wireless_GetError(void);
 BOOL Wireless_End(void);
 u16 Wireless_SelectChannel(void);
@@ -322,7 +321,7 @@ static void CommWireless_InitManager(int mode) {
     buffer = sCommWireless.work->managerBuffer;
     misalignment = (u32)buffer & 0x1F;
     Wireless_Init(buffer + (0x20 - misalignment), mode);
-    Wireless_SetGgid((void *)sCommWireless.work->ggid);
+    Wireless_SetGgid(sCommWireless.work->ggid);
 }
 
 void CommWireless_ClearParents(void) {
@@ -587,7 +586,7 @@ static void CommWireless_UpdateBeaconMemberCount(void) {
         beacon->memberCount = CommWireless_CountConnected();
         DC_FlushRange(sCommWireless.work->beacon, sizeof(CommBeacon));
         Wireless_SetParentGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon));
-        Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), (void *)sCommWireless.work->ggid, sCommWireless.tgid);
+        Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), sCommWireless.work->ggid, sCommWireless.tgid);
     }
 }
 
@@ -818,7 +817,7 @@ void *CommWireless_GetRuleset(void) {
 
 void CommWireless_RefreshBeacon(void) {
     CommWireless_BuildBeacon();
-    Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), (void *)sCommWireless.work->ggid, sCommWireless.tgid);
+    Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), sCommWireless.work->ggid, sCommWireless.tgid);
 }
 
 BOOL CommWireless_HasSentBeacons(void) {

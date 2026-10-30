@@ -384,7 +384,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         Sound_SetSceneAndPlayBGM(0x34, SEQ_NONE, 0);
         GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
         DrawingSessionLink_RegisterCommands(work);
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         if (Comm_GetLocalNetId() == 0) {
             CommState_SetMaxEntries(3);
         }

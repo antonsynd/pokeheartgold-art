@@ -882,7 +882,7 @@ BOOL MimeJrTop_Exit(OverlayManager *man, int *state) {
         result = MimeJrTop_HandleConnectionLost(OverlayManager_GetData(man));
         OverlayManager_FreeData(man);
         Heap_Destroy(HEAP_ID_113);
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         if (result != 0) {
             return TRUE;
         }

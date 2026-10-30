@@ -19,7 +19,7 @@
 #include "wireless_manager.h"
 
 int CommState_GetLinkMode(void);
-void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
+void CommState_SetErrorWatch(BOOL watchMembers, BOOL reportErrors);
 void CommState_CheckLinkError(int unused);
 void CommState_Main(void);
 void LinkSync_Free(void);
@@ -1326,7 +1326,7 @@ int Comm_GetConnectedChildren(void) {
 
 BOOL Comm_HasLinkError(void) {
     if (sCommCore.work != NULL && sCommCore.work->linkError != 0) {
-        CommState_SetErrorWatch(1, 1);
+        CommState_SetErrorWatch(TRUE, TRUE);
         return TRUE;
     }
     return CommWireless_IsLinkLost();

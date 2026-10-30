@@ -967,7 +967,7 @@ static BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *wor
     return FALSE;
 }
 
-void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord *src, GlobalTerminalNetDressUpForm *dst) {
+void GlobalTerminalNet_DressUpToUploadForm(const SaveFashionDataSub *src, GlobalTerminalNetDressUpForm *dst) {
     int i;
 
     MI_CpuFill8(dst, 0, sizeof(GlobalTerminalNetDressUpForm));
@@ -983,10 +983,10 @@ void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord 
     dst->y = src->y;
     dst->form = src->form;
     dst->itemMask = src->itemMask;
-    dst->mailMsgBank = src->mailMsgBank;
-    dst->mailMsgNo = src->mailMsgNo;
-    dst->mailField0 = src->mailField0;
-    dst->mailField1 = src->mailField1;
+    dst->mailMsgBank = src->mailMessage.msg_bank;
+    dst->mailMsgNo = src->mailMessage.msg_no;
+    dst->mailField0 = src->mailMessage.fields[0];
+    dst->mailField1 = src->mailMessage.fields[1];
     {
         const u8 *item = src->items[0];
         for (i = 0; i < 10; i++) {
@@ -1001,7 +1001,7 @@ void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord 
     dst->language = src->language;
 }
 
-void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, GlobalTerminalNetDressUpRecord *dst) {
+void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, SaveFashionDataSub *dst) {
     int i;
 
     MI_CpuFill8(dst, 0, FashionEntry_sizeof());
@@ -1017,10 +1017,10 @@ void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *s
     dst->y = src->y;
     dst->form = src->form;
     dst->itemMask = src->itemMask;
-    dst->mailMsgBank = src->mailMsgBank;
-    dst->mailMsgNo = src->mailMsgNo;
-    dst->mailField0 = src->mailField0;
-    dst->mailField1 = src->mailField1;
+    dst->mailMessage.msg_bank = src->mailMsgBank;
+    dst->mailMessage.msg_no = src->mailMsgNo;
+    dst->mailMessage.fields[0] = src->mailField0;
+    dst->mailMessage.fields[1] = src->mailField1;
     {
         const u8 *item = src->items[0];
         for (i = 0; i < 10; i++) {
@@ -1036,5 +1036,5 @@ void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *s
     for (i = 0; i < 11; i++) {
         dst->nickname[i] = EOS;
     }
-    dst->unk_38[0] = 0;
+    dst->secondTextGender = 0;
 }

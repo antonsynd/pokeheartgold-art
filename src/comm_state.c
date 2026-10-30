@@ -309,7 +309,7 @@ s32 CommState_IsAlternateLinked(void) {
 void CommState_ResumeAlternateSearch(void) {
     Wireless_SetEntryLocked(0);
     if ((sCommState->watchMembers != 1) || (sCommState->reportErrors != 1) || (sCommState->linkMode == COMM_TYPE_UNION)) {
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
     }
     WirelessStatusIcon_Destroy();
     sCommState->linkMode = COMM_TYPE_UNION;
@@ -1233,7 +1233,7 @@ void CommState_LeaveWifiMatch(void) {
 
 void CommState_EndWifiMatch(void) {
     if (sCommState) {
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         if (!Comm_GetLocalNetId()) {
             sCommState->waitHostDisconnect = 0;
         } else {
@@ -1272,7 +1272,7 @@ void CommState_InitWfcSession(SaveData *saveData) {
         sCommState->linkMode = COMM_TYPE_24;
         sCommState->unk55 = 1;
         sCommState->saveData = saveData;
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         Sys_SetSoftResetDisableFlag(1);
     }
 }
@@ -1280,7 +1280,7 @@ void CommState_InitWfcSession(SaveData *saveData) {
 void CommState_FreeWfcSession(void) {
     if (sCommState) {
         Sys_ClearSoftResetDisableFlag(1);
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         Heap_Free(sCommState);
         sCommState = NULL;
         Heap_Destroy(HEAP_ID_15);
@@ -1296,7 +1296,7 @@ void CommState_InitMysteryGiftWfcSession(SaveData *saveData) {
         sCommState->linkMode = COMM_TYPE_25;
         sCommState->unk55 = 1;
         sCommState->saveData = saveData;
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         Sys_SetSoftResetDisableFlag(1);
     }
 }
@@ -1304,7 +1304,7 @@ void CommState_InitMysteryGiftWfcSession(SaveData *saveData) {
 void CommState_FreeMysteryGiftWfcSession(void) {
     if (sCommState) {
         Sys_ClearSoftResetDisableFlag(1);
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         Heap_Free(sCommState);
         sCommState = NULL;
         Heap_Destroy(HEAP_ID_15);
@@ -1319,7 +1319,7 @@ void CommState_InitWiiMessageWfcSession(SaveData *saveData) {
         sCommState->linkMode = COMM_TYPE_EMAIL_WIFI;
         sCommState->unk55 = 1;
         sCommState->saveData = saveData;
-        CommState_SetErrorWatch(0, 1);
+        CommState_SetErrorWatch(FALSE, TRUE);
         Sys_SetSoftResetDisableFlag(1);
     }
 }
@@ -1327,7 +1327,7 @@ void CommState_InitWiiMessageWfcSession(SaveData *saveData) {
 void CommState_FreeWiiMessageWfcSession(void) {
     if (sCommState) {
         Sys_ClearSoftResetDisableFlag(1);
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         Heap_Free(sCommState);
         sCommState = NULL;
         Heap_Destroy(HEAP_ID_15);
@@ -1477,7 +1477,7 @@ WifiClubStatusData *CommState_GetWifiClubData(void) {
     return sCommState->wifiClubData;
 }
 
-void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors) {
+void CommState_SetErrorWatch(BOOL watchMembers, BOOL reportErrors) {
     if (sCommState) {
         sCommState->watchMembers = watchMembers;
         sCommState->reportErrors = reportErrors;
@@ -1794,7 +1794,7 @@ void Comm_InitSyncedSave(s32 *state) {
     *state = 0;
 }
 
-s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state) {
+BOOL Comm_SyncedSave(SaveData *saveData, s32 arg1, s32 *state) {
     switch (*state) {
     case 0:
         LinkSync_StartSync(111);
@@ -1835,9 +1835,9 @@ s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state) {
         *state = 6;
         break;
     case 6:
-        return 1;
+        return TRUE;
     }
-    return 0;
+    return FALSE;
 }
 
 void Comm_RecordPlayerLocations(SaveWiFiHistory *wifiHistory) {
@@ -1987,17 +1987,17 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum He
         String *string = PlayerProfile_GetPlayerName_NewString(playerProfile, heapID);
         FriendRoster_SetPlayerName(wifiList, slot, string);
         String_Delete(string);
-        FriendRoster_SetEntryField(wifiList, slot, 8, PlayerProfile_GetTrainerGender(playerProfile));
-        FriendRoster_SetEntryField(wifiList, slot, 0, PlayerProfile_GetTrainerID(playerProfile));
-    } else if (((mode - 1) <= 1) && (FriendRoster_GetEntryField(wifiList, slot, 8) == 2)) {
-        FriendRoster_SetEntryField(wifiList, slot, 8, PlayerProfile_GetTrainerGender(playerProfile));
-        FriendRoster_SetEntryField(wifiList, slot, 0, PlayerProfile_GetTrainerID(playerProfile));
+        FriendRoster_SetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_GENDER, PlayerProfile_GetTrainerGender(playerProfile));
+        FriendRoster_SetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_TRAINER_ID, PlayerProfile_GetTrainerID(playerProfile));
+    } else if (((mode - 1) <= 1) && (FriendRoster_GetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_GENDER) == FRIEND_ROSTER_GENDER_UNKNOWN)) {
+        FriendRoster_SetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_GENDER, PlayerProfile_GetTrainerGender(playerProfile));
+        FriendRoster_SetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_TRAINER_ID, PlayerProfile_GetTrainerID(playerProfile));
     }
     String *string = String_New(120, heapID);
     CopyU16ArrayToString(string, CommPlayerInfo_GetGroupName(netId));
     FriendRoster_SetGroupName(wifiList, slot, string);
     String_Delete(string);
-    FriendRoster_SetEntryField(wifiList, slot, 7, PlayerProfile_GetAvatar(playerProfile));
+    FriendRoster_SetEntryField(wifiList, slot, FRIEND_ROSTER_FIELD_AVATAR, PlayerProfile_GetAvatar(playerProfile));
     CommPlayerInfo_SaveRecords(saveData);
 }
 

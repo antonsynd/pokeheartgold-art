@@ -14,7 +14,7 @@ int Wireless_GetConnectedBitmap(void);
 int MATH_CountPopulation(u32);
 void CommState_SetMaxEntries(int);
 void GF_AssertFail(void);
-void CommState_SetErrorWatch(int, int);
+void CommState_SetErrorWatch(BOOL, BOOL);
 
 void DrawingSessionLink_RegisterCommands(void *arg);
 

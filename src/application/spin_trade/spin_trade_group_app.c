@@ -754,7 +754,7 @@ static void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app) {
 }
 
 static int SpinTradeGroup_State_ShowPrompt(SpinTradeGroupApp *app, int state) {
-    CommState_SetErrorWatch(0, 1);
+    CommState_SetErrorWatch(FALSE, TRUE);
     if (!Comm_GetLocalNetId()) {
         if ((int)Comm_CountConnected() >= 2) {
             SpinTradeGroup_PrintMessage(app, msg_0207_00002, 0);
@@ -1128,7 +1128,7 @@ static int SpinTradeGroup_State_StartExitSync(SpinTradeGroupApp *app, int state)
 
 static int SpinTradeGroup_State_WaitExitSync(SpinTradeGroupApp *app, int state) {
     if (LinkSync_IsSynced(0xCA)) {
-        CommState_SetErrorWatch(0, 0);
+        CommState_SetErrorWatch(FALSE, FALSE);
         BeginNormalPaletteFade(0, 0x10, 0x10, RGB_BLACK, 0x10, 1, HEAP_ID_102);
         state = 3;
     }

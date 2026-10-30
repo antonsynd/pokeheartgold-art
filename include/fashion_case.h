@@ -4,9 +4,24 @@
 #include "mail_message.h"
 
 typedef struct SaveFashionDataSub {
-    u8 filler_00[0x40];
+    u32 magic;
+    u32 personality;
+    u32 otId;
+    u16 species;
+    u16 nickname[11];
+    u16 secondText[8];
+    s8 z;
+    u8 x;
+    u8 y;
+    u8 form;
+    u8 secondTextGender;
+    u8 padding_39[3];
+    u32 itemMask;
     MailMessage mailMessage;
-    u8 filler_48[0x2C];
+    u8 items[10][4];
+    u8 backdrop;
+    u8 language;
+    u8 padding_72[2];
 } SaveFashionDataSub; // size=0x74
 
 typedef struct SaveFashionDataSub3FC {

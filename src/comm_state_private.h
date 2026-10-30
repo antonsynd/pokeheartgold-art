@@ -31,6 +31,7 @@ int DWC_IsEqualFriendData(DWCFriendData *friendData0, DWCFriendData *friendData1
 #ifndef POKEHEARTGOLD_FRIEND_ROSTER_H
 #define POKEHEARTGOLD_FRIEND_ROSTER_H
 
+#include "constants/friend_roster.h"
 #include "pm_string.h"
 #include "save.h"
 
@@ -48,7 +49,7 @@ s32 FriendRoster_GetEntryField(WiFiList *data, s32 index, s32 field);
 void FriendRoster_Compact(WiFiList *data);
 void FriendRoster_UpdateDate(WiFiList *data, s32 index);
 u16 FriendRoster_GetUsedSlotCount(WiFiList *data);
-void FriendRoster_SetEntryField(WiFiList *data, int index, int field, u32 value);
+void FriendRoster_SetEntryField(WiFiList *data, int index, enum FriendRosterField field, u32 value);
 void Save_FriendRoster_Init(WiFiList *data);
 void FriendRoster_SetGroupName(WiFiList *data, int index, String *name);
 void FriendRoster_SetPlayerName(WiFiList *data, int index, String *name);
@@ -256,7 +257,7 @@ void CommState_StartPlazaMatch(s32 index);
 void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
 WifiClubStatusData *CommState_GetWifiClubData(void);
-void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
+void CommState_SetErrorWatch(BOOL watchMembers, BOOL reportErrors);
 BOOL CommState_ReportsErrors(void);
 u8 CommState_GetLinkMode(void);
 u8 CommState_GetBeaconId(void);
@@ -293,7 +294,7 @@ void CommState_PlazaEndMatch(void);
 void CommState_PlazaTimedOut(void);
 void CommState_SetFrontierWifiLinkMode(void);
 void Comm_InitSyncedSave(s32 *state);
-s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, s32 arg1, s32 *state);
 void Comm_RecordPlayerLocations(SaveWiFiHistory *wifiHistory);
 void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8 language);
 s32 Comm_InitDwc(enum HeapID heapID);

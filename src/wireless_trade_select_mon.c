@@ -93,7 +93,7 @@ void WirelessTrade_SetWork(FieldSystem *fieldSystem, WirelessTradeSelectMon *wor
 
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 void Comm_InitSyncedSave(s32 *state);
-s32 Comm_SyncedSave(SaveData *saveData, s32 unused, s32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, s32 unused, s32 *state);
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode);
 
 static void WirelessTradeSelectMon_LoadMonIconGfx(NNSG2dCharacterData *charData, u32 species, u32 form, u32 isEgg, u32 slot, Sprite *sprite);

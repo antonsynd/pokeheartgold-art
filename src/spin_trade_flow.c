@@ -103,7 +103,7 @@ BOOL SpinTradeFlow_WaitGroupApp(SpinTradeFlow *work) {
         if (SpinTradeArgs_GetResult(work->subwork) == 0) {
             work->state = SPIN_TRADE_FLOW_FINISH;
         } else {
-            CommState_SetErrorWatch(1, 1);
+            CommState_SetErrorWatch(TRUE, TRUE);
             work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
             work->subwork->unk_00 = 1;
             work->state = SPIN_TRADE_FLOW_WAIT_PARTY_MENU;

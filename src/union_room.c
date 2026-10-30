@@ -149,7 +149,7 @@ void UnionRoom_ParentLinked(struct UnionRoom *unionRoom) {
     status = CommWireless_GetRuleset();
     if (Comm_GetConnectedChildren() && UnionRoom_AnyOtherPlayerPresent() == TRUE && status->activity != UNION_ACTIVITY_BUSY) {
         CommPlayerInfo_SendLocal();
-        CommState_SetErrorWatch(1, 1);
+        CommState_SetErrorWatch(TRUE, TRUE);
         UnionRoom_SetBeaconActivity(UNION_ACTIVITY_LINKED);
         UnionRoom_SetState(unionRoom, UnionRoom_ParentInSession, 0);
     }
@@ -253,7 +253,7 @@ void UnionRoom_WaitJoinedProfile(struct UnionRoom *unionRoom) {
             unionRoom->connectRequest = UNION_ROOM_CONNECT_NONE;
             unionRoom->joinStatus = UNION_ROOM_JOIN_JOINED;
             unionRoom->partnerCancelled = 0;
-            CommState_SetErrorWatch(1, 1);
+            CommState_SetErrorWatch(TRUE, TRUE);
             UnionRoom_SetState(unionRoom, UnionRoom_ChildInSession, 3);
         }
     } else if (!CommState_GetJoinResult()) {

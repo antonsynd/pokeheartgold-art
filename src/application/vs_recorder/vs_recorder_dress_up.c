@@ -524,7 +524,7 @@ static BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         work->step++;
         break;
     case DRESS_UP_SEND_UPLOAD_STEP_REQUEST:
-        if (GlobalTerminalNet_RequestDressUpUpload(VsRecorder_GetNet(work), dressUp->uploadCard, (GlobalTerminalNetDressUpRecord *)dressUp->ownPhoto) == TRUE) {
+        if (GlobalTerminalNet_RequestDressUpUpload(VsRecorder_GetNet(work), dressUp->uploadCard, dressUp->ownPhoto) == TRUE) {
             FrontierCard_Delete(dressUp->uploadCard);
             work->step++;
         }
@@ -948,7 +948,7 @@ static BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work) {
         dressUp->showProfile = FALSE;
         {
             GlobalTerminalNetDressUpUpload *download = dressUp->downloads[dressUp->photoIndex];
-            GlobalTerminalNet_UnpackDressUpPhoto(&download->form, (GlobalTerminalNetDressUpRecord *)dressUp->photo);
+            GlobalTerminalNet_UnpackDressUpPhoto(&download->form, dressUp->photo);
             dressUp->portrait = AccessoryPortrait_Create(&dressUp->portraitConfig, dressUp->photo);
         }
         AccessoryPortrait_SetMonVisible(dressUp->portrait, FALSE);
@@ -1111,7 +1111,7 @@ static BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
             VsRecorder_SetVBlankPaused(work, FALSE);
             VsRecorder_LoadScreen(work, 80, GF_BG_LYR_MAIN_3);
         } else {
-            GlobalTerminalNet_UnpackDressUpPhoto(&dressUp->downloads[dressUp->photoIndex]->form, (GlobalTerminalNetDressUpRecord *)dressUp->photo);
+            GlobalTerminalNet_UnpackDressUpPhoto(&dressUp->downloads[dressUp->photoIndex]->form, dressUp->photo);
             dressUp->portrait = AccessoryPortrait_Create(&dressUp->portraitConfig, dressUp->photo);
             AccessoryPortrait_SetMonVisible(dressUp->portrait, FALSE);
             VsRecorder_SetPhotoWindow();
@@ -1188,7 +1188,7 @@ static BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
     case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_CREATE_PHOTO:
         VsRecorder_SetVBlankPaused(work, TRUE);
         if (!dressUp->showProfile) {
-            GlobalTerminalNet_UnpackDressUpPhoto(&dressUp->downloads[dressUp->photoIndex]->form, (GlobalTerminalNetDressUpRecord *)dressUp->photo);
+            GlobalTerminalNet_UnpackDressUpPhoto(&dressUp->downloads[dressUp->photoIndex]->form, dressUp->photo);
             dressUp->portrait = AccessoryPortrait_Create(&dressUp->portraitConfig, dressUp->photo);
             AccessoryPortrait_SetMonVisible(dressUp->portrait, FALSE);
             VsRecorder_SetPhotoWindow();
