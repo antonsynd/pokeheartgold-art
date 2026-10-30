@@ -162,7 +162,7 @@ static u32 *Save_RankingSys_GetPlayerStats(SaveData *saveData, enum HeapID heapI
         }
         default:
             if (i >= RANKINGS_RECORD_BATTLE_TOWER_SINGLE_WINS && i <= RANKINGS_RECORD_BATTLE_TOWER_WIFI_WINS) {
-                ret[i] = FrontierSave_GetStat(frontierSave, sStatIDs[i], 0xFF);
+                ret[i] = FrontierSave_GetStat(frontierSave, sStatIDs[i], FRONTIER_STAT_NO_FRIEND);
             } else {
                 ret[i] = GameStats_GetCapped(gameStats, sStatIDs[i]);
             }

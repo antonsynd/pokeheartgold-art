@@ -199,7 +199,7 @@ void FrontierFieldSystem_PackLinkAllyData(FrontierFieldSystem *frontierFsys, Sav
         Pokemon *mon = Party_GetMonByIndex(party, frontierFsys->partyMonIndexes[i]);
         frontierFsys->linkSendBuffer[1 + i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
     }
-    frontierFsys->linkSendBuffer[3] = FrontierData_TowerRoundAction(frontierFsys->frontierData, 3, 0);
+    frontierFsys->linkSendBuffer[3] = FrontierData_TowerRoundAction(frontierFsys->frontierData, TOWER_MODE_LINK, FRONTIER_DATA_GET);
 }
 
 void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys) {

@@ -88,14 +88,6 @@ FS_EXTERN_OVERLAY(OVY_5);
 FS_EXTERN_OVERLAY(OVY_6);
 FS_EXTERN_OVERLAY(OVY_18);
 
-typedef struct BattlerInitData {
-    u8 battler;
-    u8 battlerType;
-} BattlerInitData;
-
-// The overlay 5 link battle screen arguments, held by the battle system while that screen runs.
-#define LINK_SCREEN_ARGS(battleSystem) ((LinkBattleScreenArgs *)(battleSystem)->linkScreenArgs)
-
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 
 const BattleBgTemplateSet gBattleReinitBgTemplates = {
@@ -269,7 +261,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     MIi_CpuClear16(0, GetMainBgPlttAddr(), paletteSize);
     paletteSize = GetSubBgPlttSize();
     MIi_CpuClear16(0, GetSubBgPlttAddr(), paletteSize);
-    battleSystem->gf3dVramMan = (void *)Battle_Create3DVramMan();
+    battleSystem->gf3dVramMan = Battle_Create3DVramMan();
     HBlankInterruptDisable();
     FontID_Alloc(4, HEAP_ID_BATTLE);
     battleSystem->hpNumPrinter = (void *)MessagePrinter_New(14, 2, 15, HEAP_ID_BATTLE);
@@ -319,12 +311,12 @@ void Battle_BattleInit(OverlayManager *manager) {
     PokepicManager_SetPlttBaseAddrAndSize(battleSystem->pokepicManager, 0, 192);
     BattleSystem_HpBar_Init(battleSystem);
     Battle_ReserveTexAndPlttVram();
-    battleSystem->animSystem = (u32 *)BattleAnimSystem_New(HEAP_ID_BATTLE);
+    battleSystem->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
     BattleSystem_InitTerrainsAndBalls(battleSystem);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
     battleSystem->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0197_bin, HEAP_ID_BATTLE);
-    battleSystem->attackMsgData = (void *)NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0003_EVERYWHERE_bin, HEAP_ID_BATTLE);
+    battleSystem->attackMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0003_EVERYWHERE_bin, HEAP_ID_BATTLE);
     battleSystem->msgFormat = MessageFormat_New(HEAP_ID_BATTLE);
     battleSystem->msgBuffer = String_New(320, HEAP_ID_BATTLE);
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_BG), battleSystem->bgPaletteBackup, 224);
@@ -345,7 +337,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem_SetupTextFlags(battleSystem);
     BagCursor_Battle_Init(BattleSystem_GetBagCursor(battleSystem));
     battleSystem->pokepicAnimManager = PokepicAnimManager_New(HEAP_ID_BATTLE, 4, FALSE);
-    battleSystem->cellTransferState = (void *)CreateCellTransferStateManager(4, HEAP_ID_BATTLE);
+    battleSystem->cellTransferState = CreateCellTransferStateManager(4, HEAP_ID_BATTLE);
     if (battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) {
         for (i = 0; i < BATTLER_MAX; i++) {
             battleSystem->chatotVoiceParam[i] = setup->chatotVoiceParam[i];
@@ -430,7 +422,7 @@ void Battle_BattleExit(OverlayManager *man) {
     setup->bagCursor = battleSystem->bagCursor;
     setup->keyPressedSave = battleSystem->keyPressedSave;
     setup->unk_128 = battleSystem->unk98;
-    setup->unk_134 = (struct BattleSetupSub_134 *)battleSystem->unk9C;
+    setup->unk_134 = battleSystem->unk9C;
     setup->safariBalls = battleSystem->safariBallCnt;
     setup->winFlag = battleSystem->battleOutcomeFlag & 0x3F;
     setup->caughtBattlerId = battleSystem->caughtBattlerId;
@@ -450,11 +442,11 @@ void Battle_BattleExit(OverlayManager *man) {
     PaletteData_FreeBuffers(battleSystem->palette, PLTTBUF_SUB_OBJ);
     PaletteData_Free(battleSystem->palette);
     DestroyMsgData(battleSystem->msgData);
-    DestroyMsgData((MsgData *)battleSystem->attackMsgData);
+    DestroyMsgData(battleSystem->attackMsgData);
     MessageFormat_Delete(battleSystem->msgFormat);
     PokepicAnimManager_Delete(battleSystem->pokepicAnimManager);
     ParticleSystem_FreeAll();
-    BattleAnimSystem_Delete((BattleAnimSystem *)battleSystem->animSystem);
+    BattleAnimSystem_Delete(battleSystem->animSystem);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         OpponentData_Free(battleSystem, battleSystem->opponentData[i], battleSystem->graphicsMode);
@@ -474,12 +466,12 @@ void Battle_BattleExit(OverlayManager *man) {
     SysTask_Destroy((SysTask *)battleSystem->drawGraphicsTask);
     SysTask_Destroy((SysTask *)battleSystem->criticalHpMusicTask);
     GF_TouchpadStopSampling();
-    Battle_Delete3DVramMan((GF3DVramMan *)battleSystem->gf3dVramMan);
+    Battle_Delete3DVramMan(battleSystem->gf3dVramMan);
     SetLCRNGSeed(battleSystem->lcrngSeedBackup);
     if (BattleSystem_GetCriticalHpMusicFlag(battleSystem)) {
         StopSE(SEQ_SE_DP_HINSI, 0);
     }
-    DestroyCellTransferStateManager((NNSG2dCellTransferState *)battleSystem->cellTransferState);
+    DestroyCellTransferStateManager(battleSystem->cellTransferState);
     if (BattleSystem_IsRecordingPaused(battleSystem)) {
         Sound_SetMasterVolume(127);
     }
@@ -613,12 +605,12 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
 
     battleSystem->storage = setup->storagePC;
     battleSystem->options = setup->options;
-    battleSystem->palPad = (u32 *)setup->palPad;
+    battleSystem->palPad = setup->palPad;
     battleSystem->bagCursor = setup->bagCursor;
     battleSystem->keyPressedSave = setup->keyPressedSave;
     battleSystem->unk98 = setup->unk_128;
     battleSystem->evolutionLocation = setup->evolutionLocation;
-    battleSystem->unk9C = (u32 *)setup->unk_134;
+    battleSystem->unk9C = setup->unk_134;
     battleSystem->safariBallCnt = setup->safariBalls;
     battleSystem->terrain = setup->terrain;
     battleSystem->backgroundId = setup->battleBg;
@@ -667,7 +659,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = gDoublesBattlerTypes[i];
-                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             }
 
             battleSystem->maxBattlers = i;
@@ -693,7 +685,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkMultiBattlerTypes[BattleSystem_GetLinkPosition(battleSystem, networkID)][BattleSystem_GetLinkPosition(battleSystem, i)];
-                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             }
             battleSystem->maxBattlers = i;
             for (i = 0; i < BATTLER_MAX; i++) {
@@ -716,7 +708,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkDoublesBattlerTypes[networkID][i];
-                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
                 OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
             }
             battleSystem->maxBattlers = i;
@@ -745,7 +737,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
             for (i = 0; i < BATTLER_MAX / 2; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkSinglesBattlerTypes[networkID * 2 + i];
-                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
                 OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
             }
             battleSystem->maxBattlers = i;
@@ -768,7 +760,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = gDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
@@ -802,7 +794,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = gDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
@@ -826,7 +818,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = gDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
@@ -857,7 +849,7 @@ static void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *
         for (i = 0; i < BATTLER_MAX / 2; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = sSinglesBattlerTypes[i];
-            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, &battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
@@ -1434,33 +1426,33 @@ BOOL Battle_PartyPreviewInit(OverlayManager *man) {
         return FALSE;
     }
     battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(LinkBattleScreenArgs));
-    MIi_CpuClearFast(0, battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
+    MI_CpuClearFast(battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
     netId = Comm_GetLocalNetId();
     switch (Comm_GetBattleSlot(netId)) {
     case 0:
     case 3:
-        LINK_SCREEN_ARGS(battleSystem)->parties[0] = battleSystem->trainerParty[netId];
-        LINK_SCREEN_ARGS(battleSystem)->parties[2] = battleSystem->trainerParty[BattleSystem_GetBattlerIdPartner(battleSystem, netId)];
+        battleSystem->linkScreenArgs->parties[0] = battleSystem->trainerParty[netId];
+        battleSystem->linkScreenArgs->parties[2] = battleSystem->trainerParty[BattleSystem_GetBattlerIdPartner(battleSystem, netId)];
         break;
     case 1:
     case 2:
-        LINK_SCREEN_ARGS(battleSystem)->parties[0] = battleSystem->trainerParty[BattleSystem_GetBattlerIdPartner(battleSystem, netId)];
-        LINK_SCREEN_ARGS(battleSystem)->parties[2] = battleSystem->trainerParty[netId];
+        battleSystem->linkScreenArgs->parties[0] = battleSystem->trainerParty[BattleSystem_GetBattlerIdPartner(battleSystem, netId)];
+        battleSystem->linkScreenArgs->parties[2] = battleSystem->trainerParty[netId];
         break;
     }
-    LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
-    LINK_SCREEN_ARGS(battleSystem)->mode = 0;
+    battleSystem->linkScreenArgs->heapId = HEAP_ID_BATTLE;
+    battleSystem->linkScreenArgs->mode = 0;
     switch (Comm_GetBattleSlot(netId)) {
     case 0:
     case 3:
-        LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 0;
+        battleSystem->linkScreenArgs->multiOrSide = 0;
         break;
     case 1:
     case 2:
-        LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 1;
+        battleSystem->linkScreenArgs->multiOrSide = 1;
         break;
     }
-    LinkBattleScreen_Start(LINK_SCREEN_ARGS(battleSystem));
+    LinkBattleScreen_Start(battleSystem->linkScreenArgs);
     return TRUE;
 }
 
@@ -1468,10 +1460,10 @@ BOOL Battle_PartyPreviewMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
 
-    if (LINK_SCREEN_ARGS(battleSystem)->done) {
+    if (battleSystem->linkScreenArgs->done) {
         for (i = 0; i < 4; i++) {
-            if (LINK_SCREEN_ARGS(battleSystem)->names[i] != NULL) {
-                Heap_Free(LINK_SCREEN_ARGS(battleSystem)->names[i]);
+            if (battleSystem->linkScreenArgs->names[i] != NULL) {
+                Heap_Free(battleSystem->linkScreenArgs->names[i]);
             }
         }
         Heap_Free(battleSystem->linkScreenArgs);
@@ -1496,27 +1488,27 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
     MI_CpuClearFast(battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
     if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
         for (i = 0; i < BATTLER_MAX; i++) {
-            LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(i)] = battleSystem->trainerParty[i];
+            battleSystem->linkScreenArgs->parties[Comm_GetBattleSlot(i)] = battleSystem->trainerParty[i];
             slot = Comm_GetBattleSlot(i);
-            LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[i], HEAP_ID_BATTLE);
+            battleSystem->linkScreenArgs->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[i], HEAP_ID_BATTLE);
         }
-        LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
-        LINK_SCREEN_ARGS(battleSystem)->mode = 1;
-        LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 1;
+        battleSystem->linkScreenArgs->heapId = HEAP_ID_BATTLE;
+        battleSystem->linkScreenArgs->mode = 1;
+        battleSystem->linkScreenArgs->multiOrSide = 1;
     } else {
         int other;
-        LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(netId)] = battleSystem->trainerParty[netId];
+        battleSystem->linkScreenArgs->parties[Comm_GetBattleSlot(netId)] = battleSystem->trainerParty[netId];
         other = netId ^ 1;
-        LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(other)] = battleSystem->trainerParty[other];
+        battleSystem->linkScreenArgs->parties[Comm_GetBattleSlot(other)] = battleSystem->trainerParty[other];
         slot = Comm_GetBattleSlot(netId);
-        LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[netId], HEAP_ID_BATTLE);
+        battleSystem->linkScreenArgs->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[netId], HEAP_ID_BATTLE);
         slot = Comm_GetBattleSlot(other);
-        LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[other], HEAP_ID_BATTLE);
-        LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
-        LINK_SCREEN_ARGS(battleSystem)->mode = 1;
-        LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 0;
+        battleSystem->linkScreenArgs->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[other], HEAP_ID_BATTLE);
+        battleSystem->linkScreenArgs->heapId = HEAP_ID_BATTLE;
+        battleSystem->linkScreenArgs->mode = 1;
+        battleSystem->linkScreenArgs->multiOrSide = 0;
     }
-    LinkBattleScreen_Start(LINK_SCREEN_ARGS(battleSystem));
+    LinkBattleScreen_Start(battleSystem->linkScreenArgs);
     return TRUE;
 }
 
@@ -1524,10 +1516,10 @@ BOOL Battle_VsScreenMain(OverlayManager *man) {
     BattleSystem *battleSystem = OverlayManager_GetData(man);
     int i;
 
-    if (LINK_SCREEN_ARGS(battleSystem)->done) {
+    if (battleSystem->linkScreenArgs->done) {
         for (i = 0; i < 4; i++) {
-            if (LINK_SCREEN_ARGS(battleSystem)->names[i] != NULL) {
-                Heap_Free(LINK_SCREEN_ARGS(battleSystem)->names[i]);
+            if (battleSystem->linkScreenArgs->names[i] != NULL) {
+                Heap_Free(battleSystem->linkScreenArgs->names[i]);
             }
         }
         Heap_Free(battleSystem->linkScreenArgs);

@@ -494,7 +494,7 @@ typedef struct OpponentData {
     SysTask *pokepicBobTask;
     u16 pokepicBobAngle;
     int substituteShown;
-    u32 *pokepicAnimNarc;
+    NARC *pokepicAnimNarc;
     u8 commandReceived;
     u8 unk1A9[3];
 } OpponentData;
@@ -525,11 +525,11 @@ typedef struct BattleSystemUnusedWords {
 typedef struct BattleInput BattleInput;
 
 struct BattleSystem {
-    u32 *gf3dVramMan;
+    struct GF3DVramMan *gf3dVramMan;
     BgConfig *bgConfig;
     Window *window;
     MsgData *msgData;
-    u32 *attackMsgData;
+    MsgData *attackMsgData;
     MessageFormat *msgFormat;
     String *msgBuffer;
     u32 drawGraphicsTask;
@@ -548,27 +548,27 @@ struct BattleSystem {
     Party *trainerParty[4];
     SOUND_CHATOT *chatotVoice[4];
     PokepicManager *pokepicManager;
-    u32 *animSystem;
+    struct BattleAnimSystem *animSystem;
     SpriteSystem *spriteRenderer;
     SpriteManager *gfxHandler;
     u32 *unk98;
-    u32 *unk9C;
+    struct BattleSetupSub_134 *unk9C;
     u16 trainerId[4];
     u8 trainerGender[4];
     Trainer trainers[4];
     BattleTerrain terrains[2]; // Battle Background..?
     BattleInput *battleInput;
-    u32 *partyGauges[2];
+    struct PartyGauge *partyGauges[2];
     BattleNumberPrinter *hpNumPrinter;
     BattleNumberPrinter *levelNumPrinter;
-    void *msgIcon;
+    struct PaletteBlink *msgIcon;
     Options *options;
-    u32 *palPad;
-    void *waitingIcon;
+    struct SavePalPad *palPad;
+    struct WaitingIcon *waitingIcon;
     u8 *keyPressedSave;
-    u32 *linkScreenArgs;
-    void *pokepicAnimManager; // related to animations
-    u32 *cellTransferState;
+    struct LinkBattleScreenArgs *linkScreenArgs;
+    struct PokepicAnimManager *pokepicAnimManager; // related to animations
+    NNSG2dCellTransferState *cellTransferState;
     MonPicData monPicData[4];
     BattleSystemUnusedWords unk210;
     GameStats *gameStats;
@@ -598,7 +598,7 @@ struct BattleSystem {
     int backgroundId;
     int location;
     u32 battleSpecial;
-    int timezone; // might be timeOfDay? unclear
+    TIMEOFDAY timezone; // might be timeOfDay? unclear
     int safariBallCnt;
     u8 monsBattled[4];
     u32 regulationFlag;
@@ -726,9 +726,9 @@ struct BallThrow { // TODO: Give a better name.
     int modeFrames;
     int arcHeight;
     SysTask *task;
-    int burstEffect;
-    int paletteFlash;
-    int battlerSprites;
+    struct BallBurstEffect *burstEffect;
+    struct BattleAnimPaletteBlend *paletteFlash;
+    struct BattleAnimBattlerSprites *battlerSprites;
     int startDelay;
 }; // Size: 0xe0
 

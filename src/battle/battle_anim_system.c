@@ -3378,7 +3378,7 @@ BattleAnimBattlerSprites *BattleAnimBattlerSprites_New(BattleSystem *battleSyste
         sprites->picData[i] = BattleSystem_GetMonPicData(battleSystem, i);
     }
     BattleSystem_GetBattlerTypes(battleSystem, sprites->battlerTypes);
-    BattleSystem_GetPokepics(battleSystem, (void **)sprites->pokepics);
+    BattleSystem_GetPokepics(battleSystem, sprites->pokepics);
     narc = NARC_New(NARC_a_0_0_8, heapId);
     for (i = 0; i < BATTLER_MAX; ++i) {
         if ((i == sprites->battler || sprites->battler == 0xFF) && sprites->pokepics[i] != NULL) {

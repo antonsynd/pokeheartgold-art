@@ -103,7 +103,7 @@ PokepicManager *BattleSystem_GetPokepicManager(BattleSystem *battleSystem) {
     return battleSystem->pokepicManager;
 }
 
-u32 *BattleSystem_GetBattleAnimSystem(BattleSystem *battleSystem) {
+struct BattleAnimSystem *BattleSystem_GetBattleAnimSystem(BattleSystem *battleSystem) {
     return battleSystem->animSystem;
 }
 
@@ -123,11 +123,11 @@ BattleInput *BattleSystem_GetBattleInput(BattleSystem *battleSystem) {
     return battleSystem->battleInput;
 }
 
-u32 *BattleSystem_GetPartyGauge(BattleSystem *battleSystem, int index) {
+struct PartyGauge *BattleSystem_GetPartyGauge(BattleSystem *battleSystem, int index) {
     return battleSystem->partyGauges[index];
 }
 
-void BattleSystem_SetPartyGauge(BattleSystem *battleSystem, int index, u32 *gauge) {
+void BattleSystem_SetPartyGauge(BattleSystem *battleSystem, int index, struct PartyGauge *gauge) {
     battleSystem->partyGauges[index] = gauge;
 }
 
@@ -143,7 +143,7 @@ MsgData *BattleSystem_GetMessageLoader(BattleSystem *battleSystem) {
     return battleSystem->msgData;
 }
 
-u32 *BattleSystem_GetAttackMessageLoader(BattleSystem *battleSystem) {
+MsgData *BattleSystem_GetAttackMessageLoader(BattleSystem *battleSystem) {
     return battleSystem->attackMsgData;
 }
 
@@ -274,7 +274,7 @@ u8 BattleSystem_GetFieldSide(BattleSystem *battleSystem, int battlerId) {
     return OpponentData_GetBattlerType(battleSystem->opponentData[battlerId]) & 1;
 }
 
-void *BattleSystem_GetMessageIcon(BattleSystem *battleSystem) {
+struct PaletteBlink *BattleSystem_GetMessageIcon(BattleSystem *battleSystem) {
     return battleSystem->msgIcon;
 }
 
@@ -642,7 +642,7 @@ u32 BattleSystem_GetBattleSpecial(BattleSystem *battleSystem) {
     return battleSystem->battleSpecial;
 }
 
-int BattleSystem_GetTimezone(BattleSystem *battleSystem) {
+TIMEOFDAY BattleSystem_GetTimezone(BattleSystem *battleSystem) {
     return battleSystem->timezone;
 }
 
@@ -657,15 +657,15 @@ int BattleSystem_GetBgTimeOfDay(BattleSystem *battleSystem) {
     case 4:
     case 5:
         switch (battleSystem->timezone) {
-        case 0:
-        case 1:
+        case RTC_TIMEOFDAY_MORN:
+        case RTC_TIMEOFDAY_DAY:
             ret = 0;
             break;
-        case 2:
+        case RTC_TIMEOFDAY_EVE:
             ret = 1;
             break;
-        case 3:
-        case 4:
+        case RTC_TIMEOFDAY_NITE:
+        case RTC_TIMEOFDAY_LATE:
             ret = 2;
             break;
         }
@@ -767,7 +767,7 @@ u32 BattleSystem_GetBattleStyle(BattleSystem *battleSystem) {
     return Options_GetBattleStyle(battleSystem->options);
 }
 
-void *BattleSystem_GetPokepicAnimManager(BattleSystem *battleSystem) {
+struct PokepicAnimManager *BattleSystem_GetPokepicAnimManager(BattleSystem *battleSystem) {
     return battleSystem->pokepicAnimManager;
 }
 
@@ -975,11 +975,11 @@ void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u
     battleSystem->switchingOrCanPickCommandMask = mask;
 }
 
-void *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem) {
+struct WaitingIcon *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem) {
     return battleSystem->waitingIcon;
 }
 
-void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, void *waitingIcon) {
+void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, struct WaitingIcon *waitingIcon) {
     battleSystem->waitingIcon = waitingIcon;
 }
 
@@ -1288,7 +1288,7 @@ void BattleSystem_GetBattlerTypes(BattleSystem *battleSystem, u8 *buffer) {
     }
 }
 
-void BattleSystem_GetPokepics(BattleSystem *battleSystem, void **pokepics) {
+void BattleSystem_GetPokepics(BattleSystem *battleSystem, Pokepic **pokepics) {
     int i;
 
     for (i = 0; i < 4; i++) {

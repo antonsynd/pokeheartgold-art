@@ -6,8 +6,8 @@
 
 BOOL PartyIsValidForFrontier(u16 numRequired, SaveData *saveData, BOOL checkDuplicateItems);
 void ResetSystem(void);
-void FrontierFieldSystem_ClearSavedChallenge(u32 record);
-u32 FrontierFieldSystem_GetSavedChallenge(u32 record);
+void FrontierFieldSystem_ClearSavedChallenge(struct BattleTowerChallenge *record);
+u32 FrontierFieldSystem_GetSavedChallenge(struct BattleTowerChallenge *record);
 void FrontierFieldSystem_SetReturnWarp(FieldSystem *fieldSystem);
 void FrontierFieldSystem_ClearReturnWarpFlag(FieldSystem *fieldSystem);
 u32 FrontierFieldSystem_GetWinStreak(SaveData *saveData, u32 towerMode);

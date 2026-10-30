@@ -25,6 +25,7 @@
 #include "battle/battle_cursor.h"
 #include "battle/battle_hp_bar.h"
 #include "battle/battle_input.h"
+#include "battle/battle_main.h"
 #include "battle/battle_party_menu.h"
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
@@ -1328,12 +1329,12 @@ int TrainerAI_GetMoveType(BattleSystem *battleSystem, BattleContext *ctx, Pokemo
     return type;
 }
 
-OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data) {
+OpponentData *OpponentData_New(BattleSystem *battleSystem, const BattlerInitData *data) {
     OpponentData *opponentData = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentData));
     MI_CpuClearFast(opponentData, sizeof(OpponentData));
-    opponentData->battlerId = data[0];
-    opponentData->battlerType = data[1];
-    opponentData->pokepicAnimNarc = (u32 *)NARC_New(NARC_a_1_8_0, HEAP_ID_BATTLE);
+    opponentData->battlerId = data->battler;
+    opponentData->battlerType = data->battlerType;
+    opponentData->pokepicAnimNarc = NARC_New(NARC_a_1_8_0, HEAP_ID_BATTLE);
     return opponentData;
 }
 
@@ -1375,7 +1376,7 @@ void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, i
         Sprite_DeleteAndFreeResources(opponentData->managedSprite);
     }
     OpponentData_StopPokepicBobTask(opponentData);
-    NARC_Delete((NARC *)opponentData->pokepicAnimNarc);
+    NARC_Delete(opponentData->pokepicAnimNarc);
     Heap_Free(opponentData);
 }
 
@@ -1931,10 +1932,10 @@ static void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentDa
 
     GetMonSpriteCharAndPlttNarcIdsEx(&pokepicTemplate, packet->species, packet->gender, work->facing, packet->shiny != 0, packet->form, packet->personality);
     height = GetMonPicHeightBySpeciesGenderForm(packet->species, packet->gender, work->facing, packet->form, packet->personality);
-    READ_POKEPIC_SHADOW_HEIGHT((NARC *)opponentData->pokepicAnimNarc, &anim.shadowHeight, packet->species);
-    READ_POKEPIC_SHADOW_X_OFFSET((NARC *)opponentData->pokepicAnimNarc, &anim.shadowXOffset, packet->species);
-    READ_POKEPIC_SHADOW_SIZE((NARC *)opponentData->pokepicAnimNarc, &anim.shadowSize, packet->species);
-    NARC_ReadPokepicAnimScript((NARC *)opponentData->pokepicAnimNarc, anim.scripts, packet->species, opponentData->battlerType);
+    READ_POKEPIC_SHADOW_HEIGHT(opponentData->pokepicAnimNarc, &anim.shadowHeight, packet->species);
+    READ_POKEPIC_SHADOW_X_OFFSET(opponentData->pokepicAnimNarc, &anim.shadowXOffset, packet->species);
+    READ_POKEPIC_SHADOW_SIZE(opponentData->pokepicAnimNarc, &anim.shadowSize, packet->species);
+    NARC_ReadPokepicAnimScript(opponentData->pokepicAnimNarc, anim.scripts, packet->species, opponentData->battlerType);
 
     battlerType = opponentData->battlerType;
     work->pokepic = opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, gBattlerPokepicPositions[0][battlerType][0], gBattlerPokepicPositions[0][battlerType][1], gBattlerPokepicPositions[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
@@ -1983,9 +1984,9 @@ static void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData
     }
     GetMonSpriteCharAndPlttNarcIdsEx(&work->pokepicTemplate, packet->species, packet->gender, work->facing, packet->shiny != 0, packet->form, packet->personality);
     work->height = GetMonPicHeightBySpeciesGenderForm(packet->species, packet->gender, work->facing, packet->form, packet->personality);
-    READ_POKEPIC_SHADOW_HEIGHT((NARC *)opponentData->pokepicAnimNarc, &work->shadowHeight, packet->species);
-    READ_POKEPIC_SHADOW_X_OFFSET((NARC *)opponentData->pokepicAnimNarc, &work->shadowXOffset, packet->species);
-    READ_POKEPIC_SHADOW_SIZE((NARC *)opponentData->pokepicAnimNarc, &work->shadowSize, packet->species);
+    READ_POKEPIC_SHADOW_HEIGHT(opponentData->pokepicAnimNarc, &work->shadowHeight, packet->species);
+    READ_POKEPIC_SHADOW_X_OFFSET(opponentData->pokepicAnimNarc, &work->shadowXOffset, packet->species);
+    READ_POKEPIC_SHADOW_SIZE(opponentData->pokepicAnimNarc, &work->shadowSize, packet->species);
     OpponentData_ResetCursorPosition(opponentData);
 
     work->battleSystem = battleSystem;
@@ -2031,9 +2032,9 @@ static void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData
     }
     GetMonSpriteCharAndPlttNarcIdsEx(&work->pokepicTemplate, packet->species, packet->gender, work->facing, packet->shiny != 0, packet->form, packet->personality);
     work->height = GetMonPicHeightBySpeciesGenderForm(packet->species, packet->gender, work->facing, packet->form, packet->personality);
-    READ_POKEPIC_SHADOW_HEIGHT((NARC *)opponentData->pokepicAnimNarc, &work->shadowHeight, packet->species);
-    READ_POKEPIC_SHADOW_X_OFFSET((NARC *)opponentData->pokepicAnimNarc, &work->shadowXOffset, packet->species);
-    READ_POKEPIC_SHADOW_SIZE((NARC *)opponentData->pokepicAnimNarc, &work->shadowSize, packet->species);
+    READ_POKEPIC_SHADOW_HEIGHT(opponentData->pokepicAnimNarc, &work->shadowHeight, packet->species);
+    READ_POKEPIC_SHADOW_X_OFFSET(opponentData->pokepicAnimNarc, &work->shadowXOffset, packet->species);
+    READ_POKEPIC_SHADOW_SIZE(opponentData->pokepicAnimNarc, &work->shadowSize, packet->species);
     OpponentData_ResetCursorPosition(opponentData);
 
     work->battleSystem = battleSystem;
@@ -2428,7 +2429,7 @@ static void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *
 }
 
 static void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketAttackMessage *packet) {
-    MsgData *msgData = (MsgData *)BattleSystem_GetAttackMessageLoader(battleSystem);
+    MsgData *msgData = BattleSystem_GetAttackMessageLoader(battleSystem);
     OpponentMessageWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMessageWork));
     BattleMessage msg;
     u32 selectedMonIndex;
@@ -2463,7 +2464,7 @@ static void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentD
     work->opponentData = opponentData;
     work->command = OPPONENT_COMMAND_ID(opponentData);
     work->battlerId = opponentData->battlerId;
-    work->animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(battleSystem);
+    work->animSystem = BattleSystem_GetBattleAnimSystem(battleSystem);
     work->animData = *animData;
     work->pokepic = opponentData->pokepic;
     if (animData->isEffectAnim == 1 && animData->effectAnimId == BATTLE_ANIMATION_SUBSTITUTE_IN) {
@@ -2941,7 +2942,7 @@ static void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *op
 
 static void Task_PokemonEncounter(SysTask *task, void *data) {
     OpponentPokemonEncounterWork *work = data;
-    BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    BattleAnimSystem *animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
     u8 state = work->state;
     BattleAnimSystem *anim = animSystem;
     s16 coords[2]; // [1] = x, [0] = y
@@ -3056,7 +3057,7 @@ static void Task_GiratinaEncounter(SysTask *task, void *data) {
     OpponentPokemonEncounterWork *work = data;
     MoveAnimData animData;
     s16 coords[2]; // [1] = x, [0] = y
-    BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    BattleAnimSystem *animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
 
     switch ((int)work->state) {
     case 0:
@@ -3165,7 +3166,7 @@ static void Task_PokemonSlideIn(SysTask *task, void *data) {
             work->delay = 0;
         }
         pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
-        NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
+        NARC_ReadPokepicAnimScript(work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
         work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerSlideInTargetX[work->battlerType][0], gBattlerPokepicPositions[0][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0);
@@ -3288,7 +3289,7 @@ static void Task_FollowMonSlideIn(SysTask *task, void *data) {
             work->delay = 0;
         }
         pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
-        NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
+        NARC_ReadPokepicAnimScript(work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
         work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerPokepicPositions[1][work->battlerType][0], gBattlerPokepicPositions[1][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0x100);
@@ -3368,7 +3369,7 @@ static void Task_PokemonSendOut(SysTask *task, void *data) {
     BallSealEffectTemplate openArgs;
     u8 state;
 
-    animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
     case SEND_OUT_STATE_INIT:
@@ -3388,7 +3389,7 @@ static void Task_PokemonSendOut(SysTask *task, void *data) {
         work->ballData = BallThrow_New(&ballParams);
         {
             PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
-            NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
+            NARC_ReadPokepicAnimScript(work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
             work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerSlideInTargetX[work->battlerType][0], gBattlerPokepicPositions[0][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         }
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0);
@@ -3514,12 +3515,12 @@ static void Task_FollowMonSendOut(SysTask *task, void *data) {
     PokepicAnimScript scripts[10];
     u8 state;
 
-    animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
     case FOLLOW_SEND_OUT_STATE_CREATE_POKEPIC: {
         PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
-        NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
+        NARC_ReadPokepicAnimScript(work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
         work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerPokepicPositions[1][work->battlerType][0], gBattlerPokepicPositions[1][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0x100);
@@ -3596,7 +3597,7 @@ static void Task_RecallPokemon(SysTask *task, void *data) {
     OpponentBallKindTable ballKinds;
     u8 state;
 
-    animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
     case RECALL_STATE_SUBSTITUTE_HIDE:
@@ -3699,7 +3700,7 @@ static void Task_RecallFollowMon(SysTask *task, void *data) {
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
     MoveAnimData recallAnimData;
-    BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    BattleAnimSystem *animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
 
     switch (work->state) {
     case RECALL_FOLLOW_STATE_SUBSTITUTE_HIDE:
@@ -4991,7 +4992,7 @@ static void Task_PlayerSelectItem(SysTask *task, void *data) {
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &selfAnimData, 1, BATTLE_ANIMATION_BAG_ITEM, work->battlerId, work->battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
-        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &selfAnimData);
+        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &selfAnimData);
         work->state++;
     } break;
     case SELECT_ITEM_STATE_HP_MON_ANIM:
@@ -5000,7 +5001,7 @@ static void Task_PlayerSelectItem(SysTask *task, void *data) {
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &monAnimData, 1, BATTLE_ANIMATION_BAG_ITEM, battlerId, battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, battlerId);
-        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &monAnimData);
+        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &monAnimData);
         work->state++;
     } break;
     case SELECT_ITEM_STATE_EFFECT_ANIM: {
@@ -5008,15 +5009,15 @@ static void Task_PlayerSelectItem(SysTask *task, void *data) {
         if (work->bagMenu->selectedItem == ITEM_GUARD_SPEC_) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 0, 0, work->battlerId, work->battlerId, MOVE_MIST);
             opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
-            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
+            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
         } else if (work->bagMenu->selectedItem == ITEM_DIRE_HIT) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 0, 0, work->battlerId, work->battlerId, MOVE_FOCUS_ENERGY);
             opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
-            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
+            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
         } else {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 1, BATTLE_ANIMATION_STAT_BOOST, work->battlerId, work->battlerId, MOVE_NONE);
             opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
-            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
+            OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
         }
         work->state++;
     } break;
@@ -5064,7 +5065,7 @@ static void Task_PlayerSelectItem(SysTask *task, void *data) {
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, BATTLE_ANIMATION_RESTORE_HP, battlerId, battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, battlerId);
-        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &restoreAnimData);
+        OpponentData_StartMoveAnimation(work->battleSystem, opponentData, BattleSystem_GetBattleAnimSystem(work->battleSystem), &restoreAnimData);
         work->state++;
     } break;
     case SELECT_ITEM_STATE_UPDATE_HP_BAR: {
@@ -5188,9 +5189,9 @@ static void Task_PlayerSelectItem(SysTask *task, void *data) {
     case SELECT_ITEM_STATE_WAIT_HP_RESTORE_ANIM:
     case SELECT_ITEM_STATE_WAIT_STATUS_MON_ANIM:
     case SELECT_ITEM_STATE_WAIT_STATUS_RESTORE_ANIM:
-        BattleAnimSystem_Execute((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem));
-        if (!BattleAnimSystem_IsActive((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem))) {
-            BattleAnimSystem_EndMove((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem));
+        BattleAnimSystem_Execute(BattleSystem_GetBattleAnimSystem(work->battleSystem));
+        if (!BattleAnimSystem_IsActive(BattleSystem_GetBattleAnimSystem(work->battleSystem))) {
+            BattleAnimSystem_EndMove(BattleSystem_GetBattleAnimSystem(work->battleSystem));
             work->state++;
         }
         break;
@@ -5760,7 +5761,7 @@ static void Task_PlayFaintAnimation(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData unsubstituteAnimData;
-    BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    BattleAnimSystem *animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
     int value;
 
     switch (work->state) {
@@ -5879,7 +5880,7 @@ static void Task_ToggleVanish(SysTask *task, void *data) {
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
     MoveAnimData restoreAnimData;
-    BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
+    BattleAnimSystem *animSystem = BattleSystem_GetBattleAnimSystem(work->battleSystem);
 
     switch (work->state) {
     case TOGGLE_VANISH_STATE_SET:
@@ -6204,11 +6205,11 @@ static void Task_ShowPartyGauge(SysTask *task, void *data) {
         spriteSystem = BattleSystem_GetSpriteSystem(work->battleSystem);
         spriteManager = BattleSystem_GetSpriteManager(work->battleSystem);
         partyGauge = PartyGauge_NewAndShow(work->status, side, show, variant, spriteSystem, spriteManager);
-        BattleSystem_SetPartyGauge(work->battleSystem, side, (u32 *)partyGauge);
+        BattleSystem_SetPartyGauge(work->battleSystem, side, partyGauge);
         work->state++;
         break;
     case SHOW_PARTY_GAUGE_STATE_WAIT:
-        partyGauge = (PartyGauge *)BattleSystem_GetPartyGauge(work->battleSystem, side);
+        partyGauge = BattleSystem_GetPartyGauge(work->battleSystem, side);
         if (PartyGauge_IsArrowTaskFinished(partyGauge) == TRUE) {
             work->state++;
         }
@@ -6235,7 +6236,7 @@ static void Task_HidePartyGauge(SysTask *task, void *data) {
         side = 1;
         break;
     }
-    partyGauge = (PartyGauge *)BattleSystem_GetPartyGauge(work->battleSystem, side);
+    partyGauge = BattleSystem_GetPartyGauge(work->battleSystem, side);
     switch (work->state) {
     case HIDE_PARTY_GAUGE_STATE_HIDE:
         switch (work->midBattle) {
@@ -6922,7 +6923,7 @@ static void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, Opponent
         setup.moveEffectFlags[i] = animData->moveEffectFlags[i];
     }
     BattleSystem_GetBattlerTypes(battleSystem, setup.battlerTypes);
-    BattleSystem_GetPokepics(battleSystem, (void **)setup.pokepics);
+    BattleSystem_GetPokepics(battleSystem, setup.pokepics);
     setup.battleType = BattleSystem_GetBattleType(battleSystem);
     setup.chatotCry = BattleSystem_GetChatotVoice(battleSystem, opponentData->battlerId);
     setup.battleBgTiles = BattleSystem_GetBattleBgTiles(battleSystem);
@@ -6949,7 +6950,7 @@ static void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, Mo
         params->personalities[i] = animData->personality[i];
     }
     BattleSystem_GetBattlerTypes(battleSystem, params->battlerTypes);
-    BattleSystem_GetPokepics(battleSystem, (void **)params->pokepics);
+    BattleSystem_GetPokepics(battleSystem, params->pokepics);
 }
 
 static void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move) {
@@ -7089,14 +7090,14 @@ static u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSy
 }
 
 // Starts the battler's pokepic animation (when battle animations are on) and plays its cry, panned towards its side.
-void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam) {
+void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, NARC *narc, int species, int form, int facing, int cryParam) {
     u8 cryDelay = 0;
     int pan;
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) {
         Pokepic_StartAnim(pokepic, 1);
-        NARC_StartPokepicAnim((NARC *)narc, BattleSystem_GetPokepicAnimManager(battleSystem), pokepic, species, facing, 0, battlerId);
-        NARC_ReadPokepicCryDelay((NARC *)narc, &cryDelay, species, battlerType);
+        NARC_StartPokepicAnim(narc, BattleSystem_GetPokepicAnimManager(battleSystem), pokepic, species, facing, 0, battlerId);
+        NARC_ReadPokepicCryDelay(narc, &cryDelay, species, battlerType);
     }
     if (facing == 2) {
         pan = 117;

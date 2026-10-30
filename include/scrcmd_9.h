@@ -88,7 +88,7 @@ typedef struct FrontierFieldSystem {
     u16 partyMonItems[4];
     u16 trainersInCurrentRound[14];
     u8 filler5a[0x13];
-    u32 challenge; // Seems to be some sort of frontier save data.
+    struct BattleTowerChallenge *challenge; // Seems to be some sort of frontier save data.
     FrontierData *frontierData;
     FrontierTrainer opponents[2];
     FrontierTrainer frontierStatTrainers[5];

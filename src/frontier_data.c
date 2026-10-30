@@ -12,7 +12,7 @@
 #include "msgdata.h"
 
 // The Battle Tower challenge in progress (fields addressed by enum BattleTowerChallengeField).
-typedef struct BattleTowerChallenge {
+struct BattleTowerChallenge {
     u8 allyReplaceItem : 1;
     u8 saved : 1; // BattleTowerChallenge_GetSaved / SetSaved
     u8 towerMode : 3;
@@ -26,7 +26,7 @@ typedef struct BattleTowerChallenge {
     u8 trainers[28]; // 14 trainer ids
     u32 randomState;
     u8 multiAllyData[16];
-} BattleTowerChallenge;
+};
 
 struct FrontierData {
     u16 battlePoints;
@@ -79,8 +79,8 @@ u32 BattleRoomTrainer_sizeof(void) {
     return sizeof(BattleRoomTrainer);
 }
 
-void BattleTowerChallenge_Clear(u32 challenge) {
-    MI_CpuFill8((void *)challenge, 0, sizeof(BattleTowerChallenge));
+void BattleTowerChallenge_Clear(BattleTowerChallenge *challenge) {
+    MI_CpuFill8(challenge, 0, sizeof(BattleTowerChallenge));
 }
 
 void FrontierData_Reset(void *data) {
@@ -102,8 +102,7 @@ void BattleRoomDownload_Init(void *data) {
     MI_CpuFill8(data, 0, sizeof(BattleRoomDownload));
 }
 
-u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
-    BattleTowerChallenge *tower = (BattleTowerChallenge *)challenge;
+u32 BattleTowerChallenge_GetField(BattleTowerChallenge *tower, enum BattleTowerChallengeField field, void *out) {
     switch (field) {
     case TOWER_CHALLENGE_MODE:
         return tower->towerMode;
@@ -134,8 +133,7 @@ u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
     return 0;
 }
 
-void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
-    BattleTowerChallenge *tower = (BattleTowerChallenge *)challenge;
+void BattleTowerChallenge_SetField(BattleTowerChallenge *tower, enum BattleTowerChallengeField field, void *value) {
     switch (field) {
     case TOWER_CHALLENGE_MODE:
         tower->towerMode = *(u8 *)value;
@@ -174,8 +172,7 @@ void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
 }
 
 // Adds to the three Wi-Fi score counters, each capped below its type's maximum.
-void BattleTowerChallenge_AddWifiScoreCounters(u32 challenge, u8 timesFainted, u32 turns, u32 damage) {
-    BattleTowerChallenge *ch = (BattleTowerChallenge *)challenge;
+void BattleTowerChallenge_AddWifiScoreCounters(BattleTowerChallenge *ch, u8 timesFainted, u32 turns, u32 damage) {
     int totalTimesFainted = ch->totalTimesFainted + timesFainted;
     int totalTurns;
     int totalDamage;
@@ -192,16 +189,16 @@ void BattleTowerChallenge_AddWifiScoreCounters(u32 challenge, u8 timesFainted, u
     }
 }
 
-u32 BattleTowerChallenge_GetSaved(u32 challenge) {
-    return ((BattleTowerChallenge *)challenge)->saved;
+u32 BattleTowerChallenge_GetSaved(BattleTowerChallenge *challenge) {
+    return challenge->saved;
 }
 
-void BattleTowerChallenge_SetSaved(u32 challenge, u32 value) {
-    ((BattleTowerChallenge *)challenge)->saved = value;
+void BattleTowerChallenge_SetSaved(BattleTowerChallenge *challenge, u32 value) {
+    challenge->saved = value;
 }
 
 // Capped at 9999. Returns the new amount.
-u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
+u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, enum FrontierDataAction action) {
     switch (action) {
     case FRONTIER_DATA_SET:
         if (param > 9999) {
@@ -236,7 +233,7 @@ u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
 }
 
 // Counting starts at 1 when the streak flag is not set. Returns the count.
-u32 FrontierData_WifiStreakAction(FrontierData *data, u32 action) {
+u32 FrontierData_WifiStreakAction(FrontierData *data, enum FrontierDataAction action) {
     switch (action) {
     case FRONTIER_DATA_RESET:
         data->wifiStreak = 0;
@@ -255,7 +252,7 @@ u32 FrontierData_WifiStreakAction(FrontierData *data, u32 action) {
 }
 
 // The rank resets to 1 and stays within 1-10. Returns the rank.
-u32 FrontierData_WifiRankAction(FrontierData *data, u32 action) {
+u32 FrontierData_WifiRankAction(FrontierData *data, enum FrontierDataAction action) {
     switch (action) {
     case FRONTIER_DATA_RESET:
         data->wifiRank = 1;
@@ -290,8 +287,7 @@ void FrontierData_GetWifiTeam(FrontierData *data, s32 index, FrontierWifiUploadR
     }
 }
 
-u16 FrontierData_CalcWifiScore(FrontierData *data, u32 challenge) {
-    BattleTowerChallenge *tower = (BattleTowerChallenge *)challenge;
+u16 FrontierData_CalcWifiScore(FrontierData *data, BattleTowerChallenge *tower) {
     u16 base = 1000 * (tower->battleNumber - 1);
     u16 turnsPenalty = 10 * tower->totalTurns;
     u16 faintPenalty = 20 * tower->totalTimesFainted;
@@ -321,7 +317,7 @@ u8 FrontierData_GetWifiWinCount(FrontierData *data) {
 }
 
 // Counts up to 65534. The Wi-Fi practice mode has no counter, mode 6 uses its slot.
-u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, u32 action) {
+u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, enum FrontierDataAction action) {
     if (towerMode == TOWER_MODE_WIFI_PRACTICE) {
         return 0;
     }
@@ -352,7 +348,7 @@ u32 FrontierData_SetTowerRound(FrontierData *data, u32 towerMode, u16 round) {
     return data->towerRounds[towerMode];
 }
 
-u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
+u32 FrontierData_FlagAction(FrontierData *data, u16 flag, enum FrontierDataAction action) {
     u16 mask = 1;
     u16 i;
     if (flag >= 16) {
@@ -515,8 +511,8 @@ BattleRoomLeader *BattleRoomDownload_CopyLeaders(u32 addr, enum HeapID heapID) {
     return out;
 }
 
-u32 Save_BattleTowerChallenge_Get(SaveData *save) {
-    return (u32)Save_Frontier_GetStatic(save) + 0x8E0;
+BattleTowerChallenge *Save_BattleTowerChallenge_Get(SaveData *save) {
+    return (BattleTowerChallenge *)((u8 *)Save_Frontier_GetStatic(save) + 0x8E0);
 }
 
 FrontierData *Save_FrontierData_Get(SaveData *save) {

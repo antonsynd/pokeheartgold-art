@@ -508,7 +508,7 @@ static BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
     switch (work->step) {
     case FRONTIER_ENTER_STEP_FADE_OUT_MENU:
         if (VsRecorder_StepFade(&record->fade, 1)) {
-            record->battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(work->saveData), 0, 0);
+            record->battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(work->saveData), 0, FRONTIER_DATA_GET);
             work->step++;
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_OBJ, 12, record->fade, work->blendColor);

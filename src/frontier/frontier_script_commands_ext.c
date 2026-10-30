@@ -875,7 +875,7 @@ static BOOL FrtCmd_BufferRivalsName(FrontierScriptContext *ctx) {
 static BOOL FrtCmd_GetBattlePoints(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 *result = FrontierScript_ReadVarPtr(ctx);
-    *result = FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), 0, 0);
+    *result = FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), 0, FRONTIER_DATA_GET);
     return FALSE;
 }
 
@@ -883,7 +883,7 @@ static BOOL FrtCmd_GiveBattlePoints(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 points = FrontierScript_ReadVar(ctx);
     GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, points);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, 5);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, FRONTIER_DATA_ADD);
     return FALSE;
 }
 
@@ -891,7 +891,7 @@ static BOOL FrtCmd_TakeBattlePoints(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     u16 points = FrontierScript_ReadVar(ctx);
     GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_SPENT, points);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, 6);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(args->saveData), points, FRONTIER_DATA_SUB);
     return FALSE;
 }
 

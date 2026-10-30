@@ -3,11 +3,13 @@
 
 #include "battle/battle.h"
 
+struct BattlerInitData;
+
 // The display side of a battler: OpponentData_RunCommand runs the command the battle controller sent
 // (BattleController_Emit*); the input commands run the tasks OpponentData_SetInputTasks chose
 // (local player, AI, link partner, recorded battle, Safari Zone, Pal Park).
 
-OpponentData *OpponentData_New(BattleSystem *battleSystem, const u8 *data);
+OpponentData *OpponentData_New(BattleSystem *battleSystem, const struct BattlerInitData *data);
 void OpponentData_CreateBallData(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int battlerId);
 void OpponentData_RunCommand(BattleSystem *battleSystem, OpponentData *opponentData);
 void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, int mode);
@@ -24,6 +26,6 @@ int TrainerAI_GetMoveType(BattleSystem *battleSystem, BattleContext *ctx, Pokemo
 int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler);
 
 // Starts the pokepic animation and plays the cry of a battler that appeared (its own file, after the data asm).
-void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam);
+void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, NARC *narc, int species, int form, int facing, int cryParam);
 
 #endif

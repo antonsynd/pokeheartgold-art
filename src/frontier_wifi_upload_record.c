@@ -29,7 +29,7 @@ void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 isWifiUpload, Frontie
     MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, 3), &record->unkC0, sizeof(record->unkC0));
 
     if (isWifiUpload == 0) {
-        record->unkE2 = FrontierData_FlagAction(frontierData, 7, 0);
+        record->unkE2 = FrontierData_FlagAction(frontierData, 7, FRONTIER_DATA_GET);
         if (record->unkE2 != 0) {
             FrontierData_GetWifiTeam(frontierData, isWifiUpload, record);
         }

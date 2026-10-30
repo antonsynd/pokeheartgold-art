@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_BATTLE_CONTROLLER_H
 
 #include "battle/battle.h"
+#include "battle/battle_controller_packets.h"
 
 typedef void (*ControllerFunction)(BattleSystem *, BattleContext *ctx);
 
@@ -31,15 +32,15 @@ typedef struct MoveAnimData {
     u32 moveEffectFlags[BATTLER_MAX];
     int isEffectAnim;
     int effectAnimId;
-    int terrain;
+    Terrain terrain;
 } MoveAnimData;
 
 // Packet queues. direction 0: input replies to the battle context (ctx->battleBuffer),
 // 1: commands to a battler's OpponentData, 2: command-complete notices.
-void BattleController_SendData(BattleSystem *battleSystem, int direction, int battlerId, const u8 *data, u8 size);
+void BattleController_SendData(BattleSystem *battleSystem, enum BattleControllerPacketKind direction, int battlerId, const u8 *data, u8 size);
 BOOL BattleController_RecvData(BattleSystem *battleSystem, const u8 *data);
-void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction);
-void BattleController_EmitPacket(BattleSystem *battleSystem, int direction, int battlerId, const void *data, u8 size);
+void BattleController_ProcessQueue(BattleSystem *battleSystem, enum BattleControllerPacketKind direction);
+void BattleController_EmitPacket(BattleSystem *battleSystem, enum BattleControllerPacketKind direction, int battlerId, const void *data, u8 size);
 BOOL BattleController_RecvLinkData(BattleSystem *battleSystem, u8 *data);
 void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battlerId, int command);
 

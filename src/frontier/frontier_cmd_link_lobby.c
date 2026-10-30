@@ -225,7 +225,7 @@ BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx) {
             stat = FrontierLinkLobby_GetWinStreakStat(lobby->facility);
             FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), stat, FrontierStat_GetFriendIndex(stat), 0);
             if (lobby->facility == LINK_LOBBY_FACILITY_TOWER) {
-                FrontierData_TowerRoundAction(Save_FrontierData_Get(lobby->saveData), TOWER_MODE_6, 2);
+                FrontierData_TowerRoundAction(Save_FrontierData_Get(lobby->saveData), TOWER_MODE_6, FRONTIER_DATA_RESET);
             }
             if (lobby->facility == LINK_LOBBY_FACILITY_CASTLE) {
                 FrontierSave_SetStat(Save_Frontier_GetStatic(lobby->saveData), 0x88, FrontierStat_GetFriendIndex(0x88), 0);

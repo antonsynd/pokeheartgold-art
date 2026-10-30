@@ -22,7 +22,7 @@
 
 static void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId);
 
-void BattleController_SendData(BattleSystem *battleSystem, int direction, int battlerId, const u8 *data, u8 size) {
+void BattleController_SendData(BattleSystem *battleSystem, enum BattleControllerPacketKind direction, int battlerId, const u8 *data, u8 size) {
     u8 *buffer;
     u16 *writePos;
     u16 *endPos;
@@ -89,7 +89,7 @@ BOOL BattleController_RecvData(BattleSystem *battleSystem, const u8 *data) {
     return ret;
 }
 
-void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction) {
+void BattleController_ProcessQueue(BattleSystem *battleSystem, enum BattleControllerPacketKind direction) {
     u8 *buffer;
     u16 *readPos;
     u16 *writePos;
@@ -117,7 +117,7 @@ void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction) {
     }
 }
 
-void BattleController_EmitPacket(BattleSystem *battleSystem, int direction, int battlerId, const void *data, u8 size) {
+void BattleController_EmitPacket(BattleSystem *battleSystem, enum BattleControllerPacketKind direction, int battlerId, const void *data, u8 size) {
     int i;
 
     if ((battleSystem->battleType & BATTLE_TYPE_LINK) && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {

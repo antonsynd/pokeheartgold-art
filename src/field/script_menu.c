@@ -755,7 +755,7 @@ void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type) {
         break;
     case POINTS_BOX_BATTLE_POINTS:
         template = NewString_ReadMsgData(msgData, msg_0191_00220);
-        value = FrontierData_BattlePointAction(Save_FrontierData_Get(fieldSystem->saveData), 0, 0);
+        value = FrontierData_BattlePointAction(Save_FrontierData_Get(fieldSystem->saveData), 0, FRONTIER_DATA_GET);
         break;
     case POINTS_BOX_ATHLETE_POINTS:
     default:

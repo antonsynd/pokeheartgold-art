@@ -114,7 +114,7 @@ static u32 GetNumFashionBackgrounds(SaveData *saveData) {
 }
 
 static u32 GetNumBattlePoints(SaveData *saveData) {
-    return FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0); // todo: DATA_GET
+    return FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, FRONTIER_DATA_GET); // todo: DATA_GET
 }
 
 BOOL TryFormatRegisteredKeyItemUseMessage(SaveData *saveData, String *dest, u16 itemId, enum HeapID heapID) {

@@ -400,11 +400,11 @@ u32 BattleTower_AdvanceSeed(SaveData *saveData) {
 
 u32 BattleTower_RestoreRandom(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    u32 challenge = Save_BattleTowerChallenge_Get(saveData);
+    BattleTowerChallenge *challenge = Save_BattleTowerChallenge_Get(saveData);
     u32 value = BattleTower_NextRandom(FrontierData_GetTowerSeed(frontierData));
     s32 i;
     s32 count;
-    count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(challenge, TOWER_CHALLENGE_MODE, 0), 0) * 24;
+    count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(challenge, TOWER_CHALLENGE_MODE, 0), FRONTIER_DATA_GET) * 24;
     i = 0;
     for (i = 0; i < count; i++) {
         value = BattleTower_NextRandom(value);

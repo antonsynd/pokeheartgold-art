@@ -5,6 +5,7 @@
 #include "scrcmd_9.h"
 
 struct BattleRoomDownload;
+typedef struct BattleTowerChallenge BattleTowerChallenge;
 
 // One trainer of a downloaded Wi-Fi Battle Room.
 typedef struct BattleRoomTrainer {
@@ -51,36 +52,25 @@ enum BattleTowerChallengeField {
 };
 
 u32 BattleRoomTrainer_sizeof(void);
-void BattleTowerChallenge_Clear(u32 challenge);
-// The action argument of the FrontierData_*Action functions
-enum FrontierDataAction {
-    FRONTIER_DATA_GET,
-    FRONTIER_DATA_SET,
-    FRONTIER_DATA_RESET,
-    FRONTIER_DATA_INC,
-    FRONTIER_DATA_DEC,
-    FRONTIER_DATA_ADD,
-    FRONTIER_DATA_SUB,
-};
-
+void BattleTowerChallenge_Clear(BattleTowerChallenge *challenge);
 void FrontierData_Reset(void *data);
 void TowerMessages_Init(void *data);
 void BattleRoomDownload_Init(void *data);
-u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out);
-void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value);
-void BattleTowerChallenge_AddWifiScoreCounters(u32 challenge, u8 timesFainted, u32 turns, u32 damage);
-u32 BattleTowerChallenge_GetSaved(u32 record);
-void BattleTowerChallenge_SetSaved(u32 challenge, u32 value);
-u32 FrontierData_WifiStreakAction(FrontierData *frontierData, u32 action);
-u32 FrontierData_WifiRankAction(FrontierData *frontierData, u32 action);
+u32 BattleTowerChallenge_GetField(BattleTowerChallenge *challenge, enum BattleTowerChallengeField field, void *out);
+void BattleTowerChallenge_SetField(BattleTowerChallenge *challenge, enum BattleTowerChallengeField field, void *value);
+void BattleTowerChallenge_AddWifiScoreCounters(BattleTowerChallenge *challenge, u8 timesFainted, u32 turns, u32 damage);
+u32 BattleTowerChallenge_GetSaved(BattleTowerChallenge *challenge);
+void BattleTowerChallenge_SetSaved(BattleTowerChallenge *challenge, u32 value);
+u32 FrontierData_WifiStreakAction(FrontierData *frontierData, enum FrontierDataAction action);
+u32 FrontierData_WifiRankAction(FrontierData *frontierData, enum FrontierDataAction action);
 void FrontierData_SetWifiTeam(FrontierData *frontierData, u32 index, const FrontierMon *src);
 void FrontierData_GetWifiTeam(FrontierData *frontierData, s32 index, FrontierWifiUploadRecord *dst);
-u16 FrontierData_CalcWifiScore(FrontierData *frontierData, u32 challenge);
+u16 FrontierData_CalcWifiScore(FrontierData *frontierData, BattleTowerChallenge *challenge);
 u16 FrontierData_GetWifiScore(FrontierData *frontierData);
 u8 FrontierData_GetWifiWinCount(FrontierData *data);
-u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, u32 action);
+u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, enum FrontierDataAction action);
 u32 FrontierData_SetTowerRound(FrontierData *frontierData, u32 towerMode, u16 round);
-u32 FrontierData_FlagAction(FrontierData *frontierData, u16 flag, u32 action);
+u32 FrontierData_FlagAction(FrontierData *frontierData, u16 flag, enum FrontierDataAction action);
 void FrontierData_SetTowerSeed(FrontierData *data, u32 value);
 u32 FrontierData_GetTowerSeed(FrontierData *data);
 void Save_Frontier_SetTowerMessage(SaveData *saveData, int index, MailMessage *mailMessage);
@@ -95,7 +85,7 @@ void BattleRoomDownload_GetTrainer(u32 addr, FrontierTrainer *trainer, int index
 void BattleRoomDownload_SetLeaders(struct BattleRoomDownload *download, const BattleRoomLeader *leaders, u32 rank, u32 room);
 void BattleRoomDownload_GetLeadersRoom(u32 addr, u8 *out);
 BattleRoomLeader *BattleRoomDownload_CopyLeaders(u32 addr, enum HeapID heapID);
-u32 Save_BattleTowerChallenge_Get(SaveData *saveData);
+BattleTowerChallenge *Save_BattleTowerChallenge_Get(SaveData *saveData);
 u32 Save_BattleRoomDownload_Get(SaveData *saveData);
 
 #endif // POKEHEARTGOLD_FRONTIER_DATA_ACCESS_H

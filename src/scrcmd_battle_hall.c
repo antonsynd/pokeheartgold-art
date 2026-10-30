@@ -436,7 +436,7 @@ BOOL ScrCmd_BufferBattleHallStreak(ScriptContext *ctx) {
     }
     GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, battlePoints);
     if (battlePoints) {
-        FrontierData_BattlePointAction(Save_FrontierData_Get(ctx->fieldSystem->saveData), battlePoints, 5);
+        FrontierData_BattlePointAction(Save_FrontierData_Get(ctx->fieldSystem->saveData), battlePoints, FRONTIER_DATA_ADD);
     }
     if (winStreak == 0) {
         *result = 0;

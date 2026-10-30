@@ -3817,7 +3817,7 @@ static BOOL TrainerAI_ShouldSwitch(BattleSystem *battleSystem, BattleContext *ct
     return FALSE;
 }
 
-int TrainerAI_SelectCommand(BattleSystem *battleSystem, int battler) {
+enum BattleMenuInputCodes TrainerAI_SelectCommand(BattleSystem *battleSystem, int battler) {
     int i;
     u8 battler1, battler2;
     u32 battleType;

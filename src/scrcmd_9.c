@@ -313,7 +313,7 @@ static u32 FrontierFieldSystem_GetAllyIdOrSprite(FrontierFieldSystem *frontierFs
 BOOL ScrCmd_GetBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
     u16 *battlePoints = ScriptGetVarPointer(ctx);
-    *battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0);
+    *battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, FRONTIER_DATA_GET);
     return FALSE;
 }
 
@@ -321,7 +321,7 @@ BOOL ScrCmd_GiveBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
     u16 battlePoints = ScriptGetVar(ctx);
     GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, battlePoints);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, 5);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, FRONTIER_DATA_ADD);
     return FALSE;
 }
 
@@ -329,7 +329,7 @@ BOOL ScrCmd_TakeBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
     u16 battlePoints = ScriptGetVar(ctx);
     GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS_SPENT, battlePoints);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, 6);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, FRONTIER_DATA_SUB);
     return FALSE;
 }
 
@@ -337,7 +337,7 @@ BOOL ScrCmd_CheckBattlePoints(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
     u16 amount = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
-    if (FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, 0) < amount) {
+    if (FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), 0, FRONTIER_DATA_GET) < amount) {
         *result = FALSE;
     } else {
         *result = TRUE;

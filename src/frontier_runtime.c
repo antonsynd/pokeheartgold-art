@@ -184,8 +184,7 @@ static void Frontier_UnloadOverlays(void) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_42));
 }
 
-FrontierLaunchArgs *Frontier_GetLaunchArgs(void *frontierWork) {
-    FrontierWork *work = frontierWork;
+FrontierLaunchArgs *Frontier_GetLaunchArgs(FrontierWork *work) {
     return work->launchArgs;
 }
 
@@ -193,18 +192,15 @@ FrontierMap *Frontier_GetMap(FrontierWork *work) {
     return work->map;
 }
 
-void *Frontier_GetData(void *frontierWork) {
-    FrontierWork *work = frontierWork;
+void *Frontier_GetData(FrontierWork *work) {
     return work->launchArgs->frontierFsys;
 }
 
-void Frontier_SetData(void *frontierWork, void *data) {
-    FrontierWork *work = frontierWork;
+void Frontier_SetData(FrontierWork *work, void *data) {
     work->launchArgs->frontierFsys = data;
 }
 
-void Frontier_LaunchApplication(void *frontierWork, const OverlayManagerTemplate *template, void *args, BOOL freeArgs, FrontierAppExitFunc exit) {
-    FrontierWork *work = frontierWork;
+void Frontier_LaunchApplication(FrontierWork *work, const OverlayManagerTemplate *template, void *args, BOOL freeArgs, FrontierAppExitFunc exit) {
     GF_ASSERT(work->childManager == NULL);
     work->childManager = OverlayManager_New(template, args, HEAP_ID_FIELD2);
     work->childArgs = args;

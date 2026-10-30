@@ -738,8 +738,8 @@ BOOL BallThrow_CaptureStateOpen(BallThrow *data) {
         template.emitter = 0xFF;
         template.generic = FALSE;
         ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-        data->battlerSprites = (int)BattleAnimBattlerSprites_NewAll(data->params.battleSystem, data->params.heapID);
-        data->burstEffect = (int)BallBurstEffect_New(&template);
+        data->battlerSprites = BattleAnimBattlerSprites_NewAll(data->params.battleSystem, data->params.heapID);
+        data->burstEffect = BallBurstEffect_New(&template);
         data->step++;
         break;
     }
@@ -750,14 +750,14 @@ BOOL BallThrow_CaptureStateOpen(BallThrow *data) {
         }
         break;
     case 2:
-        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
-        BattleAnimBattlerSprites_Free((struct BattleAnimBattlerSprites *)data->battlerSprites);
+        BallBurstEffect_Start(data->burstEffect);
+        BattleAnimBattlerSprites_Free(data->battlerSprites);
         data->step++;
         break;
     case 3:
-        if (!BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect)) {
+        if (!BallBurstEffect_IsRunning(data->burstEffect)) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+            BallBurstEffect_Free(data->burstEffect);
             data->step++;
         }
         break;
@@ -966,18 +966,18 @@ BOOL BallThrow_CaptureStateClick(BallThrow *data) {
             template.emitter = BallAnim_GetBurstSkippedEmitter(template.ball);
             template.generic = FALSE;
             ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-            data->burstEffect = (int)BallBurstEffect_New(&template);
+            data->burstEffect = BallBurstEffect_New(&template);
             data->step++;
         }
         break;
     case 2:
-        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
+        BallBurstEffect_Start(data->burstEffect);
         data->step++;
         break;
     case 3:
-        if (!BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect)) {
+        if (!BallBurstEffect_IsRunning(data->burstEffect)) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 0);
-            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+            BallBurstEffect_Free(data->burstEffect);
             data->step++;
         }
         break;
@@ -1063,7 +1063,7 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
         BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->arcHeight << FX32_SHIFT);
         data->modeFrames = 0;
         data->step++;
-        data->paletteFlash = 0;
+        data->paletteFlash = NULL;
         if (BallThrow_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, (LCRandom() % 20 + 10) << 13);
         }
@@ -1075,7 +1075,7 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->modeFrames++;
@@ -1087,11 +1087,11 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
         }
         break;
     case 2:
-        if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
+        if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != NULL) {
+            if (BattleAnimUtil_IsPaletteBlendActive(data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
+            BattleAnimUtil_FreePaletteBlend(data->paletteFlash);
             data->opened = TRUE;
             return FALSE;
         }
@@ -1113,17 +1113,17 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
     default:
         if (data->modeFrames == 5) {
             if (data->params.kind != 12 && data->params.kind != 13) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
             data->opened = TRUE;
         }
         data->modeFrames++;
         if (data->modeFrames > 15) {
             if (data->params.kind != 12 && data->params.kind != 13) {
-                if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
+                if (BattleAnimUtil_IsPaletteBlendActive(data->paletteFlash) == TRUE) {
                     break;
                 }
-                BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
+                BattleAnimUtil_FreePaletteBlend(data->paletteFlash);
             }
             return FALSE;
         }
@@ -1138,7 +1138,7 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
         BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->arcHeight << FX32_SHIFT);
         data->modeFrames = 0;
         data->step++;
-        data->paletteFlash = 0;
+        data->paletteFlash = NULL;
         if (BallThrow_IsSpinningKind(data->params.kind) == TRUE) {
             ManagedSprite_OffsetAffineZRotation(data->managedSprite, (LCRandom() % 20 + 10) << 13);
         }
@@ -1150,7 +1150,7 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->modeFrames++;
@@ -1162,11 +1162,11 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
         }
         break;
     case 2:
-        if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
+        if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != NULL) {
+            if (BattleAnimUtil_IsPaletteBlendActive(data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
+            BattleAnimUtil_FreePaletteBlend(data->paletteFlash);
             data->opened = TRUE;
             return FALSE;
         }
@@ -1185,13 +1185,13 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
     default:
         if (data->modeFrames == 5) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            data->paletteFlash = BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4, 16, -2, 2, 0, 14, 0xFFFF, 1002);
             data->opened = TRUE;
         }
         data->modeFrames++;
         if (data->modeFrames > 15) {
-            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) != TRUE) {
-                BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
+            if (BattleAnimUtil_IsPaletteBlendActive(data->paletteFlash) != TRUE) {
+                BattleAnimUtil_FreePaletteBlend(data->paletteFlash);
                 return FALSE;
             }
         }
@@ -1228,11 +1228,11 @@ BOOL BallThrow_OpenInPlace(BallThrow *data) {
         template.emitter = 0xFF;
         template.generic = TRUE;
         ManagedSprite_GetPositionXY(data->managedSprite, &template.x, &template.y);
-        data->burstEffect = (int)BallBurstEffect_New(&template);
+        data->burstEffect = BallBurstEffect_New(&template);
         data->step++;
         break;
     case 3:
-        BallBurstEffect_Start((BallBurstEffect *)data->burstEffect);
+        BallBurstEffect_Start(data->burstEffect);
         data->step++;
         break;
     case 4:
@@ -1260,8 +1260,8 @@ BOOL BallThrow_OpenInPlace(BallThrow *data) {
         }
         break;
     case 7:
-        if (!BallBurstEffect_IsRunning((BallBurstEffect *)data->burstEffect)) {
-            BallBurstEffect_Free((BallBurstEffect *)data->burstEffect);
+        if (!BallBurstEffect_IsRunning(data->burstEffect)) {
+            BallBurstEffect_Free(data->burstEffect);
             data->step++;
         }
         break;

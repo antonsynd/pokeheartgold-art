@@ -7240,7 +7240,7 @@ static u32 BattleSystem_CalculateBallShakes(BattleSystem *bsys, BattleContext *c
             }
             break;
         case ITEM_DUSK_BALL:
-            if (BattleSystem_GetTimezone(bsys) == 3 || BattleSystem_GetTimezone(bsys) == 4 || BattleSystem_GetTerrainId(bsys) == TERRAIN_CAVE) {
+            if (BattleSystem_GetTimezone(bsys) == RTC_TIMEOFDAY_NITE || BattleSystem_GetTimezone(bsys) == RTC_TIMEOFDAY_LATE || BattleSystem_GetTerrainId(bsys) == TERRAIN_CAVE) {
                 ballMultiplier = 35;
             }
             break;
