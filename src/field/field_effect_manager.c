@@ -263,7 +263,7 @@ FieldEffect *FieldEffectManager_CreateEffect(FieldEffectManager *manager, const 
     return effect;
 }
 
-void FieldEffectManager_DestroyEffect(int effect) {
+void FieldEffectManager_DestroyEffect(FieldEffect *effect) {
     FieldEffect_Destroy(effect);
 }
 

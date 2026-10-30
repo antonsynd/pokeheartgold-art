@@ -402,12 +402,12 @@ u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn) {
 void FieldMoveCutIn_DestroyFlyer(FieldMoveCutIn *cutIn) {
     CutInFlyer *flyer = FieldEffect_GetState(cutIn->flyerEffect);
     if (flyer->trainerJumpEffect) {
-        FieldEffect_Destroy((int)flyer->trainerJumpEffect);
+        FieldEffect_Destroy(flyer->trainerJumpEffect);
     }
     if (flyer->cameraZoom) {
         FieldCameraZoom_End(flyer->cameraZoom);
     }
-    FieldEffect_Destroy((int)cutIn->flyerEffect);
+    FieldEffect_Destroy(cutIn->flyerEffect);
 }
 
 BOOL CutInFlyer_Init(FieldEffect *effect, CutInFlyer *flyer) {
@@ -932,7 +932,7 @@ void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn) {
 
 void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn) {
     if (cutIn->trainerClipEffect) {
-        FieldEffect_Destroy((int)cutIn->trainerClipEffect);
+        FieldEffect_Destroy(cutIn->trainerClipEffect);
         cutIn->trainerClipEffect = NULL;
     }
 }
@@ -1019,7 +1019,7 @@ BOOL FieldMoveCutIn_StepShowOtherObject(FieldMoveCutIn *cutIn) {
 BOOL FieldMoveCutIn_StepWaitModelEffect(FieldMoveCutIn *cutIn) {
     CutInModelEffect *modelEffect = FieldEffect_GetState(cutIn->modelEffect);
     if (modelEffect->done == TRUE) {
-        FieldEffect_Destroy((int)cutIn->modelEffect);
+        FieldEffect_Destroy(cutIn->modelEffect);
         FieldMoveCutIn_UnloadModel(cutIn);
         cutIn->state++;
         return FALSE;

@@ -201,7 +201,7 @@ static void ReflectionEffect_Update(FieldEffect *effect, void *state) {
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     work->scale.x += work->scaleStep;
@@ -228,7 +228,7 @@ static void ReflectionEffect_Draw(FieldEffect *effect, void *state) {
     BOOL hidden = FALSE;
 
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (!work->hasBillboard) {
@@ -432,7 +432,7 @@ static void FollowerReflectionEffect_Update(FieldEffect *effect, void *state) {
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     work->scale.x += work->scaleStep;
@@ -458,7 +458,7 @@ static void FollowerReflectionEffect_Draw(FieldEffect *effect, void *state) {
     BillboardObject *source;
 
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (!work->hasBillboard) {

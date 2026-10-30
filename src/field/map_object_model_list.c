@@ -197,7 +197,7 @@ static void MapObjectModelEffect_Update(FieldEffect *effect, void *state) {
 
     LocalMapObject *mapObject = work->args.mapObject;
     if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     MapObject_CopyPositionVector(mapObject, &position);

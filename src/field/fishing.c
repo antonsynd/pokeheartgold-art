@@ -83,7 +83,7 @@ typedef struct FishingRod {
     s32 reelWindow; // frames the player has to press A after the bite
     u32 rodType;
     FieldSystem *fieldSystem;
-    int emoteMark;
+    FieldEffect *emoteMark;
     u8 printerId;
     String *string;
     String *template;
@@ -314,9 +314,9 @@ static int FishingRodState_WaitBite(FishingRod *rod, PlayerAvatar *avatar, Local
     }
     MapObject_SetAnimation(object, FISHING_ROD_ANIM_BITE);
     if (FishingRod_FollowMonNoticesBite(rod)) {
-        rod->emoteMark = EmoteMark_Spawn(FollowMon_GetMapObject(rod->fieldSystem), 0, 1);
+        rod->emoteMark = EmoteMark_Spawn(FollowMon_GetMapObject(rod->fieldSystem), 0, TRUE);
     } else {
-        rod->emoteMark = EmoteMark_Spawn(object, 0, 1);
+        rod->emoteMark = EmoteMark_Spawn(object, 0, TRUE);
     }
     rod->state = FISHING_ROD_STATE_WAIT_REEL;
     return 1;

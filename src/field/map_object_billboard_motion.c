@@ -1328,7 +1328,7 @@ void ModelObjectDraw_Update(void) {
 void ModelObjectDraw_Delete(LocalMapObject *object) {
     FieldEffect **effect = (FieldEffect **)MapObject_GetDrawData(object);
     if (*effect != NULL) {
-        FieldEffectManager_DestroyEffect((int)*effect);
+        FieldEffectManager_DestroyEffect(*effect);
         *effect = NULL;
     }
 }
@@ -1336,7 +1336,7 @@ void ModelObjectDraw_Delete(LocalMapObject *object) {
 void ModelObjectDraw_Pause(LocalMapObject *object) {
     FieldEffect **effect = (FieldEffect **)MapObject_GetDrawData(object);
     if (*effect != NULL) {
-        FieldEffectManager_DestroyEffect((int)*effect);
+        FieldEffectManager_DestroyEffect(*effect);
         *effect = NULL;
     }
 }

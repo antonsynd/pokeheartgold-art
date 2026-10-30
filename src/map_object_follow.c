@@ -597,8 +597,8 @@ void HiddenObjectMovement_Update(LocalMapObject *object) {
 }
 
 void HiddenObjectMovement_Delete(LocalMapObject *object) {
-    int effect = HiddenObjectMovement_GetCoverEffect(object);
-    if (effect != 0) {
+    FieldEffect *effect = HiddenObjectMovement_GetCoverEffect(object);
+    if (effect != NULL) {
         FieldEffectManager_DestroyEffect(effect);
     }
 }
@@ -607,7 +607,7 @@ void HiddenObjectMovement_Resume(LocalMapObject *object) {
     HiddenObjectMovementState *state = MapObject_GetMovementData(object);
 
     state->state = 0;
-    HiddenObjectMovement_SetCoverEffect(object, 0);
+    HiddenObjectMovement_SetCoverEffect(object, NULL);
     if (!state->revealed) {
         VecFx32 offset = gHiddenObjectResumeOffset;
         MapObject_SetFacingVector(object, &offset);
@@ -617,7 +617,7 @@ void HiddenObjectMovement_Resume(LocalMapObject *object) {
 
 static BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (!state->revealed) {
-        HiddenObjectMovement_SetCoverEffect(object, (int)HiddenObjectCover_Spawn(object, state->coverType));
+        HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
     }
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
@@ -627,21 +627,21 @@ static BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMo
 
 static BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (!state->revealed) {
-        if (HiddenObjectMovement_GetCoverEffect(object) == 0 && MapObject_IsDrawInitialized(object) == TRUE) {
-            HiddenObjectMovement_SetCoverEffect(object, (int)HiddenObjectCover_Spawn(object, state->coverType));
+        if (HiddenObjectMovement_GetCoverEffect(object) == NULL && MapObject_IsDrawInitialized(object) == TRUE) {
+            HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
         }
         MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK20);
     }
     return FALSE;
 }
 
-int HiddenObjectMovement_SetCoverEffect(LocalMapObject *object, int effect) {
+int HiddenObjectMovement_SetCoverEffect(LocalMapObject *object, FieldEffect *effect) {
     HiddenObjectMovementState *state = MapObject_GetMovementData(object);
     state->coverEffect = effect;
     return (int)state;
 }
 
-int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object) {
+FieldEffect *HiddenObjectMovement_GetCoverEffect(LocalMapObject *object) {
     return ((HiddenObjectMovementState *)MapObject_GetMovementData(object))->coverEffect;
 }
 

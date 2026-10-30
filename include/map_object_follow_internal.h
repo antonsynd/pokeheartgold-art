@@ -34,7 +34,7 @@ typedef struct HiddenObjectMovementState {
     u8 coverType;
     u8 revealed;
     u8 unk3;
-    int coverEffect;
+    struct FieldEffect *coverEffect;
 } HiddenObjectMovementState;
 
 typedef BOOL (*FollowPlayerStateFunc)(LocalMapObject *object, FollowPlayerMovementState *state);
@@ -73,7 +73,7 @@ void HiddenObjectMovement_InitCover3(LocalMapObject *object);
 void HiddenObjectMovement_Update(LocalMapObject *object);
 void HiddenObjectMovement_Delete(LocalMapObject *object);
 void HiddenObjectMovement_Resume(LocalMapObject *object);
-int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
+struct FieldEffect *HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
 void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 
 #endif // POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H

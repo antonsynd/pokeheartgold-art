@@ -163,7 +163,7 @@ static void ApricornRegrowthEffect_Update(FieldEffect *effect, void *state) {
         work->sequenceDone = FALSE;
         work->playCount++;
         if (work->playCount >= APRICORN_REGROWTH_PLAY_COUNT) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         BillboardObject_SetFrame(work->billboard, 0);

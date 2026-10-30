@@ -98,7 +98,7 @@ static void MudSplashEffect_Destroy(FieldEffect *effect, void *state) {
 static void MudSplashEffect_Update(FieldEffect *effect, void *state) {
     MudSplashEffect *work = state;
     if (RenderAnimation_IsDone(&work->animation) == TRUE) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
     } else {
         RenderAnimation_Advance(&work->animation, FX32_ONE, FALSE);
     }

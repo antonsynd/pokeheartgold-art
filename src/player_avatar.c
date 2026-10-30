@@ -189,7 +189,7 @@ void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar) {
         u32 x = PlayerAvatar_GetXCoord(avatar);
         u32 z = PlayerAvatar_GetZCoord(avatar);
         u32 direction = PlayerAvatar_GetFacingDirection(avatar);
-        PlayerAvatar_SetSurfMountEffect(avatar, SurfMountEffect_Create(mapObject, x, z, direction, 1));
+        PlayerAvatar_SetSurfMountEffect(avatar, SurfMountEffect_Create(mapObject, x, z, direction, TRUE));
     }
 }
 
@@ -408,11 +408,11 @@ void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 lastHorizontal, s32 la
     PlayerAvatar_SetLastVerticalInput(avatar, lastVertical);
 }
 
-void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect) {
+void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, struct FieldEffect *surfMountEffect) {
     avatar->surfMountEffect = surfMountEffect;
 }
 
-u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar) {
+struct FieldEffect *PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar) {
     return avatar->surfMountEffect;
 }
 

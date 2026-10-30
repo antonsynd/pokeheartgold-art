@@ -127,7 +127,7 @@ static void GroundDustEffect_Update(FieldEffect *effect, void *state) {
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
         frame = BillboardObject_GetSequenceFrame(work->billboard);
         if (frame / FX32_ONE >= 9) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
     }
 }

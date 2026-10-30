@@ -296,7 +296,7 @@ static void EmoteBubbleEffect_Update(FieldEffect *effect, void *state) {
         break;
     case EMOTE_BUBBLE_STATE_END:
         work->args.bubble->active = FALSE;
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_SetPosition(effect, &result);

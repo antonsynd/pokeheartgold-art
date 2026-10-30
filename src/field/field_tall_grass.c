@@ -227,7 +227,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
     int z;
 
     if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (MapObject_TestFlagsBits(mapObject, MAPOBJECTFLAG_VISIBLE) == TRUE) {
@@ -260,13 +260,13 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
         // fallthrough
     case TALL_GRASS_STATE_WAIT:
         if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         x = MapObject_GetXCoord(mapObject) - work->args.dx;
         z = MapObject_GetZCoord(mapObject) - work->args.dz;
         if (work->args.x != x || work->args.z != z) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         if (work->args.direction == -1) {
@@ -275,7 +275,7 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
         if (work->args.direction == MapObject_GetFacingDirection(mapObject)) {
             return;
         }
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
 }
@@ -284,7 +284,7 @@ void TallGrassEffect_Draw(FieldEffect *effect, TallGrassEffect *work) {
     VecFx32 position;
 
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);

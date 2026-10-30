@@ -98,7 +98,7 @@ typedef struct SurfWork {
     FieldSystem *fieldSystem;
     PlayerAvatar *playerAvatar;
     LocalMapObject *mapObject;
-    u32 surfMount;
+    FieldEffect *surfMount;
 } SurfWork;
 
 typedef struct StopSurfingWork {
@@ -108,7 +108,7 @@ typedef struct StopSurfingWork {
     FieldSystem *fieldSystem;
     PlayerAvatar *playerAvatar;
     LocalMapObject *mapObject;
-    u32 surfMount;
+    FieldEffect *surfMount;
 } StopSurfingWork;
 
 typedef struct RockClimbWork {
@@ -168,7 +168,7 @@ enum FieldMoveTaskStepResult {
 typedef enum FieldMoveTaskStepResult (*RockClimbStepFunc)(RockClimbWork *work, TaskManager *taskManager);
 typedef enum FieldMoveTaskStepResult (*WaterfallStepFunc)(WaterfallWork *work);
 
-void SurfMountEffect_SetBobbing(u32 effect, int bobbing);
+void SurfMountEffect_SetBobbing(FieldEffect *effect, BOOL bobbing);
 
 static void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar);
 static void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar);
@@ -330,58 +330,58 @@ void Field_PlayerAvatar_ApplyTransitionFlags(PlayerAvatar *avatar) {
 }
 
 static void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar) {
-    u32 surfMount;
+    FieldEffect *surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WALKING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_WALKING);
     PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
     surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
-    if (surfMount != 0) {
+    if (surfMount != NULL) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, NULL);
 }
 
 static void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar) {
-    u32 surfMount;
+    FieldEffect *surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_CYCLING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_CYCLING);
     PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
     surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
-    if (surfMount != 0) {
+    if (surfMount != NULL) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, NULL);
     PlaySE(SEQ_SE_DP_JITENSYA);
 }
 
 static void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar) {
-    u32 surfMount;
+    FieldEffect *surfMount;
     u32 direction;
     LocalMapObject *mapObject;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_SURFING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_SURFING);
     PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
     surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
-    if (surfMount != 0) {
+    if (surfMount != NULL) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, NULL);
     direction = PlayerAvatar_GetFacingDirection(playerAvatar);
     mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     MapObject_GetFieldSystem(mapObject);
-    PlayerAvatar_SetSurfMountEffect(playerAvatar, SurfMountEffect_Create(mapObject, 0, 0, direction, 1));
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, SurfMountEffect_Create(mapObject, 0, 0, direction, TRUE));
 }
 
 static void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar) {
-    u32 surfMount;
+    FieldEffect *surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_ROCKET, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_ROCKET);
     PlayerAvatar_ClearSpeedAndFlag2(playerAvatar);
     surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
-    if (surfMount != 0) {
+    if (surfMount != NULL) {
         FieldEffectManager_DestroyEffect(surfMount);
     }
-    PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
+    PlayerAvatar_SetSurfMountEffect(playerAvatar, NULL);
 }
 
 static void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar) {
@@ -654,7 +654,7 @@ static BOOL Task_Surf(TaskManager *taskManager) {
         int dx = GetDeltaXByFacingDirection(work->direction);
         int z = PlayerAvatar_GetZCoord(work->playerAvatar);
         int dz = GetDeltaYByFacingDirection(work->direction);
-        work->surfMount = SurfMountEffect_Create(work->mapObject, x + dx, z + dz, work->direction, 0);
+        work->surfMount = SurfMountEffect_Create(work->mapObject, x + dx, z + dz, work->direction, FALSE);
         PlayerAvatar_SetSurfMountEffect(work->playerAvatar, work->surfMount);
         PlayerAvatar_SetState(work->playerAvatar, PLAYER_STATE_SURFING);
         work->state++;
@@ -717,7 +717,7 @@ static void Field_StartStopSurfingTask(u32 direction, FieldSystem *fieldSystem, 
     work->playerAvatar = playerAvatar;
     work->mapObject = PlayerAvatar_GetMapObject(playerAvatar);
     work->surfMount = PlayerAvatar_GetSurfMountEffect(playerAvatar);
-    GF_ASSERT(work->surfMount != 0);
+    GF_ASSERT(work->surfMount != NULL);
     FieldSystem_CreateTask(fieldSystem, Task_StopSurfing, work);
 }
 
@@ -737,7 +737,7 @@ static BOOL Task_StopSurfing(TaskManager *taskManager) {
         if (MapObject_IsMovementPaused(work->mapObject)) {
             MapObject_ClearHeldMovementIfActive(work->mapObject);
             FieldEffectManager_DestroyEffect(work->surfMount);
-            PlayerAvatar_SetSurfMountEffect(work->playerAvatar, 0);
+            PlayerAvatar_SetSurfMountEffect(work->playerAvatar, NULL);
             PlayerAvatar_SetState(work->playerAvatar, PLAYER_STATE_WALKING);
             FieldSystem_ProcessSoundplate(work->fieldSystem, FALSE);
             if (FollowMon_IsActive(work->fieldSystem)) {
@@ -966,7 +966,7 @@ static enum FieldMoveTaskStepResult RockClimb_Finish(RockClimbWork *work, TaskMa
         return FIELD_MOVE_TASK_STEP_WAIT;
     }
     MapObject_ClearHeldMovementIfActive(work->mapObject);
-    FieldEffectManager_DestroyEffect((int)work->effect);
+    FieldEffectManager_DestroyEffect(work->effect);
     return FIELD_MOVE_TASK_STEP_DONE;
 }
 

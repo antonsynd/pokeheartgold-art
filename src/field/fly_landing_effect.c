@@ -79,12 +79,12 @@ BOOL FlyLandingEffect_Init(FieldEffect *effect, FlyLandingEffect *landing) {
 void FlyLandingEffect_Delete(FieldEffect *effect) {
     FlyLandingEffect *landing = FieldEffect_GetState(effect);
     if (landing->trainerJumpEffect != NULL) {
-        FieldEffect_Destroy((int)landing->trainerJumpEffect);
+        FieldEffect_Destroy(landing->trainerJumpEffect);
     }
     if (landing->cameraZoom != NULL) {
         FieldCameraZoom_End(landing->cameraZoom);
     }
-    FieldEffect_Destroy((int)effect);
+    FieldEffect_Destroy(effect);
 }
 
 void FlyLandingEffect_Destroy(FieldEffect *effect, FlyLandingEffect *landing) {

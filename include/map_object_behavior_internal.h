@@ -49,7 +49,7 @@ typedef struct TrainerApproachWork {
     int encounterType;
     int trainerIndex;
     int timer;
-    int effect;
+    FieldEffect *effect;
     LocalMapObject *trainer;
     PlayerAvatar *player;
     FieldSystem *fieldSystem;

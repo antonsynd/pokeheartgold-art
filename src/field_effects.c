@@ -160,9 +160,7 @@ FieldEffect *FieldEffectPool_AddBasicEffect(FieldEffectPool *pool, const FieldEf
     return FieldEffectPool_AddEffect(pool, &full, position, parameter, userData, priority);
 }
 
-// value is a FieldEffect *
-void FieldEffect_Destroy(int value) {
-    FieldEffect *effect = (FieldEffect *)value;
+void FieldEffect_Destroy(FieldEffect *effect) {
     SysTask *task;
     GF_ASSERT(effect != NULL);
     if (FieldEffect_IsActive(effect)) {
@@ -181,7 +179,7 @@ static void FieldEffectPool_DestroyAll(FieldEffectPool *pool) {
     FieldEffect *effect = FieldEffectPool_GetEffects(pool);
     do {
         if (FieldEffect_IsActive(effect) == TRUE) {
-            FieldEffect_Destroy((int)effect);
+            FieldEffect_Destroy(effect);
         }
         effect++;
     } while (--count);

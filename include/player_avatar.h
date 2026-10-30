@@ -8,6 +8,8 @@
 #include "field_types_def.h"
 #include "save.h"
 
+struct FieldEffect;
+
 typedef enum PlayerAvatarFlags {
     AVATAR_FLAG_FORCED_MOVEMENT = (1 << 0),
     AVATAR_FLAG_UNK1 = (1 << 1),
@@ -39,7 +41,7 @@ struct PlayerAvatar {
     s32 lastHorizontalInput;
     s32 lastVerticalInput;
     LocalMapObject *mapObject;
-    u32 surfMountEffect;
+    struct FieldEffect *surfMountEffect;
     PlayerSaveData *playerSaveData;
     u32 unk3c;
 }; // size: 0x40
@@ -85,8 +87,8 @@ s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 delta, s32 ceilin
 s32 PlayerAvatar_GetLastHorizontalInput(PlayerAvatar *avatar);
 s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar);
 void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 lastHorizontal, s32 lastVertical);
-void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect);
-u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar);
+void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, struct FieldEffect *surfMountEffect);
+struct FieldEffect *PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar);
 PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar);
 void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 heldMovement);
 u32 PlayerAvatar_GetHeldMovement(PlayerAvatar *avatar);

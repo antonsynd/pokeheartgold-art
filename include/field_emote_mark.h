@@ -3,8 +3,10 @@
 
 #include "player_avatar.h"
 
-int EmoteMark_Spawn(LocalMapObject *obj, int kind, int playSound);
-BOOL EmoteMark_IsDone(int effect);
-void EmoteMark_Hide(int effect);
+struct FieldEffect;
+
+struct FieldEffect *EmoteMark_Spawn(LocalMapObject *obj, int kind, BOOL playSound);
+BOOL EmoteMark_IsDone(struct FieldEffect *effect);
+void EmoteMark_Hide(struct FieldEffect *effect);
 
 #endif // POKEHEARTGOLD_FIELD_EMOTE_MARK_H

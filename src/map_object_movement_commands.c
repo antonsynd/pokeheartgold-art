@@ -56,7 +56,7 @@ typedef struct RiseMovementWork {
 
 typedef struct EmoteMovementWork {
     u32 type;
-    int effect;
+    FieldEffect *effect;
 } EmoteMovementWork;
 
 typedef struct JumpOffsetData {
@@ -978,7 +978,7 @@ BOOL MapObjectMovementCmd074_Step0(LocalMapObject *object) {
 static void MapObject_StartEmoteMovement(LocalMapObject *object, u32 type) {
     EmoteMovementWork *work = MapObject_InitMovementCmdData(object, sizeof(EmoteMovementWork));
     work->type = type;
-    work->effect = EmoteMark_Spawn(object, type, 1);
+    work->effect = EmoteMark_Spawn(object, type, TRUE);
     MapObject_IncrementMovementStep(object);
 }
 
@@ -1130,7 +1130,7 @@ BOOL MapObjectMovementCmd100_Step1(LocalMapObject *object) {
 }
 
 BOOL MapObjectMovementCmd101_Step0(LocalMapObject *object) {
-    int effect;
+    FieldEffect *effect;
 
     MapObject_InitMovementCmdData(object, sizeof(s32));
     effect = HiddenObjectMovement_GetCoverEffect(object);

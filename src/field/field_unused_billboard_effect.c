@@ -131,7 +131,7 @@ void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *wo
     int z;
 
     if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (MapObject_TestFlagsBits(mapObject, MAPOBJECTFLAG_VISIBLE) == TRUE) {
@@ -164,17 +164,17 @@ void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *wo
         // fallthrough
     case UNUSED_BILLBOARD_STATE_WAIT:
         if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         x = MapObject_GetXCoord(mapObject);
         z = MapObject_GetZCoord(mapObject);
         if (work->args.x != x || work->args.z != z) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         if (work->args.direction != -1 && work->args.direction != MapObject_GetFacingDirection(mapObject)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
         break;
     }
@@ -184,7 +184,7 @@ void UnusedBillboardEffect_Draw(FieldEffect *effect, UnusedBillboardEffect *work
     VecFx32 position;
 
     if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);

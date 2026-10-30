@@ -100,7 +100,7 @@ static BOOL Task_RevertShayminToLandForm(TaskManager *taskMan) {
         if (env->formChange == NULL) {
             var = 1;
         } else if (ShayminFormChange_IsDone(env->formChange)) {
-            FieldEffect_Destroy((int)env->formChange);
+            FieldEffect_Destroy(env->formChange);
             var = 1;
         }
         if (var != 0) {

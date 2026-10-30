@@ -120,7 +120,7 @@ static void HiddenObjectCoverEffect_Destroy(FieldEffect *effect, void *state) {
     LocalMapObject *mapObject = coverEffect->args.mapObject;
 
     if (MapObject_CheckIDAndMap(mapObject, coverEffect->localMapObjectId, coverEffect->mapId) == TRUE) {
-        HiddenObjectMovement_SetCoverEffect(mapObject, 0);
+        HiddenObjectMovement_SetCoverEffect(mapObject, NULL);
     }
 }
 

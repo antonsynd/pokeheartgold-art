@@ -116,7 +116,7 @@ static void UnionChatMarkerEffect_Destroy(FieldEffect *effect, void *state) {
 static void UnionChatMarkerEffect_Update(FieldEffect *effect, void *state) {
     UnionChatMarkerEffect *work = state;
     if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
     }
 }
 
@@ -127,7 +127,7 @@ static void UnionChatMarkerEffect_Draw(FieldEffect *effect, void *state) {
     VecFx32 facing;
 
     if (!MapObject_CheckIDAndMap(mapObject, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     MapObject_CopyPositionVector(mapObject, &position);

@@ -222,7 +222,7 @@ static void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, void *state) 
     VecFx32 position;
     VecFx32 ground;
     if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (!work->onGround) {
@@ -249,7 +249,7 @@ static void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, void *state) 
         work->state = BALL_RELEASE_STATE_BURST;
     case BALL_RELEASE_STATE_BURST:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(&work->args.ball->burstAnimation, FX32_ONE)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
         break;
     }
@@ -259,7 +259,7 @@ static void FollowMonBallEffect_DrawRelease(FieldEffect *effect, void *state) {
     FollowMonBallEffect *work = state;
     VecFx32 position;
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);
@@ -272,7 +272,7 @@ static void FollowMonBallEffect_UpdateBurst(FieldEffect *effect, void *state) {
     VecFx32 position;
     VecFx32 ground;
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (!work->onGround) {
@@ -292,7 +292,7 @@ static void FollowMonBallEffect_UpdateBurst(FieldEffect *effect, void *state) {
         work->state = BALL_BURST_STATE_BURST;
     case BALL_BURST_STATE_BURST:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(&work->args.ball->burstAnimation, FX32_ONE)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
         break;
     }
@@ -302,7 +302,7 @@ static void FollowMonBallEffect_DrawBurst(FieldEffect *effect, void *state) {
     FollowMonBallEffect *work = state;
     VecFx32 position;
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);
@@ -339,7 +339,7 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, void *sta
     u32 direction;
 
     if (!MapObject_CheckSpriteIDAndMap(owner, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (!work->onGround) {
@@ -393,7 +393,7 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, void *sta
         break;
     case BALL_RECALL_STATE_SHOW_BALL:
         if (++work->timer >= FOLLOW_MON_BALL_SHRINK_FRAMES) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
         break;
     }
@@ -403,7 +403,7 @@ static void FollowMonBallEffect_DrawBall(FieldEffect *effect, void *state) {
     FollowMonBallEffect *work = state;
     VecFx32 position;
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);
@@ -430,7 +430,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, void *state) {
     FollowMonBallEffect *work = state;
     LocalMapObject *mapObject = work->args.mapObject;
     if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     switch (work->state) {
@@ -471,7 +471,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, void *state) {
     case BALL_RECALL_STATE_SHOW_BALL:
         work->timer++;
         if (work->timer >= 16) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
         break;
     }

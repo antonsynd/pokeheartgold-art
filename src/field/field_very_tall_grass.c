@@ -179,7 +179,7 @@ static void VeryTallGrassEffect_Update(FieldEffect *effect, void *state) {
     LocalMapObject *mapObject = work->args.mapObject;
 
     if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (MapObject_TestFlagsBits(mapObject, MAPOBJECTFLAG_VISIBLE) == TRUE) {
@@ -215,11 +215,11 @@ static void VeryTallGrassEffect_Update(FieldEffect *effect, void *state) {
         int x = MapObject_GetXCoord(mapObject) - work->args.dx;
         int z = MapObject_GetZCoord(mapObject) - work->args.dz;
         if (work->args.x != x || work->args.z != z) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
             return;
         }
         if (work->args.direction != -1 && work->args.direction != MapObject_GetFacingDirection(mapObject)) {
-            FieldEffectManager_DestroyEffect((int)effect);
+            FieldEffectManager_DestroyEffect(effect);
         }
     }
         return;
@@ -231,7 +231,7 @@ static void VeryTallGrassEffect_Draw(FieldEffect *effect, void *state) {
     VecFx32 position;
 
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     FieldEffect_GetPosition(effect, &position);

@@ -277,11 +277,11 @@ static void FieldShadowEffect_Update(FieldEffect *effect, void *state) {
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
     if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     if (MapObject_GetManagerFlagsBitsMask(object, MAPOBJECTFLAG_END_MOVEMENT)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     work->hidden = FALSE;
@@ -380,7 +380,7 @@ static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, void *stat
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
     if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
-        FieldEffectManager_DestroyEffect((int)effect);
+        FieldEffectManager_DestroyEffect(effect);
         return;
     }
     work->hidden = FALSE;

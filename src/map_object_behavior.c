@@ -782,7 +782,7 @@ static BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
 }
 
 static BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work) {
-    work->effect = EmoteMark_Spawn(work->trainer, 0, 0);
+    work->effect = EmoteMark_Spawn(work->trainer, 0, FALSE);
     work->state = TRAINER_APPROACH_WAIT_EXCLAMATION;
     return FALSE;
 }
