@@ -1168,7 +1168,7 @@ static int BattlePartyMenu_AnimateItemEffect(BattlePartyMenu *menu) {
             menu->ppTargets[0] = GetMonData(menu->mons[context->selectedMon].mon, MON_DATA_MOVE1_PP + context->selectedMove, NULL);
             menu->effectState = ITEM_EFFECT_STATE_RESTORE_PP;
         } else {
-            int status = Pokemon_GetStatusIconId(menu->mons[context->selectedMon].mon);
+            PartyMonStatusIconId status = Pokemon_GetStatusIconId(menu->mons[context->selectedMon].mon);
             menu->mons[context->selectedMon].status = status;
             if (menu->mons[context->selectedMon].status == PARTY_MON_STATUS_ICON_OK) {
                 ManagedSprite_SetDrawFlag(menu->sprites[context->selectedMon + 13], FALSE);
@@ -2383,7 +2383,7 @@ static void BattlePartyMenu_PrintPartyListPage(BattlePartyMenu *menu) {
             if (!menu->mons[i].isEgg) {
                 BattlePartyMenu_PrintMonHPAndBar(menu, (u8)i);
             }
-            if (Pokemon_GetStatusIconId(menu->mons[i].mon) == 7) {
+            if (Pokemon_GetStatusIconId(menu->mons[i].mon) == PARTY_MON_STATUS_ICON_OK) {
                 BattlePartyMenu_PrintPartyMonLevel(menu, (u8)i);
             }
         }

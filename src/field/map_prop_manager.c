@@ -97,7 +97,7 @@ void MapPropManager_RemoveMapPropByIndex(int modelID, MapPropManager *mapPropMan
 }
 
 // NARC_a_0_6_5
-void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropManager, int a3) {
+void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropManager, MapPropAnimationManager *a3) {
     MapPropArcData *narcData = NULL;
     u32 num;
 
@@ -137,7 +137,7 @@ void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropMa
     }
 }
 
-void MapPropManager_LoadFromSafariZone(NARC *narc, MapPropManager *mapPropManager, int a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender) {
+void MapPropManager_LoadFromSafariZone(NARC *narc, MapPropManager *mapPropManager, MapPropAnimationManager *a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender) {
     u32 numSafariObjects = safariArea->active_object_count;
     if (numSafariObjects > SAFARI_ZONE_MAX_OBJECTS) {
         GF_ASSERT(FALSE);

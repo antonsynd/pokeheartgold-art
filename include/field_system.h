@@ -102,7 +102,7 @@ typedef struct FieldMapSystems {
     u32 unk14;
     UnusedFieldModel *unusedFieldModel;
     HBlankSystem *hBlankSystem;
-    void *poisonEffect;
+    struct PoisonEffect *poisonEffect;
     void *localData;
 } FieldMapSystems;
 
@@ -214,7 +214,7 @@ struct FieldSystem {
     int savedBottomScreenAppId;
     Location *location;
     Camera *camera;
-    void *cameraShift;
+    struct FieldCameraShift *cameraShift;
     MapLoadManager *mapLoadManager;
     MapMatrix *mapMatrix;
     AreaDataManager *areaDataManager;
@@ -228,7 +228,7 @@ struct FieldSystem {
     MapPropAnimationManager *mapPropAnimationManager;
     MapPropOneShotAnimationManager *mapPropOneShotAnimationManager;
     TerrainAttributes *terrainAttributes;
-    void *terrainQueries;
+    const struct FieldTerrainQueries *terrainQueries;
     BOOL skipMapAttributes;
     Signpost *signpost;
     BOOL runningFieldMap;
@@ -255,7 +255,7 @@ struct FieldSystem {
     Field3dRenderObjManager *renderObjManager;
     int environmentSoundState;   // Used to keep track of the active weather/soundplate sound and their associated loading status.
     MapPropAnimationPoolList *mapPropAnimationPools;
-    void *areaMapAnimation;
+    AreaMapAnimation *areaMapAnimation;
     u16 lastTouchMenuInput;
     u8 startMenuState : 6;
     u8 textbox_open : 1;

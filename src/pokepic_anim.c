@@ -294,9 +294,7 @@ void PokepicAnimManager_Delete(PokepicAnimManager *mgr) {
     Heap_Free(mgr);
 }
 
-void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct PokepicAnimParams *params, u8 index) {
-    PokepicAnimManager *mgr = managerArg;
-    Pokepic *pic = picArg;
+void PokepicAnimManager_StartAnim(PokepicAnimManager *mgr, Pokepic *pic, struct PokepicAnimParams *params, u8 index) {
     int scriptId = params->scriptId;
     int delay = params->delay;
     GF_ASSERT(index < mgr->count);

@@ -3,6 +3,7 @@
 
 #include "menu_input_state.h"
 #include "options.h"
+#include "party_menu.h"
 #include "player_data.h"
 #include "pokemon_types_def.h"
 #include "save_special_ribbons.h"
@@ -42,6 +43,6 @@ int StatusIcon_GetCharNaix(void);
 int StatusIcon_GetPlttNaix(void);
 int StatusIcon_GetCellNaix(void);
 int StatusIcon_GetAnimNaix(void);
-u32 Pokemon_GetStatusIconId(Pokemon *pokemon);
+PartyMonStatusIconId Pokemon_GetStatusIconId(Pokemon *pokemon);
 
 #endif // POKEHEARTGOLD_POKEMON_SUMMARY_H

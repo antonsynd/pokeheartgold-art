@@ -294,19 +294,19 @@ VecFx32 *PlayerAvatar_GetPositionVector(PlayerAvatar *avatar) {
     return MapObject_GetPositionVector(PlayerAvatar_GetMapObjectConst(avatar));
 }
 
-void PlayerAvatar_SetMoveState(PlayerAvatar *avatar, u32 state) {
+void PlayerAvatar_SetMoveState(PlayerAvatar *avatar, enum AvatarMoveState state) {
     avatar->moveState = state;
 }
 
-u32 PlayerAvatar_GetMoveState(PlayerAvatar *avatar) {
+enum AvatarMoveState PlayerAvatar_GetMoveState(PlayerAvatar *avatar) {
     return avatar->moveState;
 }
 
-void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, u32 state) {
+void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, enum PlayerMoveState state) {
     avatar->playerMoveState = state;
 }
 
-u32 PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar) {
+enum PlayerMoveState PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar) {
     return avatar->playerMoveState;
 }
 

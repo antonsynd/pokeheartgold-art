@@ -294,7 +294,7 @@ static void WalkingSpin_TurnBeforeStep(LocalMapObject *object, WalkingSpinState 
 static void WalkingSpin_EndStep(LocalMapObject *object, WalkingSpinState *state);
 
 static void RandomLookMovement_Init(LocalMapObject *object, u32 value) {
-    RandomLookMovementState *state = (RandomLookMovementState *)MapObject_InitMovementData(object, sizeof(RandomLookMovementState));
+    RandomLookMovementState *state = MapObject_InitMovementData(object, sizeof(RandomLookMovementState));
     state->delay = DirectionList_GetRandom(sRandomLookDelays, -1);
     state->tableId = value;
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
@@ -346,7 +346,7 @@ void RandomLookMovement_InitLeftRight(LocalMapObject *object) {
 }
 
 void RandomLookMovement_Update(LocalMapObject *object) {
-    RandomLookMovementState *state = (RandomLookMovementState *)MapObject_GetMovementData(object);
+    RandomLookMovementState *state = MapObject_GetMovementData(object);
     int direction = MapObject_GetAllowedDirectionToNearbyPlayer(object, state->tableId, -1);
     if (direction != DIR_NONE) {
         MapObject_SetFacingDirection(object, direction);
@@ -377,7 +377,7 @@ void RandomWalkMovement_InitLeftRight(LocalMapObject *object) {
 }
 
 static void RandomWalkMovement_Init(LocalMapObject *object, u32 heldMovement, u32 directionTable, u32 restrictToRange) {
-    LocalMovementState *state = (LocalMovementState *)MapObject_InitMovementData(object, sizeof(LocalMovementState));
+    LocalMovementState *state = MapObject_InitMovementData(object, sizeof(LocalMovementState));
     state->restrictToRange = restrictToRange;
     state->heldMovement = heldMovement;
     state->directionTable = directionTable;
@@ -386,7 +386,7 @@ static void RandomWalkMovement_Init(LocalMapObject *object, u32 heldMovement, u3
 }
 
 void RandomWalkMovement_Update(LocalMapObject *object) {
-    LocalMovementState *state = (LocalMovementState *)MapObject_GetMovementData(object);
+    LocalMovementState *state = MapObject_GetMovementData(object);
     u32 direction;
     switch (state->state) {
     case RANDOM_WALK_FACE:
@@ -508,7 +508,7 @@ static BOOL MapObject_IsWithinMovementBounds(LocalMapObject *object, u32 directi
 }
 
 static void FaceDirectionMovement_Init(LocalMapObject *object, u32 direction) {
-    FaceDirectionMovementState *state = (FaceDirectionMovementState *)MapObject_InitMovementData(object, sizeof(FaceDirectionMovementState));
+    FaceDirectionMovementState *state = MapObject_InitMovementData(object, sizeof(FaceDirectionMovementState));
     state->direction = direction;
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
     MapObject_ClearSingleMovement(object);
@@ -516,7 +516,7 @@ static void FaceDirectionMovement_Init(LocalMapObject *object, u32 direction) {
 }
 
 void FaceDirectionMovement_Update(LocalMapObject *object) {
-    FaceDirectionMovementState *state = (FaceDirectionMovementState *)MapObject_GetMovementData(object);
+    FaceDirectionMovementState *state = MapObject_GetMovementData(object);
     switch (state->state) {
     case 0:
         MapObject_SetFacingDirection(object, state->direction);
@@ -544,7 +544,7 @@ void FaceDirectionMovement_InitRight(LocalMapObject *object) {
 }
 
 static void SpinMovement_Init(LocalMapObject *object, u32 order) {
-    SpinMovementState *state = (SpinMovementState *)MapObject_InitMovementData(object, sizeof(SpinMovementState));
+    SpinMovementState *state = MapObject_InitMovementData(object, sizeof(SpinMovementState));
     state->order = order;
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
     MapObject_ClearSingleMovement(object);
@@ -560,7 +560,7 @@ void SpinMovement_InitClockwise(LocalMapObject *object) {
 }
 
 void SpinMovement_Update(LocalMapObject *object) {
-    SpinMovementState *state = (SpinMovementState *)MapObject_GetMovementData(object);
+    SpinMovementState *state = MapObject_GetMovementData(object);
 
     while (sSpinMovementStateFuncs[state->state](object, state) == TRUE) {
     }
@@ -635,7 +635,7 @@ void AlternatingSpinMovement_Init(LocalMapObject *object) {
 }
 
 void AlternatingSpinMovement_Update(LocalMapObject *object) {
-    SpinMovementState *state = (SpinMovementState *)MapObject_GetMovementData(object);
+    SpinMovementState *state = MapObject_GetMovementData(object);
     while (sAlternatingSpinMovementStateFuncs[state->state](object, state) == TRUE) {}
 }
 
@@ -702,14 +702,14 @@ static BOOL AlternatingSpinMovement_Turn(LocalMapObject *object, SpinMovementSta
 }
 
 void BackAndForthMovement_Init(LocalMapObject *object) {
-    BackAndForthMovementState *state = (BackAndForthMovementState *)MapObject_InitMovementData(object, sizeof(BackAndForthMovementState));
+    BackAndForthMovementState *state = MapObject_InitMovementData(object, sizeof(BackAndForthMovementState));
     if (MapObject_SpinsWhileWalking(object) == TRUE) {
         WalkingSpin_Init(object, &state->spin);
     }
 }
 
 void BackAndForthMovement_Update(LocalMapObject *object) {
-    BackAndForthMovementState *state = (BackAndForthMovementState *)MapObject_GetMovementData(object);
+    BackAndForthMovementState *state = MapObject_GetMovementData(object);
     while (sBackAndForthMovementStateFuncs[state->state](object, state) == TRUE) {}
 }
 
@@ -779,7 +779,7 @@ static BOOL BackAndForthMovement_WaitStep(LocalMapObject *object, BackAndForthMo
 }
 
 static void PathMovement_Init(LocalMapObject *object, u32 limit, u32 axis, u32 tableId) {
-    MovementPathState *state = (MovementPathState *)MapObject_InitMovementData(object, sizeof(MovementPathState));
+    MovementPathState *state = MapObject_InitMovementData(object, sizeof(MovementPathState));
     state->limit = limit;
     state->axis = axis;
     state->tableId = tableId;
@@ -853,7 +853,7 @@ void PathMovement_InitSouthWestEastNorth(LocalMapObject *object) {
 }
 
 void PathMovement_Update(LocalMapObject *object) {
-    MovementPathState *state = (MovementPathState *)MapObject_GetMovementData(object);
+    MovementPathState *state = MapObject_GetMovementData(object);
     while (sPathMovementStateFuncs[state->state](object, state) == TRUE) {}
 }
 

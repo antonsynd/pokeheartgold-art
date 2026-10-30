@@ -2147,7 +2147,7 @@ int StatusIcon_GetAnimNaix(void) {
     return 62;
 }
 
-u32 Pokemon_GetStatusIconId(Pokemon *mon) {
+PartyMonStatusIconId Pokemon_GetStatusIconId(Pokemon *mon) {
     u32 status = GetMonData(mon, MON_DATA_STATUS, NULL);
     if (GetMonData(mon, MON_DATA_HP, NULL) == 0) {
         return PARTY_MON_STATUS_ICON_FNT;

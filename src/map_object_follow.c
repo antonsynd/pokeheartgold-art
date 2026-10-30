@@ -48,7 +48,7 @@ static int GetMovementSpeed(u32 movement);
 static void FollowMon_SpawnGrassEffects(LocalMapObject *object);
 
 void FollowPlayerMovement_Init(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPlayerMovementState));
+    FollowPlayerMovementState *state = MapObject_InitMovementData(object, sizeof(FollowPlayerMovementState));
     FollowPlayerMovement_CheckPlayer(object, state);
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
     MapObject_ClearSingleMovement(object);
@@ -56,7 +56,7 @@ void FollowPlayerMovement_Init(LocalMapObject *object) {
 }
 
 void FollowPlayerMovement_UpdateFollowMon(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         MapObject_ClearFlag18(object, FALSE);
         while (gFollowMonFollowPlayerStates[state->state](object, state) == TRUE) {
@@ -65,7 +65,7 @@ void FollowPlayerMovement_UpdateFollowMon(LocalMapObject *object) {
 }
 
 void FollowPlayerMovement_Update(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         while (gFollowPlayerStates[state->state](object, state) == TRUE) {
         }
@@ -73,7 +73,7 @@ void FollowPlayerMovement_Update(LocalMapObject *object) {
 }
 
 void FollowPlayerMovement_UpdateMirror(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
     if (FollowPlayerMovement_CheckPlayer(object, state)) {
         while (gMirrorPlayerStates[state->state](object, state) == TRUE) {
         }
@@ -129,18 +129,18 @@ u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object) {
 }
 
 u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
     return state->hopSpeed;
 }
 
 void FollowPlayerMovement_DisableBallEffect(LocalMapObject *object) {
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
     state->noBallEffect = TRUE;
 }
 
 void FollowPlayerMovement_Reset(LocalMapObject *object) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
-    FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_GetMovementData(object);
+    FollowPlayerMovementState *state = MapObject_GetMovementData(object);
 
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
@@ -262,7 +262,7 @@ static BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementS
     if (MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK4) == TRUE && MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK5) == TRUE) {
         state->state = 0;
     }
-    if (PlayerAvatar_GetPlayerMoveState(avatar) == 3) {
+    if (PlayerAvatar_GetPlayerMoveState(avatar) == PLAYER_MOVE_STATE_END) {
         state->state = 0;
     }
     return FALSE;
@@ -428,7 +428,7 @@ static BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object) {
 }
 
 void FollowPartnerMovement_Init(LocalMapObject *object) {
-    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPartnerMovementState));
+    FollowPartnerMovementState *state = MapObject_InitMovementData(object, sizeof(FollowPartnerMovementState));
     FollowPartnerMovement_FindPartner(object, state);
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
     MapObject_ClearSingleMovement(object);
@@ -436,7 +436,7 @@ void FollowPartnerMovement_Init(LocalMapObject *object) {
 }
 
 void FollowPartnerMovement_Update(LocalMapObject *object) {
-    FollowPartnerMovementState *state = (FollowPartnerMovementState *)MapObject_GetMovementData(object);
+    FollowPartnerMovementState *state = MapObject_GetMovementData(object);
 
     if (FollowPartnerMovement_FindPartner(object, state)) {
         while (gFollowPartnerStates[state->state](object, state) == TRUE) {
@@ -564,7 +564,7 @@ static BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartne
 }
 
 static void HiddenObjectMovement_Init(LocalMapObject *object, int coverType) {
-    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_InitMovementData(object, sizeof(HiddenObjectMovementState));
+    HiddenObjectMovementState *state = MapObject_InitMovementData(object, sizeof(HiddenObjectMovementState));
     state->coverType = coverType;
     MapObject_SetAnimation(object, MAP_OBJECT_ANIM_STAND);
     MapObject_ClearSingleMovement(object);
@@ -590,7 +590,7 @@ void HiddenObjectMovement_InitCover3(LocalMapObject *object) {
 }
 
 void HiddenObjectMovement_Update(LocalMapObject *object) {
-    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+    HiddenObjectMovementState *state = MapObject_GetMovementData(object);
 
     while (gHiddenObjectStates[state->state](object, state) == TRUE) {
     }
@@ -604,7 +604,7 @@ void HiddenObjectMovement_Delete(LocalMapObject *object) {
 }
 
 void HiddenObjectMovement_Resume(LocalMapObject *object) {
-    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+    HiddenObjectMovementState *state = MapObject_GetMovementData(object);
 
     state->state = 0;
     HiddenObjectMovement_SetCoverEffect(object, 0);
@@ -636,7 +636,7 @@ static BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementS
 }
 
 int HiddenObjectMovement_SetCoverEffect(LocalMapObject *object, int effect) {
-    HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_GetMovementData(object);
+    HiddenObjectMovementState *state = MapObject_GetMovementData(object);
     state->coverEffect = effect;
     return (int)state;
 }

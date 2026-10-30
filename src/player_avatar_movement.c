@@ -320,8 +320,8 @@ static void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar 
 }
 
 void PlayerAvatar_UpdateMovement(PlayerAvatar *avatar) {
-    int moveState = PlayerAvatar_GetMoveState(avatar);
-    int playerMoveState = PlayerAvatar_GetPlayerMoveState(avatar);
+    enum AvatarMoveState moveState = PlayerAvatar_GetMoveState(avatar);
+    enum PlayerMoveState playerMoveState = PlayerAvatar_GetPlayerMoveState(avatar);
     LocalMapObject *object = PlayerAvatar_GetMapObject(avatar);
 
     PlayerAvatar_SetPlayerMoveState(avatar, PLAYER_MOVE_STATE_NONE);
@@ -392,8 +392,8 @@ void PlayerAvatar_ResetMovement(PlayerAvatar *avatar) {
 }
 
 BOOL PlayerAvatar_IsBetweenSteps(PlayerAvatar *avatar) {
-    int moveState = PlayerAvatar_GetMoveState(avatar);
-    int playerMoveState = PlayerAvatar_GetPlayerMoveState(avatar);
+    enum AvatarMoveState moveState = PlayerAvatar_GetMoveState(avatar);
+    enum PlayerMoveState playerMoveState = PlayerAvatar_GetPlayerMoveState(avatar);
     LocalMapObject *mapObject;
 
     if (moveState == AVATAR_MOVE_STATE_NONE) {
@@ -1199,7 +1199,7 @@ BOOL PlayerAvatar_IsRunning(PlayerAvatar *avatar) {
     }
 }
 
-int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction) {
+enum AvatarMoveState PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction) {
     enum AvatarMoveState moveState;
     switch (PlayerAvatar_GetState(avatar)) {
     case PLAYER_STATE_WALKING:
@@ -1220,7 +1220,7 @@ int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction) {
 
 u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, BOOL allowRun, int collision) {
     int direction;
-    int moveState;
+    enum AvatarMoveState moveState;
     int movement;
 
     direction = PlayerAvatar_ChooseInputDirection(avatar, keys, heldKeys);

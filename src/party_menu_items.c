@@ -456,7 +456,7 @@ static int PartyMenu_ItemUseFunc_HPRestore(PartyMenu *partyMenu) {
     BufferIntegerAsString(partyMenu->msgFormat, 1, hp - partyMenu->monsDrawState[partyMenu->partyMonIndex].hp, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(partyMenu->msgFormat, partyMenu->formattedStrBuf, string);
     String_Delete(string);
-    int statusIcon = Pokemon_GetStatusIconId(mon);
+    PartyMonStatusIconId statusIcon = Pokemon_GetStatusIconId(mon);
     PartyMenu_DrawMonStatusIcon(partyMenu, partyMenu->partyMonIndex, statusIcon);
     if (statusIcon == PARTY_MON_STATUS_ICON_OK) {
         partyMenu->monsDrawState[partyMenu->partyMonIndex].status = PARTY_MON_STATUS_ICON_OK;
@@ -588,7 +588,7 @@ static int PartyMenu_ItemUseFunc_LevelUp(PartyMenu *partyMenu) {
     BufferIntegerAsString(partyMenu->msgFormat, 1, partyMenu->monsDrawState[partyMenu->partyMonIndex].level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(partyMenu->msgFormat, partyMenu->formattedStrBuf, string);
     String_Delete(string);
-    int statusIcon = Pokemon_GetStatusIconId(mon);
+    PartyMonStatusIconId statusIcon = Pokemon_GetStatusIconId(mon);
     PartyMenu_DrawMonStatusIcon(partyMenu, partyMenu->partyMonIndex, statusIcon);
     if (statusIcon == PARTY_MON_STATUS_ICON_OK) {
         partyMenu->monsDrawState[partyMenu->partyMonIndex].status = PARTY_MON_STATUS_ICON_OK;

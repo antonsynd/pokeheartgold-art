@@ -4192,7 +4192,7 @@ void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species
     MI_CpuCopy8(&animData.facings[facing].animScripts[0], dest, sizeof(PokepicAnimScript) * 10);
 }
 
-void NARC_StartPokepicAnim(NARC *narc, void *manager, void *pic, u16 species, int whichFacing, int reverseX, int index) {
+void NARC_StartPokepicAnim(NARC *narc, struct PokepicAnimManager *manager, Pokepic *pic, u16 species, int whichFacing, int reverseX, int index) {
     struct PokepicSpeciesAnimData animData;
     struct PokepicAnimParams animParams;
     int facing = (whichFacing == 2 ? 0 : 1);

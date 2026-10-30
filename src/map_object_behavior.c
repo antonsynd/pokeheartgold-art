@@ -190,12 +190,12 @@ enum TrainerTurnState {
 };
 
 void TypeBehavior_LookSidewaysInit(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, sizeof(TrainerBehaviorState));
+    TrainerBehaviorState *state = MapObject_InitBehaviorData(object, sizeof(TrainerBehaviorState));
     state->limit = MapObject_GetParam(object, 1);
 }
 
 BOOL TypeBehavior_LookSidewaysCheck(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
+    TrainerBehaviorState *state = MapObject_GetBehaviorData(object);
     switch (state->state) {
     case TRAINER_CHECK_STATE_WAIT_OFF_TILE:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
@@ -226,7 +226,7 @@ BOOL TypeBehavior_LookSidewaysCheck(LocalMapObject *object) {
 }
 
 BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
+    TrainerBehaviorState *state = MapObject_GetBehaviorData(object);
     switch (state->turnState) {
     case TRAINER_TURN_STATE_INIT: {
         FourValues dirTable = gLookSidewaysAxisByFacing;
@@ -266,13 +266,13 @@ BOOL TypeBehavior_LookSidewaysUpdate(LocalMapObject *object) {
 }
 
 void TypeBehavior_SpinInit(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_InitBehaviorData(object, sizeof(TrainerBehaviorState));
+    TrainerBehaviorState *state = MapObject_InitBehaviorData(object, sizeof(TrainerBehaviorState));
     state->limit = MapObject_GetParam(object, 1);
     state->sequence = (MapObject_GetType(object) != 5);
 }
 
 BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
+    TrainerBehaviorState *state = MapObject_GetBehaviorData(object);
     switch (state->state) {
     case TRAINER_CHECK_STATE_WAIT_OFF_TILE:
         if (MapObject_IsOffPreviousTile(object) == TRUE) {
@@ -304,7 +304,7 @@ BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
 
 BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
     DirectionMovementTable spinOrders = gTypeBehaviorSpinOrders;
-    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
+    TrainerBehaviorState *state = MapObject_GetBehaviorData(object);
     int i;
     u32 dir;
     switch (state->turnState) {
@@ -347,15 +347,15 @@ BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
 }
 
 void ApricornTreeObject_Init(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)MapObject_InitDrawData(object, sizeof(ApricornTreeState));
+    ApricornTreeState *state = MapObject_InitDrawData(object, sizeof(ApricornTreeState));
     state->spriteId = SPRITE_BONGURI;
     state->apricorns = 0;
     MapObject_CallDrawUpdate(object);
 }
 
 void ApricornTreeObject_Update(LocalMapObject *object) {
-    MapObjectSpriteState *spriteState = (MapObjectSpriteState *)MapObject_GetMovementData(object);
-    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
+    MapObjectSpriteState *spriteState = MapObject_GetMovementData(object);
+    ApricornTreeState *state = MapObject_GetDrawData(object);
     BOOL apricorn = FieldSystem_ApricornTree_HasApricorn(MapObject_GetFieldSystem(object), object);
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
@@ -420,12 +420,12 @@ void ApricornTreeObject_Update(LocalMapObject *object) {
 }
 
 void ApricornTreeObject_Delete(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
+    ApricornTreeState *state = MapObject_GetDrawData(object);
     MapObject_CancelAndFreeBillboard(object, &state->billboard, state->spriteId);
 }
 
 void ApricornTreeObject_Pause(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
+    ApricornTreeState *state = MapObject_GetDrawData(object);
     if (state->billboard != NULL) {
         BillboardObject_SaveState(state->billboard, &state->savedState);
     }
@@ -434,7 +434,7 @@ void ApricornTreeObject_Pause(LocalMapObject *object) {
 }
 
 void ApricornTreeObject_Resume(LocalMapObject *object) {
-    ApricornTreeState *state = (ApricornTreeState *)MapObject_GetDrawData(object);
+    ApricornTreeState *state = MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }

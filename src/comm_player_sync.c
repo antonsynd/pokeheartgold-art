@@ -152,8 +152,8 @@ static void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPositi
 }
 
 static void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused) {
-    u32 moveState = PlayerAvatar_GetMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
-    u32 playerMoveState = PlayerAvatar_GetPlayerMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
+    enum AvatarMoveState moveState = PlayerAvatar_GetMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
+    enum PlayerMoveState playerMoveState = PlayerAvatar_GetPlayerMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
     if (moveState == 0 && Comm_IsNetIdConnected(Comm_GetLocalNetId()) && gCommPlayerManager->localPositionSent == 0) {
         CommPlayerManager_SendLocalPosition(1);
         gCommPlayerManager->localPositionSent = 1;

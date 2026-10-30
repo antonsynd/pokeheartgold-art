@@ -12,6 +12,4 @@ typedef struct FieldTerrainQueries {
     BOOL (*getAttributes)(FieldSystem *fieldSystem, int x, int z, u16 *outAttributes);
 } FieldTerrainQueries;
 
-#define FS_TERRAIN_QUERIES(fieldSystem) ((const FieldTerrainQueries *)(fieldSystem)->terrainQueries)
-
 #endif

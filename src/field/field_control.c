@@ -125,8 +125,8 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
         heldKeys |= PAD_BUTTON_B;
     }
 
-    u32 moveState = PlayerAvatar_GetPlayerMoveState(fieldSystem->playerAvatar);
-    u32 avatarMoveState = PlayerAvatar_GetMoveState(fieldSystem->playerAvatar);
+    enum PlayerMoveState moveState = PlayerAvatar_GetPlayerMoveState(fieldSystem->playerAvatar);
+    enum AvatarMoveState avatarMoveState = PlayerAvatar_GetMoveState(fieldSystem->playerAvatar);
     u32 facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
 
     fieldInput->newKeys = newKeys;

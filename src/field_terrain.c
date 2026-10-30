@@ -180,11 +180,11 @@ SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, i
     return MapLoadManager_GetSoundplates(mapLoadManager, idx);
 }
 
-void FieldSystem_SetTerrainQueries(void **queries, int mode) {
+void FieldSystem_SetTerrainQueries(const FieldTerrainQueries **queries, int mode) {
     if (mode == 0) {
-        *queries = (void *)&sTerrainQueries_Bdhc;
+        *queries = &sTerrainQueries_Bdhc;
     } else if (mode == 1) {
-        *queries = (void *)&sTerrainQueries_Simple;
+        *queries = &sTerrainQueries_Simple;
     } else {
         GF_ASSERT(FALSE);
     }
@@ -192,7 +192,7 @@ void FieldSystem_SetTerrainQueries(void **queries, int mode) {
 
 BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z) {
     u16 attr;
-    if (FS_TERRAIN_QUERIES(fieldSystem)->getAttributes(fieldSystem, x, z, &attr)) {
+    if (fieldSystem->terrainQueries->getAttributes(fieldSystem, x, z, &attr)) {
         if ((u8)((u8)(attr >> 15) & 1) == 1) {
             return TRUE;
         }
@@ -202,7 +202,7 @@ BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z) {
 
 u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z) {
     u16 attr;
-    if (FS_TERRAIN_QUERIES(fieldSystem)->getAttributes(fieldSystem, x, z, &attr)) {
+    if (fieldSystem->terrainQueries->getAttributes(fieldSystem, x, z, &attr)) {
         return (u8)(attr >> 8) & 0x7F;
     }
     return 0;
@@ -211,7 +211,7 @@ u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z) {
 u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z) {
     u16 attr;
     int behavior;
-    if (FS_TERRAIN_QUERIES(fieldSystem)->getAttributes(fieldSystem, x, z, &attr)) {
+    if (fieldSystem->terrainQueries->getAttributes(fieldSystem, x, z, &attr)) {
         behavior = (u8)attr;
         return (u8)behavior;
     }
@@ -219,7 +219,7 @@ u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z) {
 }
 
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind) {
-    return FS_TERRAIN_QUERIES(fieldSystem)->getHeight(fieldSystem, objectHeight, x, z, outKind);
+    return fieldSystem->terrainQueries->getHeight(fieldSystem, objectHeight, x, z, outKind);
 }
 
 static int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind) {

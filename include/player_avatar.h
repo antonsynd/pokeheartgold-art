@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "constants/player_avatar.h"
+
 #include "field_types_def.h"
 #include "save.h"
 
@@ -28,8 +30,8 @@ struct PlayerAvatar {
     u32 transitionFlags;
     u32 heldMovement;
     BOOL footstepToggle;
-    u32 moveState;
-    u32 playerMoveState;
+    enum AvatarMoveState moveState;
+    enum PlayerMoveState playerMoveState;
     s32 state;
     u32 gender;
     u32 unk20;
@@ -64,10 +66,10 @@ u32 PlayerAvatar_GetPreviousXCoord(PlayerAvatar *avatar);
 u32 PlayerAvatar_GetPreviousZCoord(PlayerAvatar *avatar);
 void PlayerAvatar_CopyPositionVector(PlayerAvatar *avatar, VecFx32 *vector);
 VecFx32 *PlayerAvatar_GetPositionVector(PlayerAvatar *avatar);
-void PlayerAvatar_SetMoveState(PlayerAvatar *avatar, u32 state);
-u32 PlayerAvatar_GetMoveState(PlayerAvatar *avatar);
-void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, u32 state);
-u32 PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar);
+void PlayerAvatar_SetMoveState(PlayerAvatar *avatar, enum AvatarMoveState state);
+enum AvatarMoveState PlayerAvatar_GetMoveState(PlayerAvatar *avatar);
+void PlayerAvatar_SetPlayerMoveState(PlayerAvatar *avatar, enum PlayerMoveState state);
+enum PlayerMoveState PlayerAvatar_GetPlayerMoveState(PlayerAvatar *avatar);
 void PlayerAvatar_SetMapObject(PlayerAvatar *avatar, LocalMapObject *mapObject);
 LocalMapObject *PlayerAvatar_GetMapObject(PlayerAvatar *avatar);
 void PlayerAvatar_SetState(PlayerAvatar *avatar, s32 state);

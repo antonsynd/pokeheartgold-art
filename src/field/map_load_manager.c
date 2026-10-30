@@ -455,7 +455,7 @@ static void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, L
     u16 z = matrixIndex / width;
 
     if (x < 1 || x > 3 || z < 1 || z > 2) {
-        MapPropManager_LoadFromNARC(mapLoadManager->narc, header->propsSize, map->propManager, (int)mapLoadManager->mapPropAnimationManager);
+        MapPropManager_LoadFromNARC(mapLoadManager->narc, header->propsSize, map->propManager, mapLoadManager->mapPropAnimationManager);
     } else {
         SafariZone *safariZone = Save_SafariZone_Get(mapLoadManager->saveData);
         u8 linkLeader = SafariZone_GetActiveAreaSet(safariZone);
@@ -468,7 +468,7 @@ static void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, L
         }
         u16 areaX = x - 1;
         u16 areaZ = z - 1;
-        MapPropManager_LoadFromSafariZone(mapLoadManager->narc, map->propManager, (int)mapLoadManager->mapPropAnimationManager, &areaSet->areas[areaX + 3 * areaZ], map->permissions, gender);
+        MapPropManager_LoadFromSafariZone(mapLoadManager->narc, map->propManager, mapLoadManager->mapPropAnimationManager, &areaSet->areas[areaX + 3 * areaZ], map->permissions, gender);
     }
 }
 
@@ -509,7 +509,7 @@ static void LoadSlotMap_Default(int index, AreaDataManager *areaDataManager, Map
     if (modelNo != MAP_LOAD_NONE) {
         MapLoadManager_ReadSoundplates(mapLoadManager, slot->maps[index]);
         MapLoadManager_ReadPermissions(mapLoadManager, slot->maps[index], header.permissionsSize);
-        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, slot->maps[index]->propManager, (int)mapLoadManager->mapPropAnimationManager);
+        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, slot->maps[index]->propManager, mapLoadManager->mapPropAnimationManager);
         MapLoadManager_StartLoadTasks(mapLoadManager, slot->maps[index], &header, areaDataManager, slot, modelNo, TRUE);
     }
 }
@@ -521,7 +521,7 @@ static void LoadSlotMap_NoCollision(int index, AreaDataManager *areaDataManager,
     if (modelNo != MAP_LOAD_NONE) {
         MapLoadManager_ReadSoundplates(mapLoadManager, slot->maps[index]);
         NARC_ReadFile(mapLoadManager->narc, sizeof(permissions), permissions);
-        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, slot->maps[index]->propManager, (int)mapLoadManager->mapPropAnimationManager);
+        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, slot->maps[index]->propManager, mapLoadManager->mapPropAnimationManager);
         MapLoadManager_StartLoadTasks(mapLoadManager, slot->maps[index], &header, areaDataManager, slot, modelNo, FALSE);
     }
 }
@@ -545,7 +545,7 @@ static void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *are
     if (modelNo != MAP_LOAD_NONE) {
         MapLoadManager_ReadSoundplates(mapLoadManager, mapLoadManager->maps[mapSlot]);
         MapLoadManager_ReadPermissions(mapLoadManager, mapLoadManager->maps[mapSlot], header.permissionsSize);
-        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, mapLoadManager->maps[mapSlot]->propManager, (int)mapLoadManager->mapPropAnimationManager);
+        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, mapLoadManager->maps[mapSlot]->propManager, mapLoadManager->mapPropAnimationManager);
         MapLoadManager_LoadModelAndBdhc(mapLoadManager, mapLoadManager->maps[mapSlot], &header, areaDataManager, modelNo, matrixIndex, applyLight, TRUE);
     }
 }
@@ -559,7 +559,7 @@ static void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager 
     if (modelNo != MAP_LOAD_NONE) {
         MapLoadManager_ReadSoundplates(mapLoadManager, mapLoadManager->maps[mapSlot]);
         NARC_ReadFile(mapLoadManager->narc, sizeof(permissions), permissions);
-        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, mapLoadManager->maps[mapSlot]->propManager, (int)mapLoadManager->mapPropAnimationManager);
+        MapPropManager_LoadFromNARC(mapLoadManager->narc, header.propsSize, mapLoadManager->maps[mapSlot]->propManager, mapLoadManager->mapPropAnimationManager);
         MapLoadManager_LoadModelAndBdhc(mapLoadManager, mapLoadManager->maps[mapSlot], &header, areaDataManager, modelNo, matrixIndex, applyLight, FALSE);
     }
 }

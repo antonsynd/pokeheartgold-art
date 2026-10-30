@@ -195,7 +195,7 @@ BOOL MonCheckFrontierIneligibility(Pokemon *mon);
 BOOL BoxmonBelongsToPlayer(BoxPokemon *boxMon, PlayerProfile *profile, enum HeapID heapID);
 int TrainerClassToBackpicID(int trainerClass, BOOL isLink);
 void NARC_ReadPokepicAnimScript(NARC *narc, PokepicAnimScript *dest, u16 species, u16 isFrontpic);
-void NARC_StartPokepicAnim(NARC *narc, void *manager, void *pic, u16 species, int whichFacing, int reverseX, int index);
+void NARC_StartPokepicAnim(NARC *narc, struct PokepicAnimManager *manager, Pokepic *pic, u16 species, int whichFacing, int reverseX, int index);
 void NARC_ReadPokepicCryDelay(NARC *narc, u8 *ret, u16 species, u16 isFrontpic);
 void NARC_ReadPokepicShadowHeight(NARC *narc, s8 *ret, u16 species, u16 isFrontpic);
 void NARC_ReadPokepicShadowXOffset(NARC *narc, s8 *ret, u16 species, u16 isFrontpic);

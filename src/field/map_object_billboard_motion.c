@@ -303,7 +303,7 @@ BillboardObject *MapObject_GetBillboard(LocalMapObject *object) {
 }
 
 void BillboardDraw_Init(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_InitDrawData(object, sizeof(BillboardDrawWork));
+    BillboardDrawWork *work = MapObject_InitDrawData(object, sizeof(BillboardDrawWork));
     work->facing = -1;
     MapObject_CreateBillboard(object, &work->billboard);
     if (work->billboard != NULL) {
@@ -312,12 +312,12 @@ void BillboardDraw_Init(LocalMapObject *object) {
 }
 
 void BillboardDraw_Delete(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     MapObject_DeleteBillboard(object, &work->billboard);
 }
 
 void BillboardDraw_Pause(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (billboard != NULL) {
         BillboardObject_SaveState(billboard, &work->savedState);
@@ -327,7 +327,7 @@ void BillboardDraw_Pause(LocalMapObject *object) {
 }
 
 void BillboardDraw_Resume(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) != TRUE) {
         if (work->billboard == NULL) {
             MapObject_CreateBillboard(object, &work->billboard);
@@ -341,7 +341,7 @@ void BillboardDraw_Resume(LocalMapObject *object) {
 }
 
 void FollowMonDraw_Init(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_InitDrawData(object, sizeof(FollowMonBillboardWork));
+    FollowMonBillboardWork *work = MapObject_InitDrawData(object, sizeof(FollowMonBillboardWork));
     work->direction = -1;
     MapObject_CreateBillboard(object, &work->billboard);
     work->bobbing = 0;
@@ -353,12 +353,12 @@ void FollowMonDraw_Init(LocalMapObject *object) {
 }
 
 void FollowMonDraw_Delete(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     MapObject_DeleteBillboard(object, &work->billboard);
 }
 
 void FollowMonDraw_Pause(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (billboard != NULL) {
         BillboardObject_SaveState(billboard, &work->savedState);
@@ -373,7 +373,7 @@ void FollowMonDraw_Pause(LocalMapObject *object) {
 void FollowMonDraw_Resume(LocalMapObject *object) {
     VecFx32 pos;
     VecFx32 facing;
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     if (!work->spriteLoaded && MapObject_GetID(object) == obj_partner_poke) {
         FieldSystem *fieldSystem = MapObjectManager_GetFieldSystem(MapObject_GetManager(object));
         Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
@@ -435,7 +435,7 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
 }
 
 void FollowMonDraw_ClearBob(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     work->bobbing = 0;
     MapObject_GetFacingVector(object)->y = 0;
 }
@@ -446,7 +446,7 @@ BillboardObject *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manage
 
 void BillboardDraw_UpdateNpc(LocalMapObject *object) {
     u32 facing;
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     int movement;
     if (MapObject_IsBillboardPending(object) == TRUE || billboard == NULL) {
@@ -464,7 +464,7 @@ void BillboardDraw_UpdateNpc(LocalMapObject *object) {
 }
 
 void BillboardDraw_UpdatePositionOnly(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) != TRUE) {
         BillboardObject *billboard = work->billboard;
         if (billboard != NULL) {
@@ -475,7 +475,7 @@ void BillboardDraw_UpdatePositionOnly(LocalMapObject *object) {
 }
 
 void BillboardDraw_UpdateLooping(LocalMapObject *object) {
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) != TRUE) {
         BillboardObject *billboard = work->billboard;
         if (billboard != NULL) {
@@ -489,7 +489,7 @@ void BillboardDraw_UpdateLooping(LocalMapObject *object) {
 }
 
 void FollowMonDraw_UpdateLarge(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     BillboardObject *sprite = work->billboard;
     u32 direction;
 
@@ -512,7 +512,7 @@ void FollowMonDraw_UpdateLarge(LocalMapObject *object) {
 }
 
 void FollowMonDraw_Update(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     BillboardObject *sprite = work->billboard;
     u32 direction;
 
@@ -535,7 +535,7 @@ void FollowMonDraw_Update(LocalMapObject *object) {
 }
 
 void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     BillboardObject *sprite;
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
@@ -667,7 +667,7 @@ void BillboardDraw_UpdatePcWoman(LocalMapObject *object) {
     BillboardDrawWork *work;
     int movement;
     BillboardObject *billboard;
-    work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    work = MapObject_GetDrawData(object);
     billboard = work->billboard;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         facing = MapObject_GetFacingDirection(object);
@@ -701,7 +701,7 @@ static void BillboardMotion_PcWomanBow(LocalMapObject *object, BillboardObject *
 
 void BillboardDraw_UpdateTwoSequences(LocalMapObject *object) {
     u32 facing;
-    BillboardDrawWork *work = (BillboardDrawWork *)MapObject_GetDrawData(object);
+    BillboardDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     int sequence;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
@@ -730,7 +730,7 @@ void BillboardDraw_UpdateTwoSequences(LocalMapObject *object) {
 }
 
 void PlayerDraw_Init(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_InitDrawData(object, sizeof(PlayerDrawWork));
+    PlayerDrawWork *work = MapObject_InitDrawData(object, sizeof(PlayerDrawWork));
     work->facing = -1;
     MapObject_CreateBillboard(object, &work->billboard);
     if (work->billboard != NULL) {
@@ -740,13 +740,13 @@ void PlayerDraw_Init(LocalMapObject *object) {
 
 void PlayerDraw_Delete(LocalMapObject *object) {
     VecFx32 offset = { 0, 0, 0 };
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     MapObject_DeleteBillboard(object, &work->billboard);
     MapObject_SetFacingVector(object, &offset);
 }
 
 void PlayerDraw_Pause(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (billboard != NULL) {
         BillboardObject_SaveState(billboard, &work->savedState);
@@ -756,7 +756,7 @@ void PlayerDraw_Pause(LocalMapObject *object) {
 }
 
 void PlayerDraw_Resume(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     if (MapObject_IsBillboardPending(object) != TRUE) {
         if (work->billboard == NULL) {
             MapObject_CreateBillboard(object, &work->billboard);
@@ -772,7 +772,7 @@ void PlayerDraw_Resume(LocalMapObject *object) {
 void PlayerDraw_UpdateWalking(LocalMapObject *object) {
     u32 facing;
     int movement;
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
 
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
@@ -912,7 +912,7 @@ static void PlayerBillboardMotion_Run(LocalMapObject *object, BillboardObject *b
 }
 
 void PlayerDraw_UpdateCycling(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     int facing, movement;
     BillboardObject *billboard = work->billboard;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
@@ -985,7 +985,7 @@ static void PlayerBillboardMotion_CyclingAnimateNormalSpeed(LocalMapObject *obje
 
 void PlayerDraw_UpdateFishing(LocalMapObject *object) {
     u32 facing;
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     int movement;
     if (billboard == NULL || MapObject_IsBillboardPending(object) == TRUE) {
@@ -1080,7 +1080,7 @@ static void PlayerDraw_SetFishingOffset(LocalMapObject *object, BillboardObject 
 
 void PlayerDraw_UpdateLadder(LocalMapObject *object) {
     u32 facing;
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     int movement;
     PlayerBillboardMotionFunc func;
@@ -1136,7 +1136,7 @@ static void PlayerDraw_SetLadderOffset(LocalMapObject *object, BillboardObject *
 }
 
 void PlayerDraw_UpdateSurfing(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     u32 facing;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
@@ -1152,7 +1152,7 @@ void PlayerDraw_UpdateSurfing(LocalMapObject *object) {
 }
 
 void PlayerDraw_UpdateUseHmOrSaving(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
         work->facing = MapObject_GetFacingDirection(object);
@@ -1169,7 +1169,7 @@ void PlayerDraw_UpdateUseHmOrSaving(LocalMapObject *object) {
 }
 
 void PlayerDraw_UpdateWatering(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     u32 facing;
     if (MapObject_IsBillboardPending(object) == TRUE || billboard == NULL) {
@@ -1196,7 +1196,7 @@ void PlayerDraw_UpdateWatering(LocalMapObject *object) {
 }
 
 void PlayerDraw_UpdatePoketch(LocalMapObject *object) {
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     u32 facing;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
@@ -1215,7 +1215,7 @@ void PlayerDraw_UpdatePoketch(LocalMapObject *object) {
 
 void PlayerDraw_UpdateHeal(LocalMapObject *object) {
     int movement;
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard) {
         u32 facing = MapObject_GetFacingDirection(object);
@@ -1239,7 +1239,7 @@ void PlayerDraw_UpdateHeal(LocalMapObject *object) {
 
 void PlayerDraw_UpdateApricornShake(LocalMapObject *object) {
     u32 facing;
-    PlayerDrawWork *work = (PlayerDrawWork *)MapObject_GetDrawData(object);
+    PlayerDrawWork *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
     if (billboard && MapObject_IsBillboardPending(object) != TRUE) {
         facing = MapObject_GetFacingDirection(object);

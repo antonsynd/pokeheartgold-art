@@ -3,6 +3,7 @@
 
 #include "field/field_control.h"
 
+struct FieldTerrainQueries;
 struct MapProp;
 
 // Width of one map tile in world units
@@ -16,7 +17,7 @@ enum CalculatedHeightSource {
 };
 
 SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, int z);
-void FieldSystem_SetTerrainQueries(void **queries, int mode);
+void FieldSystem_SetTerrainQueries(const struct FieldTerrainQueries **queries, int mode);
 BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z);
 u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
 u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z);

@@ -125,7 +125,7 @@ void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL anchored)
     VecFx32 offset;
     fx32 *coords;
 
-    work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    work = MapObject_GetDrawData(object);
     if (anchored) {
         coords = (fx32 *)&offset;
         coords[0] = 0;
@@ -147,12 +147,12 @@ void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 height) {
 }
 
 void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 delta) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     work->height = work->height + delta;
 }
 
 BOOL FollowMonBillboard_IsShadowFollowing(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     if (work->shadowAnchored) {
         return FALSE;
     }
@@ -160,7 +160,7 @@ BOOL FollowMonBillboard_IsShadowFollowing(LocalMapObject *object) {
 }
 
 void FollowMonBillboard_GetShadowOffset(LocalMapObject *object, VecFx32 *offset) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     offset->x = work->shadowOffsetX << 12;
     offset->z = work->shadowOffsetZ << 12;
     offset->y = 0;
@@ -198,12 +198,12 @@ static BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, 
 }
 
 void FollowMonBillboard_LoadSequence(BOOL alternate, LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     FollowMonBillboard_SetResource(alternate, object, work->billboard);
 }
 
 void FollowMonBillboard_ResetPalette(LocalMapObject *object) {
-    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = MapObject_GetDrawData(object);
     work->paletteApplied = FALSE;
 }
 
@@ -218,7 +218,7 @@ void LegendaryBirdObject_Init(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_Update(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
+    LegendaryBirdObject *work = MapObject_GetDrawData(object);
     BillboardObject *billboard = work->billboard;
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
@@ -238,7 +238,7 @@ void LegendaryBirdObject_Delete(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_Pause(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
+    LegendaryBirdObject *work = MapObject_GetDrawData(object);
 
     if (work->billboard != NULL) {
         BillboardObject_SaveState(work->billboard, &work->savedState);
@@ -248,7 +248,7 @@ void LegendaryBirdObject_Pause(LocalMapObject *object) {
 }
 
 void LegendaryBirdObject_Resume(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
+    LegendaryBirdObject *work = MapObject_GetDrawData(object);
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
@@ -264,7 +264,7 @@ void LegendaryBirdObject_Resume(LocalMapObject *object) {
 }
 
 static void LegendaryBirdObject_CreateBillboard(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_InitDrawData(object, sizeof(LegendaryBirdObject));
+    LegendaryBirdObject *work = MapObject_InitDrawData(object, sizeof(LegendaryBirdObject));
     MapObject_CreateBillboard(object, &work->billboard);
 }
 
@@ -297,7 +297,7 @@ static void LegendaryBirdObject_UpdateVisibility(LocalMapObject *object, Billboa
 }
 
 static void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object) {
-    LegendaryBirdObject *work = (LegendaryBirdObject *)MapObject_GetDrawData(object);
+    LegendaryBirdObject *work = MapObject_GetDrawData(object);
     MapObject_DeleteBillboard(object, &work->billboard);
 }
 

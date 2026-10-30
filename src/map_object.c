@@ -1208,7 +1208,7 @@ static MapObjectManager *MapObject_GetManagerFromManager(LocalMapObject *object)
     return MapObjectManager_Get(object->manager);
 }
 
-u8 *MapObject_InitMovementData(LocalMapObject *object, s32 size) {
+void *MapObject_InitMovementData(LocalMapObject *object, s32 size) {
     GF_ASSERT(size <= 16);
 
     u8 *ret = MapObject_GetMovementData(object);
@@ -1216,11 +1216,11 @@ u8 *MapObject_InitMovementData(LocalMapObject *object, s32 size) {
     return ret;
 }
 
-u8 *MapObject_GetMovementData(LocalMapObject *object) {
+void *MapObject_GetMovementData(LocalMapObject *object) {
     return object->movementData;
 }
 
-u8 *MapObject_InitBehaviorData(LocalMapObject *object, s32 size) {
+void *MapObject_InitBehaviorData(LocalMapObject *object, s32 size) {
     GF_ASSERT(size <= 16);
 
     u8 *ret = MapObject_GetBehaviorData(object);
@@ -1228,11 +1228,11 @@ u8 *MapObject_InitBehaviorData(LocalMapObject *object, s32 size) {
     return ret;
 }
 
-u8 *MapObject_GetBehaviorData(LocalMapObject *object) {
+void *MapObject_GetBehaviorData(LocalMapObject *object) {
     return object->behaviorData;
 }
 
-u8 *MapObject_InitMovementCmdData(LocalMapObject *object, s32 size) {
+void *MapObject_InitMovementCmdData(LocalMapObject *object, s32 size) {
     GF_ASSERT(size <= 16);
 
     u8 *ret = MapObject_GetMovementCmdData(object);
@@ -1240,11 +1240,11 @@ u8 *MapObject_InitMovementCmdData(LocalMapObject *object, s32 size) {
     return ret;
 }
 
-u8 *MapObject_GetMovementCmdData(LocalMapObject *object) {
+void *MapObject_GetMovementCmdData(LocalMapObject *object) {
     return object->movementCmdData;
 }
 
-u8 *MapObject_InitDrawData(LocalMapObject *object, s32 size) {
+void *MapObject_InitDrawData(LocalMapObject *object, s32 size) {
     GF_ASSERT(size <= 32);
 
     u8 *ret = MapObject_GetDrawData(object);
@@ -1252,7 +1252,7 @@ u8 *MapObject_InitDrawData(LocalMapObject *object, s32 size) {
     return ret;
 }
 
-u8 *MapObject_GetDrawData(LocalMapObject *object) {
+void *MapObject_GetDrawData(LocalMapObject *object) {
     return object->drawData;
 }
 

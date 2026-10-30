@@ -5,6 +5,8 @@
 
 #include "pokepic.h"
 
+struct PokepicAnimManager;
+
 struct PokepicFacingAnimData {
     u8 cryDelay;
     u8 animScriptId;
@@ -25,6 +27,6 @@ struct PokepicAnimParams {
     u8 reverseX;
 };
 
-void PokepicAnimManager_StartAnim(void *, void *, struct PokepicAnimParams *, u8);
+void PokepicAnimManager_StartAnim(struct PokepicAnimManager *, Pokepic *, struct PokepicAnimParams *, u8);
 
 #endif // POKEHEARTGOLD_POKEPIC_ANIM_H

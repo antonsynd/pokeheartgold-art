@@ -7,6 +7,8 @@
 #include "field_types_def.h"
 #include "safari_zone.h"
 
+struct MapPropAnimationManager;
+
 typedef struct MapPropManager MapPropManager;
 typedef struct MapProp MapProp;
 
@@ -14,8 +16,8 @@ MapPropManager *MapPropManager_New(enum HeapID heapID, Field3dRenderObjManager *
 void MapPropManager_Free(MapPropManager *mapPropManager);
 void MapPropManager_Reset(MapPropManager *mapPropManager);
 void MapPropManager_RemoveMapPropByIndex(int modelID, MapPropManager *mapPropManager);
-void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropManager, int a3);
-void MapPropManager_LoadFromSafariZone(NARC *narc, MapPropManager *mapPropManager, int a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender);
+void MapPropManager_LoadFromNARC(NARC *narc, u32 size, MapPropManager *mapPropManager, struct MapPropAnimationManager *a3);
+void MapPropManager_LoadFromSafariZone(NARC *narc, MapPropManager *mapPropManager, struct MapPropAnimationManager *a2, const SAFARIZONE_AREA *safariArea, u16 *a4, BOOL gender);
 void MapPropManager_DrawWithOffset(const VecFx32 *position, AreaDataManager *areaDataManager, BOOL applyAttributes, ModelAttributes *modelAttributes, MapPropManager *mapPropManager);
 VecFx32 *MapProp_GetScale(MapProp *mapProp);
 VecFx32 *MapProp_GetRotation(MapProp *mapProp);
