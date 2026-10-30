@@ -157,14 +157,14 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
 
             // Copy data between buffers
             {
-                void *src;
+                int src;
                 u8 *dest1;
                 u8 *dest2;
                 u32 copyCount;
 
                 src = PokeathlonCourseCmd_PacketSize();
                 dest1 = data->dataCopyBuffer1; // Destination buffer 1
-                PokeathlonCourseLink_SendCommand(0x1B, dest1, src, (int)data->system);
+                PokeathlonCourseLink_SendCommand(0x1B, dest1, src, data->system);
 
                 dest1 = PokeathlonCourse_ToBytes(data->dataCopyBuffer2); // Destination buffer 2
                 dest2 = PokeathlonCourse_ToBytes(data->dataCopySource);  // Source buffer
@@ -322,7 +322,7 @@ PokeathlonFieldData *PokeathlonCourse_GetFieldData_AtIndex(PokeathlonCourseData 
     return &data->fieldData[index];
 }
 
-void *PokeathlonCourse_GetMonCounters(PokeathlonCourseData *data) {
+u8 *PokeathlonCourse_GetMonCounters(PokeathlonCourseData *data) {
     return data->monCounters;
 }
 
@@ -422,11 +422,11 @@ void PokeathlonCourse_ResetReceivedCount(PokeathlonCourseData *data) {
     data->receivedCount = 0;
 }
 
-void *PokeathlonCourse_GetSystem(PokeathlonCourseData *data) {
+struct PokeathlonCourseLink *PokeathlonCourse_GetSystem(PokeathlonCourseData *data) {
     return data->system;
 }
 
-BOOL PokeathlonCourse_GetNetId(PokeathlonCourseData *data) {
+int PokeathlonCourse_GetNetId(PokeathlonCourseData *data) {
     return PokeathlonCourseLink_GetNetId(data->system);
 }
 
@@ -434,7 +434,7 @@ PlayerProfile *PokeathlonCourse_GetPlayerProfileFromData(PokeathlonCourseData *d
     return PokeathlonCourse_GetPlayerProfile(data->playerProfiles, index);
 }
 
-PokeathlonParticipantStats *PokeathlonCourse_GetRecord(PokeathlonCourseData *data, int index) {
+PokeathlonStatistics *PokeathlonCourse_GetRecord(PokeathlonCourseData *data, int index) {
     return &data->records[index];
 }
 
@@ -501,6 +501,6 @@ void PokeathlonCourse_SetVBlankIntrCB(PokeathlonCourseData *data) {
     Main_SetVBlankIntrCB(PokeathlonCourse_VBlankCallback, data);
 }
 
-void *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data) {
+struct PokeathlonCourseScoreList *PokeathlonCourse_GetGraphicsSystem(PokeathlonCourseData *data) {
     return data->graphicsSystem;
 }

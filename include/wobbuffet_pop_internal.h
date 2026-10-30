@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_WOBBUFFET_POP_INTERNAL_H
 #define POKEHEARTGOLD_WOBBUFFET_POP_INTERNAL_H
 
+#include "communication_command.h"
 #include "wobbuffet_pop.h"
 
 typedef struct WobbuffetPopModelFiles {
@@ -34,7 +35,7 @@ extern const BgTemplate gWobbuffetPopMainBgTemplates[3];
 extern const BgTemplate gWobbuffetPopSubBgTemplates[4];
 extern const s32 gWobbuffetPopBalloonAirRates[];
 
-extern const u32 gWobbuffetPopCommands[];
+extern const CommCommand gWobbuffetPopCommands[];
 extern void (*const gWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
 extern const WobbuffetPopTouchArea gWobbuffetPopBalloonTouchAreas[];

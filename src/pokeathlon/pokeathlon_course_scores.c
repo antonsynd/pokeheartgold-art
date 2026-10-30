@@ -10,7 +10,7 @@
 #include "player_data.h"
 #include "pm_string.h"
 
-void *PokeathlonCourseScoreList_New(enum HeapID heapId) {
+PokeathlonCourseScoreList *PokeathlonCourseScoreList_New(enum HeapID heapId) {
     PokeathlonCourseScoreList *list = Heap_Alloc(heapId, sizeof(PokeathlonCourseScoreList));
     int i;
 
@@ -22,15 +22,14 @@ void *PokeathlonCourseScoreList_New(enum HeapID heapId) {
     return list;
 }
 
-void PokeathlonCourseScoreList_Free(void *ptr) {
-    PokeathlonCourseScoreList *list = ptr;
+void PokeathlonCourseScoreList_Free(PokeathlonCourseScoreList *list) {
     int i;
 
     for (i = 0; i < POKEATHLON_COURSE_SCORE_ENTRY_MAX; i++) {
         String_Delete(list->entries[i].text);
         String_Delete(list->entries[i].name);
     }
-    Heap_Free(ptr);
+    Heap_Free(list);
 }
 
 static PokeathlonCourseScore *PokeathlonCourseScoreList_AddEntry(PokeathlonCourseScoreList *list) {
@@ -391,8 +390,8 @@ int PokeathlonCourseCmd_RecordSize(void) {
     return sizeof(PokeathlonStatistics);
 }
 
-void *PokeathlonCourseCmd_PacketSize(void) {
-    return (void *)POKEATHLON_COURSE_CMD_INLINE_SIZE;
+int PokeathlonCourseCmd_PacketSize(void) {
+    return POKEATHLON_COURSE_CMD_INLINE_SIZE;
 }
 
 int PokeathlonCourseCmd_MonCountersSize(void) {
@@ -420,7 +419,7 @@ void *PokeathlonCourseCmd_GetResultsBuffer(int netId, void *context) {
 }
 
 void *PokeathlonCourseCmd_GetMonCountersBuffer(int netId, void *context, int size) {
-    return (u8 *)PokeathlonCourse_GetMonCounters(context) + netId * size;
+    return PokeathlonCourse_GetMonCounters(context) + netId * size;
 }
 
 void *PokeathlonCourseCmd_GetJuiceRecordBuffer(int netId, void *context) {

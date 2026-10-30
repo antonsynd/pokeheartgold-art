@@ -154,7 +154,7 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 void PokeathlonCourse_LaunchApp(FieldSystem *fieldSystem, PokeathlonCourseArgs *args);
 void MagnetTrainCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
 void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args);
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID);
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributes *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID);
 void LaunchApp_ViewRankings(FieldSystem *fieldSystem, ViewRankingsArgs *args);
 PartyMenuArgs *PartyMenu_LaunchApp_Field(FieldSystem *fieldSystem, FieldMoveCheckData *fieldMoveCheckData, u8 partySlot);
 void CallTask_NamingScreen(TaskManager *taskManager, NameScreenType type, int species, int maxLen, int initPos, const u16 *defaultStr, u16 *retVar);

@@ -74,7 +74,7 @@ BOOL ScriptCinematic_Lugia(LegendaryCinematic *cinematic) {
 static int LugiaCinematic_Init(LegendaryCinematic *cinematic) {
     LegendaryCinematic_Init3D(cinematic);
     LegendaryCinematic_SetCamera(cinematic, &sLugiaCinematicCamera);
-    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
+    LegendaryCinematic_SetLights(&cinematic->args->modelAttributes);
     LegendaryCinematic_SetEdgeMarking(sLugiaCinematicEdgeColors);
     LegendaryCinematic_LoadModels(cinematic, NARC_a_2_4_4, sLugiaCinematicModels, 2);
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, LUGIA_CINEMATIC_PLAY);

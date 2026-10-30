@@ -590,10 +590,10 @@ enum VsRecorderBlendScreens {
     VS_RECORDER_BLEND_SUB,
 };
 
-void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode);
-void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode);
-void VsRecorder_InitBgBlend(int *eva, int *evb, int mode);
-BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, int mode);
+void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, enum VsRecorderBlendScreens mode);
+void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, enum VsRecorderBlendScreens mode);
+void VsRecorder_InitBgBlend(int *eva, int *evb, enum VsRecorderBlendScreens mode);
+BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, enum VsRecorderBlendScreens mode);
 BOOL VsRecorder_StepFade(int *fade, int direction);
 void VsRecorder_ResetFade(int *fade);
 MessageFormat *VsRecorder_NewMessageFormat(enum HeapID heapID);

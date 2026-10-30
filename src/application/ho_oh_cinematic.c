@@ -97,7 +97,7 @@ BOOL ScriptCinematic_HoOh(LegendaryCinematic *cinematic) {
 static int HoOhCinematic_Init(LegendaryCinematic *cinematic) {
     u32 variant;
     LegendaryCinematic_Init3D(cinematic);
-    LegendaryCinematic_SetLights((ModelAttributes *)&cinematic->args->modelAttributes);
+    LegendaryCinematic_SetLights(&cinematic->args->modelAttributes);
     LegendaryCinematic_SetEdgeMarking(sHoOhCinematicEdgeColors);
     LegendaryCinematic_SetCamera(cinematic, &sHoOhCinematicCamera);
     variant = cinematic->args->timeOfDay;

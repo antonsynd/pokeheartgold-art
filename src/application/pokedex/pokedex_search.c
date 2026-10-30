@@ -102,9 +102,9 @@ end:
 }
 
 // Loads one species list of the sort-order files (DEX_SORT_FILE index); *count is its length.
-void *PokedexApp_LoadSortData(u32 index, u32 *count) {
+u16 *PokedexApp_LoadSortData(u32 index, u32 *count) {
     u32 size;
-    void *ret;
+    u16 *ret;
 
     GF_ASSERT(index < 82);
     ret = GfGfxLoader_LoadFromNarc_GetSizeOut(GetPokedexDataNarcID(), index + NARC_zukan_data_sort_order_dex_order_national, FALSE, HEAP_ID_POKEDEX_APP, FALSE, &size);

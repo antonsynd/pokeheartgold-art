@@ -195,12 +195,12 @@ void MainMenuUtil_SetFadeWhite(u32 fadeWhite) {
     gMainMenuUtilWork.fadeWhite = fadeWhite;
 }
 
-void MainMenuUtil_StartFade(u32 fadeType, u32 nextState, int *state, u32 waitingState) {
+void MainMenuUtil_StartFade(enum FadeType fadeType, u32 nextState, int *state, u32 waitingState) {
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
     if (!gMainMenuUtilWork.fadeWhite) {
-        BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)fadeType, (enum FadeType)fadeType, RGB_BLACK, 6, 1, work->heapId);
+        BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, work->heapId);
     } else {
-        BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)fadeType, (enum FadeType)fadeType, RGB_WHITE, 6, 1, work->heapId);
+        BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_WHITE, 6, 1, work->heapId);
     }
     if (state != NULL) {
         *state = waitingState;

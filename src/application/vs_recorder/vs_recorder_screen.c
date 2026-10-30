@@ -438,7 +438,7 @@ void VsRecorder_RebuildMenuRows(VsRecorderWork *work) {
     work->menuDepth++;
 }
 
-void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode) {
+void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, enum VsRecorderBlendScreens mode) {
     *eva = 0;
     *evb = 31;
     if (mode == VS_RECORDER_BLEND_BOTH) {
@@ -453,7 +453,7 @@ void VsRecorder_InitBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, in
     }
 }
 
-void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, int mode) {
+void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, int subPlane1, int subPlane2, enum VsRecorderBlendScreens mode) {
     if (mode == VS_RECORDER_BLEND_BOTH) {
         G2_SetBlendAlpha(mainPlane1, mainPlane2, *eva, *evb);
         G2S_SetBlendAlpha(subPlane1, subPlane2, *eva, *evb);
@@ -466,12 +466,12 @@ void VsRecorder_ApplyBlend(int *eva, int *evb, int mainPlane1, int mainPlane2, i
     }
 }
 
-void VsRecorder_InitBgBlend(int *eva, int *evb, int mode) {
+void VsRecorder_InitBgBlend(int *eva, int *evb, enum VsRecorderBlendScreens mode) {
     VsRecorder_InitBlend(eva, evb, GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, mode);
 }
 
 // one step of the alpha fade in (or out when reverse); TRUE when done
-BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, int mode) {
+BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, enum VsRecorderBlendScreens mode) {
     BOOL done = TRUE;
     if (!reverse) {
         if (*eva < 8) {

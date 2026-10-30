@@ -7,7 +7,7 @@ int TypeIcon_GetCharFile(int moveType);
 int TypeIcon_GetPlttFile(void);
 NarcId TypeIcon_GetNarc(void);
 u32 TypeIcon_GetPalette(u32 type);
-void TypeIcon_LoadPaletteBuffer(PaletteData *paletteData, int buffer, SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resource);
+void TypeIcon_LoadPaletteBuffer(PaletteData *paletteData, PaletteBufferId buffer, SpriteSystem *spriteSystem, SpriteManager *spriteManager, NNS_G2D_VRAM_TYPE vram, int resource);
 void TypeIcon_LoadCellAnim(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int cell, int animation);
 void TypeIcon_LoadChar(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NNS_G2D_VRAM_TYPE vramType, int type, int resource); // load type icon graphics?
 void TypeIcon_LoadPltt(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NNS_G2D_VRAM_TYPE vram, int resId);

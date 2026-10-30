@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_LEGENDARY_CINEMATIC_MANAGER_H
 #define POKEHEARTGOLD_LEGENDARY_CINEMATIC_MANAGER_H
 
+#include "field/model_attributes.h"
+
 #include "overlay_manager.h"
 #include "save.h"
 
@@ -10,7 +12,7 @@ typedef struct ModelAttributesStorage {
 
 typedef struct LegendaryCinematicArgs {
     SaveData *saveData;
-    ModelAttributesStorage modelAttributes;
+    ModelAttributes modelAttributes;
     u16 scene;
     u16 timeOfDay;
 } LegendaryCinematicArgs;

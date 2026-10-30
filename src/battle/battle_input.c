@@ -1422,7 +1422,7 @@ void BattleInput_LoadDefaultResources(BattleInput *battleInput) {
 
     TypeIcon_LoadCellAnim(spriteSystem, spriteManager, 20017, 20017);
 
-    TypeIcon_LoadPaletteBuffer(BattleSystem_GetPaletteData(battleInput->battleSystem), 3, spriteSystem, spriteManager, 2, 20020);
+    TypeIcon_LoadPaletteBuffer(BattleSystem_GetPaletteData(battleInput->battleSystem), PLTTBUF_SUB_OBJ, spriteSystem, spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 20020);
 
     for (int i = 0; i < 4; i++) {
         TypeIcon_LoadChar(spriteSystem, spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, TYPE_NORMAL, 20025 + i);

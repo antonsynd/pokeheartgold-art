@@ -239,7 +239,7 @@ static const WindowTemplate sEntryPopupWindowTemplates[9] = {
      },
 };
 
-OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
+PokedexEntryPopup *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
     PokedexEntryPopup *popup = Heap_Alloc(args->heapID, sizeof(PokedexEntryPopup));
     memset(popup, 0, sizeof(PokedexEntryPopup));
     memcpy(popup, args, sizeof(PokedexEntryPopupArgs));
@@ -247,16 +247,14 @@ OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
     popup->state = POKEDEX_ENTRY_POPUP_STATE_INIT;
     popup->done = 0;
     popup->task = SysTask_CreateOnMainQueue(PokedexEntryPopup_Task, popup, 0);
-    return (OverlayManager *)popup;
+    return popup;
 }
 
-s32 PokedexEntryPopup_IsDone(OverlayManager *man) {
-    return ((PokedexEntryPopup *)man)->done;
+s32 PokedexEntryPopup_IsDone(PokedexEntryPopup *popup) {
+    return popup->done;
 }
 
-void PokedexEntryPopup_Delete(OverlayManager *man) {
-    PokedexEntryPopup *popup = (PokedexEntryPopup *)man;
-
+void PokedexEntryPopup_Delete(PokedexEntryPopup *popup) {
     PokedexEntryPopup_FreeSprites(popup);
     PokedexEntryPopup_RemoveWindows(popup);
     PokedexEntryPopup_FreeBgs(popup);
@@ -630,9 +628,8 @@ static void PokedexEntryPopup_DeleteFootprintSprite(PokedexEntryPopup *popup) {
     Sprite_Delete(popup->sprites[3].sprite);
 }
 
-void PokedexEntryPopup_HideSprites(OverlayManager *man) {
+void PokedexEntryPopup_HideSprites(PokedexEntryPopup *popup) {
     u32 i;
-    PokedexEntryPopup *popup = (PokedexEntryPopup *)man;
     BOOL draw = FALSE;
 
     for (i = 0; i < 4; i++) {
@@ -646,6 +643,6 @@ static void PokedexEntryPopup_CreatePokepic(PokedexEntryPopup *popup) {
     popup->pokepic = PokepicManager_CreatePokepic(popup->pokepicManager, &template, 48, 72, 0, 0, NULL, NULL);
 }
 
-Pokepic *PokedexEntryPopup_GetPokepic(OverlayManager *man) {
-    return ((PokedexEntryPopup *)man)->pokepic;
+Pokepic *PokedexEntryPopup_GetPokepic(PokedexEntryPopup *popup) {
+    return popup->pokepic;
 }

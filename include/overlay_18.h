@@ -20,14 +20,16 @@ typedef struct PokedexArgs {
     u16 mapMatrixId;
 } PokedexArgs;
 
+struct PokedexEntryPopup;
+
 BOOL Pokedex_Init(OverlayManager *man, int *state);
 BOOL Pokedex_Main(OverlayManager *man, int *state);
 BOOL Pokedex_Exit(OverlayManager *man, int *state);
 
-OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args);
-s32 PokedexEntryPopup_IsDone(OverlayManager *man);
-void PokedexEntryPopup_Delete(OverlayManager *man);
-Pokepic *PokedexEntryPopup_GetPokepic(OverlayManager *man);
-void PokedexEntryPopup_HideSprites(OverlayManager *man);
+struct PokedexEntryPopup *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args);
+s32 PokedexEntryPopup_IsDone(struct PokedexEntryPopup *man);
+void PokedexEntryPopup_Delete(struct PokedexEntryPopup *man);
+Pokepic *PokedexEntryPopup_GetPokepic(struct PokedexEntryPopup *man);
+void PokedexEntryPopup_HideSprites(struct PokedexEntryPopup *man);
 
 #endif // POKEHEARTGOLD_OVY_18_H

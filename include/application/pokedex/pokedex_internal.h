@@ -760,7 +760,7 @@ u32 PokedexApp_HandleFormsInput(PokedexAppData *pokedexApp, u32 *touched);
 u32 PokedexApp_HandleFormCompareInput(PokedexAppData *pokedexApp, u32 *touched);
 u32 PokedexApp_HandleEntryMenuInput(PokedexAppData *pokedexApp, u32 *touched);
 BOOL PokedexApp_RunSearch(PokedexAppData *pokedexApp, u8 natDexFlag, u32 order, u32 letter, u32 type1, u32 type2, u32 heightMin, u32 heightMax, u32 weightMin, u32 weightMax, u32 areaMask, u32 bodyType);
-void *PokedexApp_LoadSortData(u32 index, u32 *count);
+u16 *PokedexApp_LoadSortData(u32 index, u32 *count);
 void PokedexApp_FilterSeen(u16 *dst, u32 *count, const Pokedex *pokedex, const u16 *src, u32 length);
 void PokedexApp_StoreSearchResults(PokedexSearchResults *result, const Pokedex *pokedex, const u16 *src, u32 count);
 void PokedexApp_ApplySortOrder(u32 order, u16 *dst, u32 *dstCount, const u16 *src, u32 srcCount, const Pokedex *pokedex);

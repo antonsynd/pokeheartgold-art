@@ -212,7 +212,7 @@ static u32 MainMenu_ConfirmOption(MainMenuAppData *data, int *state, BOOL cancel
         if (data->selectedApp == APPOPTION_CONNECT_TO_WII) {
             MainMenuUtil_SetFadeWhite(1);
         }
-        MainMenuUtil_StartFade(0, 7, state, 8);
+        MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, 7, state, 8);
     }
 
     if (data->beaconWatchState == 13) {
@@ -1379,20 +1379,20 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         if (MainMenu_AlwaysZero(data) == 0) { // always 0
             *state = 3;
         } else {
-            MainMenuUtil_StartFade(1, 2, state, 8);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, 2, state, 8);
             ((vu16 *)HW_PLTT)[0] = MAIN_MENU_BACKGROUND_COLOR;
         }
         break;
     case 2:
         if (!MainMenu_PrintWifiInfoErasedWarning(data)) {
-            MainMenuUtil_StartFade(0, 3, state, 8);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, 3, state, 8);
         }
         break;
     case 3:
         data->beaconWatchState = 12;
         if (data->dontHaveSavedata == TRUE) {
             data->selectedApp = APPOPTION_NEW_GAME;
-            MainMenuUtil_StartFade(0, 7, state, 8);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, 7, state, 8);
         } else {
             DetectInsertedGBACart(data);
             *state = 4;
@@ -1404,7 +1404,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         Main_SetVBlankIntrCB((GFIntrCB)MainMenu_OnVBlank, data->bgConfig);
         MainMenu_DrawOptionWindows(data);
         MainMenu_HighlightOption(data, data->currentOption);
-        MainMenuUtil_StartFade(1, 5, state, 8);
+        MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, 5, state, 8);
         ((vu16 *)HW_PLTT)[0] = MAIN_MENU_BACKGROUND_COLOR;
         data->beaconWatchState = 10;
         break;
@@ -1423,7 +1423,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
             if (data->noticeInput & PAD_BUTTON_B) {
                 *state = 5;
             } else {
-                MainMenuUtil_StartFade(0, 7, state, 8);
+                MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, 7, state, 8);
             }
         }
         break;

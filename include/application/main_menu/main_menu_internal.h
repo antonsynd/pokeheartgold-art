@@ -6,6 +6,7 @@
 #include "heap.h"
 #include "message_format.h"
 #include "overlay_manager.h"
+#include "screen_fade.h"
 #include "sprite.h"
 
 // Text box printed by the shared message helpers (MainMenuTextPrinter_Init ... MainMenuTextPrinter_AddWindowAndPrint).
@@ -38,7 +39,7 @@ void MainMenuUtil_InitWork(enum HeapID heapID);
 void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize);
 void MainMenuUtil_InitBg(BgConfig *bgConfig, GFBgLayer bgId, enum GFBgScreenSize screenSize, u32 screenBase, u32 charBase);
 void MainMenuUtil_SetFadeWhite(u32 fadeWhite);
-void MainMenuUtil_StartFade(u32 fadeType, u32 newState, int *state, u32 waitingState);
+void MainMenuUtil_StartFade(enum FadeType fadeType, u32 newState, int *state, u32 waitingState);
 void MainMenuUtil_WaitFade(int *state);
 void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 palette, u32 msgFileId, u32 frameBaseTile, u32 framePalette);
 void MainMenuTextPrinter_SetSize(MainMenuTextPrinter *printer, u32 width, u32 height, u32 baseTile);

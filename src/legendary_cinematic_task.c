@@ -11,7 +11,7 @@
 #include "task.h"
 
 typedef struct LegendaryCinematicTaskEnv {
-    ModelAttributesStorage modelAttributes;
+    ModelAttributes modelAttributes;
     u32 scene;
     u32 timeOfDay;
     u32 state;
@@ -23,7 +23,7 @@ typedef struct LegendaryCinematicAppTaskEnv {
     u32 state;
 } LegendaryCinematicAppTaskEnv;
 
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, int scene, int timeOfDay, enum HeapID heapID);
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributes *modelAttributes, int scene, int timeOfDay, enum HeapID heapID);
 
 enum LegendaryCinematicTaskState {
     LEGENDARY_CINEMATIC_LEAVE_OVERWORLD,
@@ -44,7 +44,7 @@ static BOOL Task_LegendaryCinematicApp(TaskManager *taskManager);
 
 void CallTask_LegendaryCinematic(FieldSystem *fieldSystem, u16 scene) {
     LegendaryCinematicTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LegendaryCinematicTaskEnv));
-    env->modelAttributes = *(ModelAttributesStorage *)fieldSystem->modelAttributes;
+    env->modelAttributes = *fieldSystem->modelAttributes;
     env->scene = scene;
     env->state = LEGENDARY_CINEMATIC_LEAVE_OVERWORLD;
 

@@ -53,10 +53,10 @@ void TypeIcon_LoadPltt(SpriteSystem *system, SpriteManager *manager, NNS_G2D_VRA
     SpriteSystem_LoadPlttResObj(system, manager, narc, file, FALSE, 3, vram, resource);
 }
 
-void TypeIcon_LoadPaletteBuffer(PaletteData *palette, int buffer, SpriteSystem *system, SpriteManager *manager, int vram, int resource) {
+void TypeIcon_LoadPaletteBuffer(PaletteData *palette, PaletteBufferId buffer, SpriteSystem *system, SpriteManager *manager, NNS_G2D_VRAM_TYPE vram, int resource) {
     NarcId narc = TypeIcon_GetNarc();
     int file = TypeIcon_GetPlttFile();
-    SpriteSystem_LoadPaletteBuffer(palette, (PaletteBufferId)buffer, system, manager, narc, file, FALSE, 3, vram, resource);
+    SpriteSystem_LoadPaletteBuffer(palette, buffer, system, manager, narc, file, FALSE, 3, vram, resource);
 }
 
 void TypeIcon_LoadCellAnim(SpriteSystem *system, SpriteManager *manager, int cell, int animation) {

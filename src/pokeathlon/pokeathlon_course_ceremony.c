@@ -2153,7 +2153,7 @@ static void PokeathlonCourseCeremony_ChooseLinkIntro(PokeathlonCourseCeremonyInt
     PokeathlonStatistics *records;
     u8 statistic;
 
-    records = (PokeathlonStatistics *)PokeathlonCourse_GetRecord(course, team);
+    records = PokeathlonCourse_GetRecord(course, team);
     PokeathlonCourseCeremony_GetIntroStats(&stats, records);
     PokeathlonCourseCeremony_WeighIntroStats(weights, (u32 *)&stats);
     statistic = PokeathlonCourseCeremony_PickIntroStat(weights, &level);

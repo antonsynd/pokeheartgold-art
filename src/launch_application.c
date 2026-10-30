@@ -1385,7 +1385,7 @@ void ShipDepartureCutscene_LaunchApp(FieldSystem *fieldSystem, void *args) {
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 
-LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID) {
+LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributes *modelAttributes, u16 scene, u16 timeOfDay, enum HeapID heapID) {
     static const OverlayManagerTemplate sOverlayTemplate_LegendaryCinematic = { LegendaryCinematic_Init, LegendaryCinematic_Main, LegendaryCinematic_Exit, FS_OVERLAY_ID(OVY_106) };
     LegendaryCinematicArgs *args = Heap_Alloc(heapID, sizeof(LegendaryCinematicArgs));
     memset(args, 0, sizeof(LegendaryCinematicArgs));
