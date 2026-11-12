@@ -39,7 +39,7 @@ typedef struct GlobalTerminalNetDressUpList {
 } GlobalTerminalNetDressUpList;
 
 typedef struct GlobalTerminalNetDressUpListResponse {
-    int unk_00;
+    int header; // GlobalTerminalNetResponse
     GlobalTerminalNetDressUpList list;
 } GlobalTerminalNetDressUpListResponse;
 
@@ -50,14 +50,14 @@ typedef struct GlobalTerminalNetBoxEntry {
 } GlobalTerminalNetBoxEntry;
 
 typedef struct GlobalTerminalNetBoxListResponse {
-    int unk_00;
+    int header; // GlobalTerminalNetResponse
     int count;
     GlobalTerminalNetBoxEntry entries[1];
 } GlobalTerminalNetBoxListResponse;
 
 // 22000 response: the records of this week's rankings
 typedef struct GlobalTerminalNetRankingsHeaderResponse {
-    u32 unk_00;
+    u32 header; // GlobalTerminalNetResponse
     u8 recordIds[4];
 } GlobalTerminalNetRankingsHeaderResponse;
 
@@ -68,13 +68,13 @@ typedef struct GlobalTerminalNetRankings {
 } GlobalTerminalNetRankings;
 
 typedef struct GlobalTerminalNetRankingsResponse {
-    u32 unk_00;
+    u32 header; // GlobalTerminalNetResponse
     GlobalTerminalNetRankings rankings;
 } GlobalTerminalNetRankingsResponse;
 
 // 23000 response
 typedef struct GlobalTerminalNetVideoNumberResponse {
-    u32 unk_00;
+    u32 header; // GlobalTerminalNetResponse
     u32 numberLow;
     u32 numberHigh;
 } GlobalTerminalNetVideoNumberResponse;
@@ -92,7 +92,7 @@ typedef struct GlobalTerminalNetVideoList {
 } GlobalTerminalNetVideoList;
 
 typedef struct GlobalTerminalNetVideoListResponse {
-    u8 unk_00[4];
+    u8 header[4]; // GlobalTerminalNetResponse
     GlobalTerminalNetVideoList list;
 } GlobalTerminalNetVideoListResponse;
 
