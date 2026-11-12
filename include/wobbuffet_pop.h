@@ -480,7 +480,7 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
 void WobbuffetPop_CreateBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPopup *popups);
 void WobbuffetPop_FreeBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPopup *popups);
 void WobbuffetPop_UpdateBonusPopups(WobbuffetPop *game, WobbuffetPopBonusPopup *popups);
-void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int unk_20, int vram, int height);
+void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int bgPriority, int vram, int height);
 void WobbuffetPopTextObj_Free(WobbuffetPopTextObj *textObj);
 void WobbuffetPopScoreDisplay_PlaceDigits(WobbuffetPopScoreDisplay *display);
 void WobbuffetPopScoreDisplay_Update(WobbuffetPop *game, WobbuffetPopScoreDisplay *display);

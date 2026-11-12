@@ -1741,7 +1741,7 @@ static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, Wobbuf
     return TRUE;
 }
 
-void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int unk_20, int vram, int height) {
+void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, WobbuffetPopTextObj *textObj, String *string, int fontId, u32 color, int setPalOffset, int plttResId, int x, int y, int centered, int bgPriority, int vram, int height) {
     TextOBJTemplate template;
     Window window;
     ObjCharSpaceReservation charAlloc;
@@ -1767,7 +1767,7 @@ void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, F
     template.offset = charAlloc.offset;
     template.x = x;
     template.y = y;
-    template.bgPriority = unk_20;
+    template.bgPriority = bgPriority;
     template.drawPriority = vram;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_117;
