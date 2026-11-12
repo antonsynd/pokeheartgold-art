@@ -275,20 +275,20 @@ FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFrom
     if (frontierFsys->towerMode != TOWER_MODE_WIFI_PRACTICE) {
         FrontierSave *frontierSaveData = Save_Frontier_GetStatic(saveData);
         GameStats *gameStats = Save_GameStats_Get(saveData);
-        u16 unk0;
+        u16 streakActive;
         if (frontierFsys->towerMode == TOWER_MODE_6) {
-            unk0 = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(saveData));
+            streakActive = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(saveData));
         } else {
-            unk0 = FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, FRONTIER_DATA_GET);
+            streakActive = FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, FRONTIER_DATA_GET);
         }
-        if (unk0 != 0) {
-            u32 unk0;
+        if (streakActive != 0) {
+            u32 winStreak;
             if (frontierFsys->towerMode == TOWER_MODE_6) {
-                unk0 = FrontierSave_GetStat(frontierSaveData, 113, FrontierStat_GetFriendIndex(113));
+                winStreak = FrontierSave_GetStat(frontierSaveData, 113, FrontierStat_GetFriendIndex(113));
             } else {
-                unk0 = FrontierSave_GetStat(frontierSaveData, 2 * frontierFsys->towerMode + 1, 0xff);
+                winStreak = FrontierSave_GetStat(frontierSaveData, 2 * frontierFsys->towerMode + 1, 0xff);
             }
-            frontierFsys->currentBattleInSession = unk0;
+            frontierFsys->currentBattleInSession = winStreak;
             frontierFsys->currentRound = FrontierData_TowerRoundAction(frontierFsys->frontierData, frontierFsys->towerMode, FRONTIER_DATA_GET);
         }
         frontierFsys->totalTowerWins = GameStats_GetCapped(gameStats, GAME_STAT_BATTLE_TOWER_WIN_COUNT);
@@ -659,7 +659,7 @@ u16 FrontierFieldSystem_InitChallengeRandom(FrontierFieldSystem *frontierFsys, S
     } else {
         frontierFsys->randomState = BattleTower_RestoreRandom(saveData);
     }
-    return frontierFsys->randomState / 0xffff; // unk08 is a u32, so this should return between 0-3.
+    return frontierFsys->randomState / 0xffff; // randomState is a u32, so this should return between 0-3.
 }
 
 static BOOL TryGiveTowerRibbons(SaveData *saveData, u32 ribbon, FrontierFieldSystem *frontierFsys) {
@@ -753,5 +753,5 @@ u16 FrontierFieldSystem_NextRandom(FrontierFieldSystem *frontierFsys) {
         return LCRandom();
     }
     frontierFsys->randomState = BattleTower_NextRandom(frontierFsys->randomState);
-    return frontierFsys->randomState / 0xffff; // unk08 is a u32, so this should return between 0-3.
+    return frontierFsys->randomState / 0xffff; // randomState is a u32, so this should return between 0-3.
 }
