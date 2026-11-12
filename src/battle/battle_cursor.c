@@ -37,22 +37,22 @@ static const ManagedSpriteTemplate sBattleCursorSpriteTemplate = {
 
 BattleCursor *BattleCursor_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 drawPriority, u32 bgPriority) {
     BattleCursor *cursor;
-    ManagedSpriteTemplate unkStruct;
+    ManagedSpriteTemplate template;
     int i;
 
-    unkStruct = sBattleCursorSpriteTemplate;
-    unkStruct.resIdList[0] = character;
-    unkStruct.resIdList[1] = pal;
-    unkStruct.resIdList[2] = cell;
-    unkStruct.resIdList[3] = animation;
-    unkStruct.drawPriority = drawPriority;
-    unkStruct.bgPriority = bgPriority;
+    template = sBattleCursorSpriteTemplate;
+    template.resIdList[0] = character;
+    template.resIdList[1] = pal;
+    template.resIdList[2] = cell;
+    template.resIdList[3] = animation;
+    template.drawPriority = drawPriority;
+    template.bgPriority = bgPriority;
 
     cursor = Heap_Alloc(heapID, sizeof(BattleCursor));
     MI_CpuFill8(cursor, 0, sizeof(BattleCursor));
 
     for (i = 0; i < 5; i++) {
-        cursor->sprites[i] = SpriteSystem_NewSprite(renderer, gfxHandler, &unkStruct);
+        cursor->sprites[i] = SpriteSystem_NewSprite(renderer, gfxHandler, &template);
         ManagedSprite_SetDrawFlag(cursor->sprites[i], FALSE);
     }
 

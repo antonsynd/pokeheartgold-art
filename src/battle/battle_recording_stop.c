@@ -12,11 +12,11 @@
 static void Task_BattleRecordingStop(SysTask *task, void *data);
 
 SysTask *BattleRecordingStop_CreateTask(BattleSystem *battleSystem) {
-    BattleRecordingStopWork *unk;
-    unk = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleRecordingStopWork));
-    MI_CpuFill8(unk, 0, sizeof(BattleRecordingStopWork));
-    unk->battleSystem = battleSystem;
-    return SysTask_CreateOnMainQueue(Task_BattleRecordingStop, unk, 1000);
+    BattleRecordingStopWork *work;
+    work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleRecordingStopWork));
+    MI_CpuFill8(work, 0, sizeof(BattleRecordingStopWork));
+    work->battleSystem = battleSystem;
+    return SysTask_CreateOnMainQueue(Task_BattleRecordingStop, work, 1000);
 }
 
 void BattleRecordingStop_DestroyTask(SysTask *task) {

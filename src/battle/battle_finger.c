@@ -39,19 +39,19 @@ static const ManagedSpriteTemplate sBattleFingerSpriteTemplate = {
 
 BattleFinger *BattleFinger_New(SpriteSystem *renderer, SpriteManager *gfxHandler, enum HeapID heapID, u32 character, u32 pal, u32 cell, u32 animation, u32 spritePriority, u32 bgPriority) {
     BattleFinger *finger;
-    ManagedSpriteTemplate unkStruct = sBattleFingerSpriteTemplate;
+    ManagedSpriteTemplate template = sBattleFingerSpriteTemplate;
 
-    unkStruct.resIdList[0] = character;
-    unkStruct.resIdList[1] = pal;
-    unkStruct.resIdList[2] = cell;
-    unkStruct.resIdList[3] = animation;
-    unkStruct.drawPriority = spritePriority;
-    unkStruct.bgPriority = bgPriority;
+    template.resIdList[0] = character;
+    template.resIdList[1] = pal;
+    template.resIdList[2] = cell;
+    template.resIdList[3] = animation;
+    template.drawPriority = spritePriority;
+    template.bgPriority = bgPriority;
 
     finger = Heap_Alloc(heapID, sizeof(BattleFinger));
     MI_CpuFill8(finger, 0, sizeof(BattleFinger));
 
-    finger->sprite = SpriteSystem_NewSprite(renderer, gfxHandler, &unkStruct);
+    finger->sprite = SpriteSystem_NewSprite(renderer, gfxHandler, &template);
     ManagedSprite_SetDrawFlag(finger->sprite, 0);
 
     finger->yOffset = 0xC0000;

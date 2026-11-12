@@ -497,10 +497,10 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
             if (BattleBuffer_GetNext(ctx, battlerId) == 0xff) {
                 ctx->selectionState[battlerId] = SSI_STATE_SELECT_COMMAND_INIT;
             } else if (BattleBuffer_GetNext(ctx, battlerId)) {
-                u32 *unkPtr;
+                u32 *buffer;
 
-                unkPtr = (u32 *)&ctx->battleBuffer[battlerId][0];
-                ctx->playerActions[battlerId].commandParam = unkPtr[0];
+                buffer = (u32 *)&ctx->battleBuffer[battlerId][0];
+                ctx->playerActions[battlerId].commandParam = buffer[0];
                 ctx->selectionState[battlerId] = SSI_STATE_13;
             }
             break;

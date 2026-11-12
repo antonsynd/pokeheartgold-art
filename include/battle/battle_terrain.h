@@ -4,7 +4,7 @@
 #include "battle.h"
 
 void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 side, s32 terrainId);
-void BattleTerrain_SetDrawFlag(BattleTerrain *unkBattleSystemSub17C, s32);
+void BattleTerrain_SetDrawFlag(BattleTerrain *terrain, s32);
 void BattleTerrain_Free(BattleTerrain *terrain);
 
 #endif

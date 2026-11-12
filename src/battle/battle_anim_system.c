@@ -2830,17 +2830,17 @@ static void BattleAnimScriptCmd_SetBackground(BattleAnimSystem *system) {
 
 static void BattleAnimScriptCmd_SwitchBackgroundBySide(BattleAnimSystem *system) {
     BattleAnimBgSwitchWork *work = BattleAnimBackground_NewSwitchWork(system);
-    int playerSide, enemySide, unk08Set;
+    int playerSide, enemySide, contestBg;
 
     system->scriptPtr++;
     playerSide = *system->scriptPtr;
     system->scriptPtr++;
     enemySide = *system->scriptPtr;
     system->scriptPtr++;
-    unk08Set = *system->scriptPtr;
+    contestBg = *system->scriptPtr;
     system->scriptPtr++;
     if (BattleAnimSystem_IsContest(system) == TRUE) {
-        work->bgId = unk08Set;
+        work->bgId = contestBg;
     } else if (BattleAnimUtil_GetBattlerSide(system, system->context->defender) == BATTLE_ANIM_SIDE_PLAYER) {
         work->bgId = enemySide;
     } else {

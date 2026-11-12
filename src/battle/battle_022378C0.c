@@ -27,10 +27,10 @@ typedef enum BattleState {
     BSTATE_INIT,
     BSTATE_LINK_INIT,
     BSTATE_LINK_MAIN,
-    BSTATE_UNK_A_INIT,
-    BSTATE_UNK_A_MAIN,
-    BSTATE_UNK_B_INIT,
-    BSTATE_UNK_B_MAIN,
+    BSTATE_PARTY_PREVIEW_INIT,
+    BSTATE_PARTY_PREVIEW_MAIN,
+    BSTATE_VS_SCREEN_INIT,
+    BSTATE_VS_SCREEN_MAIN,
     BSTATE_SYNC,
     BSTATE_BATTLE_INIT,
     BSTATE_BATTLE_MAIN,
@@ -51,7 +51,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         if ((setup->battleType & BATTLE_TYPE_LINK) && !(setup->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
             *state = BSTATE_LINK_INIT;
         } else {
-            *state = BSTATE_UNK_A_INIT;
+            *state = BSTATE_PARTY_PREVIEW_INIT;
         }
         break;
     case BSTATE_LINK_INIT:
@@ -70,29 +70,29 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     case BSTATE_LINK_MAIN:
         if (Battle_LinkMain(man) == TRUE) {
             Battle_LinkExit(man);
-            *state = BSTATE_UNK_A_INIT;
+            *state = BSTATE_PARTY_PREVIEW_INIT;
         }
         break;
-    case BSTATE_UNK_A_INIT:
+    case BSTATE_PARTY_PREVIEW_INIT:
         if (Battle_PartyPreviewInit(man) == TRUE) {
-            *state = BSTATE_UNK_A_MAIN;
+            *state = BSTATE_PARTY_PREVIEW_MAIN;
         } else {
-            *state = BSTATE_UNK_B_INIT;
+            *state = BSTATE_VS_SCREEN_INIT;
         }
         break;
-    case BSTATE_UNK_A_MAIN:
+    case BSTATE_PARTY_PREVIEW_MAIN:
         if (Battle_PartyPreviewMain(man) == TRUE) {
-            *state = BSTATE_UNK_B_INIT;
+            *state = BSTATE_VS_SCREEN_INIT;
         }
         break;
-    case BSTATE_UNK_B_INIT:
+    case BSTATE_VS_SCREEN_INIT:
         if (Battle_VsScreenInit(man) == TRUE) {
-            *state = BSTATE_UNK_B_MAIN;
+            *state = BSTATE_VS_SCREEN_MAIN;
         } else {
             *state = BSTATE_BATTLE_INIT;
         }
         break;
-    case BSTATE_UNK_B_MAIN:
+    case BSTATE_VS_SCREEN_MAIN:
         if (Battle_VsScreenMain(man) == TRUE) {
             UnloadOverlayByID(FS_OVERLAY_ID(OVY_5));
             *state = BSTATE_SYNC;
