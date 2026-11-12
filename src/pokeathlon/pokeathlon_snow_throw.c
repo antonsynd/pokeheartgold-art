@@ -1081,7 +1081,7 @@ static void PokeathlonSnowThrow_DrawPacket(PokeathlonCourseData *course) {
             PokeathlonSnowThrowDisplay_SetPicAnim(work->display, k, 4);
             work->mons[mon].animTimer = 4;
             work->mons[mon].throwShown = 1;
-            if (work->unk5EF[k] == 0) {
+            if (work->muteThrowSound[k] == 0) {
                 PlaySE(SEQ_SE_GS_FW104);
             }
         } else {
@@ -1206,7 +1206,7 @@ static void PokeathlonSnowThrow_DrawPacket(PokeathlonCourseData *course) {
                 PokeathlonCourseSpritePoolSprite_Show(work->balls[i].splashSprite, TRUE, TRUE);
                 if (i / POKEATHLON_TEAM_SIZE == own) {
                     PlaySE(SEQ_SE_GS_TAMA3);
-                    work->unk5EF[i % POKEATHLON_TEAM_SIZE] = 0;
+                    work->muteThrowSound[i % POKEATHLON_TEAM_SIZE] = 0;
                     work->shownSizes[i % POKEATHLON_TEAM_SIZE] = 0;
                 }
             }

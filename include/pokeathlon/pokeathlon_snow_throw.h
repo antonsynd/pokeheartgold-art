@@ -172,7 +172,7 @@ typedef struct PokeathlonSnowThrow {
     u8 holdFrames; // frames the stylus has been held on the own Pokemon (max 30)
     u8 unk5EB;
     u8 shownSizes[POKEATHLON_TEAM_SIZE]; // drawing: size of the own snowballs shown last
-    u8 unk5EF[POKEATHLON_TEAM_SIZE];
+    u8 muteThrowSound[POKEATHLON_TEAM_SIZE];
     u8 unk5F2[2];
 } PokeathlonSnowThrow;
 
