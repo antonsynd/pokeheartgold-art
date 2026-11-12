@@ -118,8 +118,8 @@ int WVR_TerminateAsync(void (*callback)(void *), void *arg);
 
 int CommState_GetLinkMode(void);
 u8 CommState_GetBeaconId(void);
-void Comm_RecvChildFrameCallback(int netId, const u8 *data, int size);
-void Comm_RecvParentFrameCallback(int netId, const u8 *data, int size);
+void Comm_RecvChildFrameCallback(int netId, const u8 *data, u16 size);
+void Comm_RecvParentFrameCallback(int netId, const u8 *data, u16 size);
 
 u32 Wireless_GetWorkSize(void);
 BOOL Wireless_Init(void *buffer, int mode);

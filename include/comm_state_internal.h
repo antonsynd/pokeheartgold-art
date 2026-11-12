@@ -68,7 +68,7 @@ s32 CommState_GetPlazaMatchStatus(void);
 BOOL CommState_ReportsErrors(void);
 void CommState_SetSelectedOrder(void *order);
 void CommState_GetSelectedOrder(void *order);
-void CommState_ShowErrorAndHalt(u32 errorCode);
+void CommState_ShowErrorAndHalt(int errorCode);
 void CommState_ShowRestartErrorAndHalt(void);
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 void CommState_CheckLinkError(int unused);

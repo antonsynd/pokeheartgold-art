@@ -386,7 +386,7 @@ static void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args) {
 
 // Connection filter of the Wi-Fi Club: TRUE when this player's activity and the other player's activity form one of
 // the matching pairs.
-BOOL WifiClub_IsMatchingActivity(s32 netId) {
+BOOL WifiClub_IsMatchingActivity(int netId) {
     WifiClubStatusData *status = CommState_GetWifiClubData();
     u8 own = status->own.status;
     u8 other = status->friends[netId].status;

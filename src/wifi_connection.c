@@ -993,7 +993,7 @@ void WifiConnection_Shutdown(void) {
     WifiConnection_Destroy();
 }
 
-void WifiConnection_SetFriendStatusBuffer(u8 *data, int stride) {
+void WifiConnection_SetFriendStatusBuffer(void *data, int stride) {
     sWifiConnection->friendStatusData = data;
     sWifiConnection->friendStatusStride = stride;
 }

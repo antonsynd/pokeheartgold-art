@@ -12,6 +12,7 @@
 
 #include "bg_window.h"
 #include "comm_state.h"
+#include "comm_state_internal.h"
 #include "filesystem.h"
 #include "font.h"
 #include "game_stats.h"
@@ -82,9 +83,6 @@ typedef struct WiFiPlazaConnectWork {
 } WiFiPlazaConnectWork;
 
 extern void CommState_StartWifiPlaza(SaveData *saveData, const WiFiPlazaPlayer *player);
-extern void CommState_LeaveWifiPlaza(void);
-extern int CommState_HasPlazaLobbyStarted(void);
-extern BOOL CommState_HasPlazaLobbyFailed(void);
 
 enum WiFiPlazaConnectState {
     WIFI_PLAZA_CONNECT_FADE_IN,

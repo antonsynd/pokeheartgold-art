@@ -28,7 +28,6 @@
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
-#include "overlay_00_thumb.h"
 #include "render_text.h"
 #include "scanline_effect.h"
 #include "screen_fade.h"
@@ -38,6 +37,7 @@
 #include "system.h"
 #include "text.h"
 #include "vram_transfer_manager.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 
 int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);

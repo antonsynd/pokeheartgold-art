@@ -36,7 +36,6 @@
 #include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
-#include "overlay_00_thumb.h"
 #include "palette.h"
 #include "pm_string.h"
 #include "render_text.h"
@@ -54,6 +53,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "vram_transfer_manager.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 

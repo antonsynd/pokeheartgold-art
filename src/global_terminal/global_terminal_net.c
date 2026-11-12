@@ -19,13 +19,13 @@
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
-#include "overlay_00_thumb.h"
 #include "player_data.h"
 #include "pm_string.h"
 #include "pokemon_storage_system.h"
 #include "save.h"
 #include "string_util.h"
 #include "system.h"
+#include "wifi_connection.h"
 
 // 20001 response: list of dress-up photos
 typedef struct GlobalTerminalNetDressUpEntry {

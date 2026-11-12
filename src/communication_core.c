@@ -632,7 +632,7 @@ static void Comm_UpdateParentSend(void) {
     }
 }
 
-void Comm_RecvParentFrameCallback(int netId, const u8 *data, int size) {
+void Comm_RecvParentFrameCallback(int netId, const u8 *data, u16 size) {
     Comm_OnParentFrameReceived(netId, data, size);
 }
 
@@ -691,7 +691,7 @@ static void Comm_OnParentFrameReceived(int netId, const u8 *data, int size) {
     }
 }
 
-void Comm_RecvChildFrameCallback(int netId, const u8 *data, int size) {
+void Comm_RecvChildFrameCallback(int netId, const u8 *data, u16 size) {
     Comm_OnChildFrameReceived(netId, data, size);
 }
 
@@ -721,7 +721,7 @@ static void Comm_OnChildFrameReceived(int slot, const u8 *data, int size) {
     }
 }
 
-void Comm_RecvPeerFrameCallback(int slot, const u8 *data) {
+void Comm_RecvPeerFrameCallback(int slot, const u8 *data, u16 size) {
     int frameSize;
 
     sCommCore.work->childSentFrames[slot]--;
@@ -1357,14 +1357,15 @@ void Comm_RecvShutdown(int netId, int size, void *data, void *context) {
     CommWireless_RequestShutdown();
 }
 
-void CommRandom_Init(CommRandom *seed) {
+void CommRandom_Init(void *seed) {
+    CommRandom *random = seed;
     RTCDate date;
     RTCTime time;
 
     GF_RTC_CopyDateTime(&date, &time);
-    seed->state = (time.second + gSystem.vblankCounter) + ((time.minute + ((time.hour + ((date.day + ((date.month + ((u64)date.year << 4)) << 5)) << 5)) << 6)) << 6);
-    seed->multiplier = 0x5D588B656C078965ULL;
-    seed->increment = 0x269EC3;
+    random->state = (time.second + gSystem.vblankCounter) + ((time.minute + ((time.hour + ((date.day + ((date.month + ((u64)date.year << 4)) << 5)) << 5)) << 6)) << 6);
+    random->multiplier = 0x5D588B656C078965ULL;
+    random->increment = 0x269EC3;
 }
 
 BOOL Comm_ParentQueueHasCommand(int value) {

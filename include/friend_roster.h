@@ -27,7 +27,7 @@ void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value);
 void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value);
 int FriendRoster_GetUsedSlotCount(FriendRoster *data);
 void FriendRoster_RemoveFriend(FriendRoster *data, int index);
-void FriendRoster_SetEntryField(FriendRoster *data, int index, enum FriendRosterField field, u8 value);
+void FriendRoster_SetEntryField(FriendRoster *data, int index, enum FriendRosterField field, u32 value);
 void Save_FriendRoster_Init(FriendRoster *data);
 u32 Save_FriendRoster_sizeof(void);
 void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);

@@ -6,6 +6,8 @@
 #include "constants/save_arrays.h"
 #include "constants/species.h"
 
+#include "dwc/dwc_account_internal.h"
+
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
 #include "msgdata/msg/msg_0800.h"
@@ -16,7 +18,6 @@
 #include "comm_wireless.h"
 #include "communication_core.h"
 #include "communication_player_state.h"
-#include "dwcaccount.h"
 #include "font.h"
 #include "font_sprite.h"
 #include "friend_roster.h"
@@ -28,7 +29,6 @@
 #include "network_overlay_loader.h"
 #include "oam_manager.h"
 #include "obj_pltt_transfer.h"
-#include "overlay_00_thumb.h"
 #include "party.h"
 #include "poke_overlay.h"
 #include "pokedex.h"
@@ -52,6 +52,7 @@
 #include "vram_transfer_manager.h"
 #include "wifi_club.h"
 #include "wifi_club_comm.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
@@ -1509,8 +1510,7 @@ s32 WifiClub_State_Start(WifiClubApp *app, s32 mainState) {
     } else {
         Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
         WifiClub_PrintTitleBar(app);
-        FriendRoster_GetUserData(app->friendRoster);
-        if (!DWC_CheckHasProfile()) {
+        if (!DWC_CheckHasProfile(FriendRoster_GetUserData(app->friendRoster))) {
             SetBgPriority(GF_BG_LYR_MAIN_0, 3);
             SetBgPriority(GF_BG_LYR_MAIN_1, 0);
             SetBgPriority(GF_BG_LYR_MAIN_3, 0);
@@ -1519,8 +1519,7 @@ s32 WifiClub_State_Start(WifiClubApp *app, s32 mainState) {
             app->yesNoPrompt = WifiClub_CreateYesNoPrompt(app->bgConfig, &sUserInfoPromptWindowTemplate, 0);
             app->state = WIFI_CLUB_STATE_SAVE_USER_INFO_PROMPT;
         } else {
-            FriendRoster_GetUserData(app->friendRoster);
-            if (!DWC_CheckValidConsole()) {
+            if (!DWC_CheckValidConsole(FriendRoster_GetUserData(app->friendRoster))) {
                 WifiClub_ShowConnectionNotice(app, msg_0800_00020);
                 app->state = WIFI_CLUB_STATE_ASK_UPDATE_USER_INFO;
             } else {

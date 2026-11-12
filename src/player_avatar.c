@@ -9,7 +9,6 @@
 #include "assert.h"
 #include "heap.h"
 #include "map_object.h"
-#include "overlay_00_thumb.h"
 #include "overlay_01.h"
 #include "field_surf_mount.h"
 #include "field_warp_arrow.h"
@@ -18,6 +17,7 @@
 #include "communication_player_state.h"
 #include "communication_core.h"
 #include "map_object_movement_utilities.h"
+#include "wifi_connection.h"
 
 static PlayerAvatar *PlayerAvatar_Create(void);
 static void PlayerAvatar_Setup(PlayerAvatar *avatar, s32 state, u32 gender, PlayerSaveData *playerSaveData);

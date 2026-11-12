@@ -10,13 +10,13 @@
 #include "font.h"
 #include "gf_gfx_planes.h"
 #include "msgdata.h"
-#include "overlay_00_thumb.h"
 #include "pm_string.h"
 #include "render_window.h"
 #include "screen_fade.h"
 #include "system.h"
 #include "text.h"
 #include "comm_state.h"
+#include "wifi_connection.h"
 
 static const GraphicsBanks sCommunicationErrorGraphicsBanks = {
     .bg = GX_VRAM_BG_256_AB,

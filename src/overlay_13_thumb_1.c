@@ -4,9 +4,11 @@
 
 #include "global.h"
 
-#include "overlay_00_thumb.h"
+#include "dwc/net_common_internal.h"
+
 #include "overlay_13_arm_2.h"
 #include "comm_wireless.h"
+#include "wifi_connection.h"
 
 void RunWifiSetupApp(enum HeapID HeapID) {
     for (int playerNo = 0; playerNo < 32; playerNo++) {

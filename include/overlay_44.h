@@ -138,7 +138,7 @@ void WifiClubGameEntry_ReleaseAllMembers(WifiClubGameEntry *gameEntry);
 void WifiClubGameEntry_SetDisconnectCallback(WifiClubGameEntry *gameEntry);
 void WifiClubGameEntry_ClearDisconnectCallback(WifiClubGameEntry *gameEntry);
 s32 WifiClubGameEntry_CheckMemberDisconnected(WifiClubGameEntry *gameEntry);
-void WifiClubGameEntry_OnDisconnect(u8 netId, WifiClubGameEntry *gameEntry, s32 arg2);
+void WifiClubGameEntry_OnDisconnect(int netId, void *arg);
 s32 WifiClubGameEntry_CheckMemberListChanged(WifiClubGameEntry *gameEntry);
 void WifiClubGameEntry_RequestMemberListRedraw(WifiClubGameEntry *gameEntry);
 void WifiClubGameEntry_AcceptMember(WifiClubGameEntry *gameEntry, s32 netId, enum HeapID heapID);

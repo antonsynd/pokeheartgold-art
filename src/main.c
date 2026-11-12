@@ -63,7 +63,7 @@ void NitroMain(void) {
     Sound_ResetFieldBGMStopOnce();
     InitSoundData(Save_Chatot_Get(gMainOverlayState.args.saveData), Save_PlayerData_GetOptionsAddr(gMainOverlayState.args.saveData));
     Init_Timer3();
-    if (Comm_LoadAndInitDwc(3) == 3) {
+    if (Comm_LoadAndInitDwc(HEAP_ID_3) == 3) {
         ShowWFCUserInfoWarning(HEAP_ID_3, 0);
     }
     if (!Save_FlashChipIsDetected(gMainOverlayState.args.saveData)) {

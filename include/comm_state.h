@@ -16,7 +16,7 @@ BOOL CommState_HasWifiFailed(void);
 u8 CommState_GetLinkMode(void);
 u8 CommState_GetBeaconId(void);
 int CommState_IsWifi(void);
-int Comm_LoadAndInitDwc(int heapID);
+s32 Comm_LoadAndInitDwc(enum HeapID heapID);
 BOOL CommState_IsLinkDown(void);
 u8 CommState_GetErrorScreen(void);
 BOOL CommState_StopForReset(void);
@@ -41,7 +41,7 @@ void CommState_SetSingleBattleWifiLinkMode(void);
 BOOL CommState_IsWifiInLobby(void);
 WifiClubStatusData *CommState_StartWifiClub(SaveData *saveData, u32 dataSize);
 void CommState_EndWifiMatch(void);
-int Comm_InitDwc(enum HeapID heapID);
+s32 Comm_InitDwc(enum HeapID heapID);
 void CommState_SetFrontierWifiLinkMode(void);
 void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8 language);
 

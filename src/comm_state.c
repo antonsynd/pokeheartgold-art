@@ -1,24 +1,35 @@
-// clang-format off
+#include "comm_state.h"
+
+#include "global.h"
+
 #include "constants/comm_type.h"
 
-#include "comm_state_private.h"
-// clang-format on
+#include "dwc/dwc_account_internal.h"
+#include "dwc/net_common_internal.h"
+#include "nitro/wm/wm_internal.h"
 
 #include "comm_state_internal.h"
 #include "comm_wireless.h"
 #include "communication_command.h"
+#include "communication_core_internal.h"
 #include "communication_error.h"
 #include "communication_player_state.h"
-#include "dwcaccount.h"
 #include "link_synchronization.h"
 #include "network_overlay_loader.h"
-#include "overlay_00_thumb.h"
 #include "overlay_13_arm_2.h"
 #include "sound_playback.h"
 #include "system.h"
+#include "wifi_connection.h"
 #include "wifi_connection_result.h"
+#include "wifi_plaza/wifi_plaza_internal.h"
 #include "wireless_manager.h"
 #include "wireless_status_icon.h"
+
+typedef struct {
+    u64 x;
+    u64 mul;
+    u64 add;
+} MATHRandContext32;
 
 typedef struct CommStateWork {
     WifiClubStatusData *wifiClubData;
@@ -135,6 +146,9 @@ static void CommState_PlazaMatchConnected(void);
 static void CommState_PlazaMatching(void);
 static void CommState_PlazaEndMatch(void);
 static void CommState_PlazaTimedOut(void);
+
+void CommState_StartWifiPlaza(SaveData *saveData, const struct WiFiPlazaPlayer *player);
+s32 Comm_FindFriendSlot(SaveData *saveData, DwcAccData *exchangeToken, s32 *slot);
 
 static CommStateWork *sCommState = NULL;
 
@@ -1544,7 +1558,7 @@ u8 CommState_GetErrorScreen(void) {
     return 0;
 }
 
-void CommState_ShowErrorAndHalt(u32 errorCode) {
+void CommState_ShowErrorAndHalt(int errorCode) {
     ShowCommunicationError(HEAP_ID_DEFAULT, 1, errorCode);
     while (TRUE) {}
 }
@@ -1860,7 +1874,7 @@ void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8
 
 s32 Comm_InitDwc(enum HeapID heapID) {
     void *work = Heap_Alloc(heapID, 1824);
-    s32 result = DWC_Init(((u32)work + 31) & ~31);
+    s32 result = DWC_Init((void *)(((u32)work + 31) & ~31));
     Heap_Free(work);
     return result;
 }
@@ -1874,34 +1888,34 @@ s32 Comm_LoadAndInitDwc(enum HeapID heapID) {
     return result;
 }
 
-void Comm_EnsureDwcUserData(WiFiList *wifiList) {
+void Comm_EnsureDwcUserData(FriendRoster *wifiList) {
 
-    DWCUserData *userData = FriendRoster_GetUserData(wifiList);
+    DwcUserData *userData = FriendRoster_GetUserData(wifiList);
     if (!DWC_CheckUserData(userData)) {
         DWC_CreateUserData(userData, 0x4144414A);
         DWC_ClearDirtyFlag(userData);
     }
 }
 
-int Comm_GetOwnGsProfileId(WiFiList *wifiList) {
-    DWCUserData *userData = FriendRoster_GetUserData(wifiList);
-    DWCFriendData friendData;
+int Comm_GetOwnGsProfileId(FriendRoster *wifiList) {
+    DwcUserData *userData = FriendRoster_GetUserData(wifiList);
+    DwcAccData friendData;
     DWC_CreateExchangeToken(userData, &friendData);
     return DWC_GetGsProfileId(userData, &friendData);
 }
 
 BOOL Comm_HasWifiProfile(SaveData *saveData) {
-    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
+    DwcUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
     if (DWC_CheckHasProfile(userData) && DWC_CheckValidConsole(userData)) {
         return TRUE;
     }
     return FALSE;
 }
 
-s32 Comm_FindFriendSlot(SaveData *saveData, DWCFriendData *exchangeToken, s32 *slot) {
+s32 Comm_FindFriendSlot(SaveData *saveData, DwcAccData *exchangeToken, s32 *slot) {
     int i;
-    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
-    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
+    DwcUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
+    DwcAccData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     *slot = -1;
     if (!DWC_IsValidFriendData(exchangeToken)) {
         return 3;
@@ -1926,12 +1940,12 @@ s32 Comm_FindFriendSlot(SaveData *saveData, DWCFriendData *exchangeToken, s32 *s
 
 int Comm_FindFriendSlotByKey(SaveData *saveData, u64 friendKey, int *slot) {
     int i;
-    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
-    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
+    DwcUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
+    DwcAccData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     if (!DWC_CheckFriendKey(userData, friendKey)) {
         return 3;
     }
-    DWCFriendData newFriendData;
+    DwcAccData newFriendData;
     DWC_CreateFriendKeyToken(&newFriendData, friendKey);
     if (DWC_GetGsProfileId(userData, &newFriendData) <= 0) {
         return 3;
@@ -1949,26 +1963,27 @@ int Comm_FindFriendSlotByKey(SaveData *saveData, u64 friendKey, int *slot) {
     return 2;
 }
 
-s32 Comm_RegisterLinkedFriends(SaveData *saveData, s32 *results, enum HeapID heapID) {
+s32 Comm_RegisterLinkedFriends(SaveData *saveData, void *results, enum HeapID heapID) {
+    s32 *slotResults = results;
     s32 hasNewFriend = 0;
-    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
+    DwcAccData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     for (int i = 0; i < Comm_CountConnected(); i++) {
         if (i != Comm_GetLocalNetId()) {
-            DWCFriendData *exchangeToken = CommPlayerInfo_GetExchangeToken(i);
+            DwcAccData *exchangeToken = CommPlayerInfo_GetExchangeToken(i);
             if (exchangeToken) {
                 s32 slot;
-                results[i] = Comm_FindFriendSlot(saveData, exchangeToken, &slot);
-                GF_ASSERT(results[i] != 3);
-                if (results[i] == 0) {
+                slotResults[i] = Comm_FindFriendSlot(saveData, exchangeToken, &slot);
+                GF_ASSERT(slotResults[i] != 3);
+                if (slotResults[i] == 0) {
                     Comm_StoreFriendFromPlayer(saveData, i, slot, heapID, 2);
                     CommPlayerInfo_SaveRecords(saveData);
-                } else if (results[i] == 1) {
+                } else if (slotResults[i] == 1) {
                     if (!CommState_IsWifi()) {
                         Comm_StoreFriendFromPlayer(saveData, i, slot, heapID, 1);
-                        MI_CpuCopy8(exchangeToken, &friendData[slot], sizeof(DWCFriendData));
+                        MI_CpuCopy8(exchangeToken, &friendData[slot], sizeof(DwcAccData));
                         CommPlayerInfo_SaveRecords(saveData);
                     }
-                } else if (results[i] == 2) {
+                } else if (slotResults[i] == 2) {
                     hasNewFriend = 1;
                 }
             }
@@ -1978,8 +1993,8 @@ s32 Comm_RegisterLinkedFriends(SaveData *saveData, s32 *results, enum HeapID hea
 }
 
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode) {
-    WiFiList *wifiList = Save_FriendRoster_Get(saveData);
-    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(wifiList, slot);
+    FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
+    DwcAccData *friendData = FriendRoster_GetDwcFriendData(wifiList, slot);
     PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(netId);
     if (mode != 2) {
         MI_CpuCopy8(CommPlayerInfo_GetExchangeToken(netId), friendData, 12);
@@ -2004,8 +2019,8 @@ void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum He
 
 s32 Comm_FindFriendIndexOfPlayer(SaveData *saveData, s32 netId) {
     int i;
-    DWCFriendData *friendData = CommPlayerInfo_GetExchangeToken(netId);
-    WiFiList *wifiList = Save_FriendRoster_Get(saveData);
+    DwcAccData *friendData = CommPlayerInfo_GetExchangeToken(netId);
+    FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
 
     for (i = 0; i < 32; i++) {
         if (DWC_IsEqualFriendData(friendData, FriendRoster_GetDwcFriendData(wifiList, i))) {

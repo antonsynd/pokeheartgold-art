@@ -11,7 +11,6 @@
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "overlay_00_arm.h"
-#include "overlay_00_thumb.h"
 #include "overlay_42.h"
 #include "overlay_44.h"
 #include "overlay_manager.h"
@@ -28,6 +27,7 @@
 #include "link_synchronization.h"
 #include "comm_state.h"
 #include "comm_state_internal.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 #include "wifi_club_comm.h"
 #include "vram_transfer_manager.h"
@@ -898,7 +898,8 @@ s32 WifiClubGameEntry_CheckMemberDisconnected(WifiClubGameEntry *gameEntry) {
     return disconnected;
 }
 
-void WifiClubGameEntry_OnDisconnect(u8 netId, WifiClubGameEntry *gameEntry, s32 arg2) {
+void WifiClubGameEntry_OnDisconnect(int netId, void *arg) {
+    WifiClubGameEntry *gameEntry = arg;
     gameEntry->disconnected[netId] = 1;
     gameEntry->disconnectedNetIds[netId] = netId;
 }

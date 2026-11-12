@@ -28,7 +28,6 @@
 #include "msgdata.h"
 #include "oam_manager.h"
 #include "options.h"
-#include "overlay_00_thumb.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "player_data.h"
@@ -43,6 +42,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "vram_transfer_manager.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 

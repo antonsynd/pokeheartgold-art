@@ -25,7 +25,7 @@
 #define WIFI_CONNECTION_STATE_DISCONNECTED      17
 #define WIFI_CONNECTION_STATE_TIMED_OUT         18
 
-typedef void (*WifiReceiveCallback)(u32 aid, void *data, u16 size);
+typedef void (*WifiReceiveCallback)(int aid, const u8 *data, u16 size);
 
 typedef struct WifiConnection WifiConnection;
 
@@ -49,7 +49,7 @@ int WifiConnection_Disconnect(int checkOnly);
 int WifiConnection_FinishDisconnect(void);
 void WifiConnection_SetErrorCallback(void (*callback)(int));
 void WifiConnection_Shutdown(void);
-void WifiConnection_SetFriendStatusBuffer(u8 *data, int stride);
+void WifiConnection_SetFriendStatusBuffer(void *data, int stride);
 void WifiConnection_SetOwnStatusData(void *data, int size);
 u8 WifiConnection_GetFriendStatus(int index);
 int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL alternate);

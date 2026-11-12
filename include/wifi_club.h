@@ -21,7 +21,7 @@ enum WifiClubChoice {
     WIFI_CLUB_WOBBUFFET_POP,
 };
 
-BOOL WifiClub_IsMatchingActivity(s32 netId);
+BOOL WifiClub_IsMatchingActivity(int netId);
 void CallTask_WifiClub(TaskManager *taskManager);
 void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result);
 
