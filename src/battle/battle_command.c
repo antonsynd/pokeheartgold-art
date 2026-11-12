@@ -1570,11 +1570,11 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
 
     BattleScriptIncrementPointer(ctx, 1);
 
-    int unkA = BattleScriptReadWord(ctx);
-    int unkB = BattleScriptReadWord(ctx);
-    int unkC = BattleScriptReadWord(ctx);
+    int adrsFailMsg = BattleScriptReadWord(ctx);
+    int adrsFailNoMsg = BattleScriptReadWord(ctx);
+    int adrsSubstitute = BattleScriptReadWord(ctx);
 
-    int unkD = 0;
+    int blocked = 0;
 
     ctx->battleStatus &= ~BATTLE_STATUS_FAIL_STAT_STAGE_CHANGE;
 
@@ -1600,14 +1600,14 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
         if (mon->statChanges[stat + 1] == 12) {
             ctx->battleStatus |= BATTLE_STATUS_FAIL_STAT_STAGE_CHANGE;
             if (ctx->statChangeType == 3 || ctx->statChangeType == 2) {
-                BattleScriptIncrementPointer(ctx, unkB);
+                BattleScriptIncrementPointer(ctx, adrsFailNoMsg);
             } else {
                 // "{0}'s {1} won't go any higher!"
                 ctx->buffMsg.id = msg_0197_00142;
                 ctx->buffMsg.tag = TAG_NICKNAME_STAT;
                 ctx->buffMsg.param[0] = CreateNicknameTag(ctx, ctx->battlerIdStatChange);
                 ctx->buffMsg.param[1] = stat + 1;
-                BattleScriptIncrementPointer(ctx, unkA);
+                BattleScriptIncrementPointer(ctx, adrsFailMsg);
             }
         } else {
             if (ctx->statChangeType == 3) {
@@ -1645,7 +1645,7 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
                     ctx->buffMsg.id = msg_0197_00273;
                     ctx->buffMsg.tag = TAG_NICKNAME;
                     ctx->buffMsg.param[0] = CreateNicknameTag(ctx, ctx->battlerIdStatChange);
-                    unkD = 1;
+                    blocked = 1;
                 } else if (CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, ctx->battlerIdStatChange, ABILITY_CLEAR_BODY) == TRUE || CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, ctx->battlerIdStatChange, ABILITY_WHITE_SMOKE) == TRUE) {
                     if (ctx->statChangeType == 3) {
                         // "{0}'s {1} suppressed {2}'s {3}!"
@@ -1662,7 +1662,7 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
                         ctx->buffMsg.param[0] = CreateNicknameTag(ctx, ctx->battlerIdStatChange);
                         ctx->buffMsg.param[1] = ctx->battleMons[ctx->battlerIdStatChange].ability;
                     }
-                    unkD = TRUE;
+                    blocked = TRUE;
                 } else if ((CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, ctx->battlerIdStatChange, ABILITY_KEEN_EYE) == TRUE && (1 + stat) == 6) || (CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, ctx->battlerIdStatChange, ABILITY_HYPER_CUTTER) == TRUE && (1 + stat) == 1)) {
                     if (ctx->statChangeType == 3) {
                         // "{0}'s {1} suppressed {2}'s {3}!"
@@ -1680,11 +1680,11 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
                         ctx->buffMsg.param[1] = ctx->battleMons[ctx->battlerIdStatChange].ability;
                         ctx->buffMsg.param[2] = stat + 1;
                     }
-                    unkD = TRUE;
+                    blocked = TRUE;
                 } else if (mon->statChanges[1 + stat] == 0) {
                     ctx->battleStatus |= BATTLE_STATUS_FAIL_STAT_STAGE_CHANGE;
                     if (ctx->statChangeType == 2 || ctx->statChangeType == 3) {
-                        BattleScriptIncrementPointer(ctx, unkB);
+                        BattleScriptIncrementPointer(ctx, adrsFailNoMsg);
                         return FALSE;
                     } else {
                         // "{0}'s {1} won't go lower!"
@@ -1692,18 +1692,18 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
                         ctx->buffMsg.tag = TAG_NICKNAME_STAT;
                         ctx->buffMsg.param[0] = CreateNicknameTag(ctx, ctx->battlerIdStatChange);
                         ctx->buffMsg.param[1] = stat + 1;
-                        BattleScriptIncrementPointer(ctx, unkA);
+                        BattleScriptIncrementPointer(ctx, adrsFailMsg);
                         return FALSE;
                     }
                 } else if (CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, ctx->battlerIdStatChange, ABILITY_SHIELD_DUST) == TRUE && ctx->statChangeType == 2) {
-                    unkD = 1;
+                    blocked = 1;
                 } else if (ctx->battleMons[ctx->battlerIdStatChange].status2 & STATUS2_SUBSTITUTE) {
-                    unkD = 2;
+                    blocked = 2;
                 }
             } else if (mon->statChanges[1 + stat] == 0) {
                 ctx->battleStatus |= BATTLE_STATUS_FAIL_STAT_STAGE_CHANGE;
                 if (ctx->statChangeType == 2 || ctx->statChangeType == 3) {
-                    BattleScriptIncrementPointer(ctx, unkB);
+                    BattleScriptIncrementPointer(ctx, adrsFailNoMsg);
                     return FALSE;
                 } else {
                     // "{0}'s {1} won't go lower!"
@@ -1711,18 +1711,18 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
                     ctx->buffMsg.tag = TAG_NICKNAME_STAT;
                     ctx->buffMsg.param[0] = CreateNicknameTag(ctx, ctx->battlerIdStatChange);
                     ctx->buffMsg.param[1] = stat + 1;
-                    BattleScriptIncrementPointer(ctx, unkA);
+                    BattleScriptIncrementPointer(ctx, adrsFailMsg);
                     return FALSE;
                 }
             }
-            if (unkD == 2 && ctx->statChangeType == 1) {
-                BattleScriptIncrementPointer(ctx, unkC);
+            if (blocked == 2 && ctx->statChangeType == 1) {
+                BattleScriptIncrementPointer(ctx, adrsSubstitute);
                 return FALSE;
-            } else if (unkD && ctx->statChangeType == 2) {
-                BattleScriptIncrementPointer(ctx, unkB);
+            } else if (blocked && ctx->statChangeType == 2) {
+                BattleScriptIncrementPointer(ctx, adrsFailNoMsg);
                 return FALSE;
-            } else if (unkD) {
-                BattleScriptIncrementPointer(ctx, unkA);
+            } else if (blocked) {
+                BattleScriptIncrementPointer(ctx, adrsFailMsg);
                 return FALSE;
             }
         }
@@ -6658,26 +6658,26 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     switch (data->state) {
     case STATE_GET_POKEMON_START:
         if (data->captureType == CAPTURE_NORMAL) {
-            BallThrowParams unkStruct;
-            unkStruct.mode = 3;
-            unkStruct.heapID = HEAP_ID_BATTLE;
-            unkStruct.resTagOffset = battlerId + 20000;
-            unkStruct.ball = data->ballID;
-            unkStruct.spriteSystem = BattleSystem_GetSpriteSystem(data->battleSystem);
-            unkStruct.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
-            unkStruct.bgPriority = 1;
-            unkStruct.keepSubSurface = 0;
-            unkStruct.battleSystem = data->battleSystem;
+            BallThrowParams params;
+            params.mode = 3;
+            params.heapID = HEAP_ID_BATTLE;
+            params.resTagOffset = battlerId + 20000;
+            params.ball = data->ballID;
+            params.spriteSystem = BattleSystem_GetSpriteSystem(data->battleSystem);
+            params.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
+            params.bgPriority = 1;
+            params.keepSubSurface = 0;
+            params.battleSystem = data->battleSystem;
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_DOUBLES) {
                 if (battlerId == BATTLER_ENEMY) {
-                    unkStruct.kind = 16;
+                    params.kind = 16;
                 } else { // BATTLER_ENEMY2, assumedly.
-                    unkStruct.kind = 17;
+                    params.kind = 17;
                 }
             } else { // This is a single battle.
-                unkStruct.kind = 15;
+                params.kind = 15;
             }
-            data->ballData = BallThrow_New(&unkStruct); // Initializes whatever this is and gets it all ready to go.
+            data->ballData = BallThrow_New(&params);
             data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
             PlaySE(SEQ_SE_DP_THROW);
             data->battleSystem->ballsThrown++;
@@ -6696,7 +6696,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         data->tempData[DATA_GET_POKEMON_NEEDS_EXTRA_DISPOSAL_CHECK] = FALSE;
         break;
     case STATE_GET_POKEMON_CHECK_IF_TRAINER:
-        if (!BallThrow_IsBallAnimationPlaying(data->ballData, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
+        if (!BallThrow_IsBallAnimationPlaying(data->ballData, BALL_ANIM_THROW)) { // the second argument is unused, BallThrow keeps its current animation in ballAnim
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
                 PlaySE_SetPan(SEQ_SE_DP_KON, 0x75);
                 BallThrow_SetBallAnimation(data->ballData, BALL_ANIM_DEFLECT);
@@ -6843,15 +6843,15 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             BattleTerrain_SetDrawFlag(BattleSystem_GetBattleTerrain(data->battleSystem, 0), 0);
             BattleTerrain_SetDrawFlag(BattleSystem_GetBattleTerrain(data->battleSystem, 1), 0);
             OpponentData_SetSpriteDrawFlag(BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER), 0);
-            PokedexEntryPopupArgs unkStruct;
-            unkStruct.bgConfig = BattleSystem_GetBgConfig(data->battleSystem);
-            unkStruct.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
-            unkStruct.pokepicManager = pokepicManager;
-            unkStruct.heapID = HEAP_ID_BATTLE;
-            unkStruct.mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
-            unkStruct.natDexEnabled = Pokedex_IsNatDexEnabled(BattleSystem_GetPokedex(data->battleSystem));
+            PokedexEntryPopupArgs popupArgs;
+            popupArgs.bgConfig = BattleSystem_GetBgConfig(data->battleSystem);
+            popupArgs.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
+            popupArgs.pokepicManager = pokepicManager;
+            popupArgs.heapID = HEAP_ID_BATTLE;
+            popupArgs.mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            popupArgs.natDexEnabled = Pokedex_IsNatDexEnabled(BattleSystem_GetPokedex(data->battleSystem));
             data->tempPointers[POINTER_GET_POKEMON_TASK_MANAGER] = ObjCharTransfer_PopTaskManager();
-            data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER] = PokedexEntryPopup_Create(&unkStruct);
+            data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER] = PokedexEntryPopup_Create(&popupArgs);
             data->state = STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY;
         }
         break;
