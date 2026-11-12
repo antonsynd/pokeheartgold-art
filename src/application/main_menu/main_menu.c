@@ -624,12 +624,12 @@ static BOOL MainMenu_UpdateNoticeBoxes(MainMenuAppData *data) {
         MainMenuTextPrinter printer;
         MainMenuTextPrinter_Init(&printer, &data->noticeWindow, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
         MainMenuNoticeBox *box;
-        u32 unk3 = data->raisedNotices & ~data->shownNotices;
-        if (unk3 & (1 << 0)) {
+        u32 newNotices = data->raisedNotices & ~data->shownNotices;
+        if (newNotices & (1 << 0)) {
             box = (data->wirelessButtonsShown & (1 << 0)) ? &ov74_0223BC30[0] : &ov74_0223BC30[1];
-        } else if (unk3 & (1 << 1)) {
+        } else if (newNotices & (1 << 1)) {
             box = (data->wirelessButtonsShown & (1 << 1)) ? &ov74_0223BC30[2] : &ov74_0223BC30[3];
-        } else if (unk3 & (1 << 7)) {
+        } else if (newNotices & (1 << 7)) {
             printer.frameType = 2;
             box = &ov74_0223BC30[4];
             MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, printer.msgFileId, HEAP_ID_MAIN_MENU);
@@ -646,22 +646,22 @@ static BOOL MainMenu_UpdateNoticeBoxes(MainMenuAppData *data) {
 
         BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(printer.window), GetWindowY(printer.window), GetWindowWidth(printer.window), GetWindowHeight(printer.window), 0);
 
-        if ((unk3 & (1 << 7)) && !(unk3 & (1 << 1 | 1 << 0))) {
+        if ((newNotices & (1 << 7)) && !(newNotices & (1 << 1 | 1 << 0))) {
             for (int i = 0; i < (int)NELEMS(data->newGameOptionWindows); i++) {
                 Window *window = &data->newGameOptionWindows[i];
                 MainMenuTextPrinter_Init(&printer, window, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
-                MainMenuNoticeBox *unk3 = &ov74_0223BC30[i + 5];
+                MainMenuNoticeBox *optionBox = &ov74_0223BC30[i + 5];
                 printer.textY = 4;
-                MainMenuTextPrinter_SetSize(&printer, unk3->width, unk3->height, (i * 72) + 1);
+                MainMenuTextPrinter_SetSize(&printer, optionBox->width, optionBox->height, (i * 72) + 1);
                 printer.bgId = GF_BG_LYR_MAIN_1;
-                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, unk3->x, unk3->y, unk3->msgId);
+                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, optionBox->x, optionBox->y, optionBox->msgId);
             }
             data->currentNewGameOption = 0;
             MainMenu_HighlightNewGameOption(data, -1);
             data->noticeState = 19;
             data->noticeInputDelay = 30;
         } else {
-            data->shownNotices |= unk3;
+            data->shownNotices |= newNotices;
             data->noticeState = 18;
             data->noticeInputDelay = 30;
         }
