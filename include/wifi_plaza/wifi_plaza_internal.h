@@ -57,9 +57,9 @@ typedef struct WiFiPlazaPlayer {
     u8 gameCleared;
     u8 tapToy; // < 27
     u8 version;
-    u8 activity;  // < 15
-    s64 unk_44;   // SysInfo_RTC.seconds_since_nitro_epoch
-    u8 slots[12]; // < 24: used
+    u8 activity;            // < 15
+    s64 adventureStartTime; // seconds
+    u8 slots[12];           // < 24: used
     s32 slotData[12];
     u16 favoriteTypes[2]; // < 18
     WiFiPlazaPlayerSurvey survey;

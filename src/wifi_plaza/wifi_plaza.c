@@ -1605,7 +1605,7 @@ static void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *s
     profile->player.tapToy = 0xff;
     profile->player.activity = 0;
     profile->player.version = GAME_VERSION;
-    profile->player.unk_44 = rtc->seconds_since_nitro_epoch;
+    profile->player.adventureStartTime = rtc->seconds_since_nitro_epoch;
     for (i = 0; i < 12; i++) {
         profile->player.slots[i] = 24;
         profile->player.slotData[i] = -1;
