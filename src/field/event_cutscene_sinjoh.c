@@ -142,9 +142,9 @@ static void SinjohCutscene_LoadResources(SinjohCutsceneData *data) {
     u32 unownAnimationFiles[2][2];
     ARRAY_ASSIGN(unownAnimationFiles, sUnownAnimationFiles);
     VecFx32 arceusPos;
-    u32 unkData2[2];
+    u32 animationFiles[2];
     u32 unownModelFiles[2];
-    ARRAY_ASSIGN(unkData2, ov02_02253CF8_0);
+    ARRAY_ASSIGN(animationFiles, ov02_02253CF8_0);
     ARRAY_ASSIGN(unownModelFiles, sUnownModelFiles);
 
     HeapExp_FndInitAllocator(&data->alloc, HEAP_ID_FIELD1, 32);
@@ -162,7 +162,7 @@ static void SinjohCutscene_LoadResources(SinjohCutsceneData *data) {
     }
 
     for (i = 0; i < NELEMS(data->animation184); i++) {
-        Field3dModelAnimation_LoadFromFilesystem(&data->animation184[i], &data->model174, NARC_demo_legend, unkData2[i], HEAP_ID_FIELD1, &data->alloc);
+        Field3dModelAnimation_LoadFromFilesystem(&data->animation184[i], &data->model174, NARC_demo_legend, animationFiles[i], HEAP_ID_FIELD1, &data->alloc);
     }
 
     for (i = 0; i < NELEMS(data->unownObjects); i++) {

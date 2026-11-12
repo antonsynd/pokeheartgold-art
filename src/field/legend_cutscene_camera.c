@@ -551,16 +551,16 @@ static BOOL Task_LugiaEyeGlimmer(TaskManager *taskman) {
 static BOOL Task_UnusedHoOhAnim(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     u32 *pState = TaskManager_GetStatePtr(taskman);
-    Field3dRenderObj *unkC0_SubC;
+    Field3dRenderObj *birdRenderObj;
     u8 i;
     ClearBellCutsceneCamera *cam = fieldSystem->mapSystems->localData;
     ClearBellCutscene3dObjectTaskData *taskData = Field3dObjectTask_GetData(cam->draw3dTask);
 
     switch (*pState) {
     case UNUSED_HO_OH_ANIM_TASK_STATE_0:
-        unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->birdModelNum);
+        birdRenderObj = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->birdModelNum);
         for (i = 0; i < 2; ++i) {
-            MapPropAnimationManager_AddAnimationToRenderObj(taskData->birdModelNum, i, 1, &unkC0_SubC->renderObj, fieldSystem->mapPropAnimationManager);
+            MapPropAnimationManager_AddAnimationToRenderObj(taskData->birdModelNum, i, 1, &birdRenderObj->renderObj, fieldSystem->mapPropAnimationManager);
         }
         for (i = 0; i < 2; ++i) {
             MapPropAnimationData *animData = MapPropAnimationManager_GetAnimationData(taskData->birdModelNum, i, fieldSystem->mapPropAnimationManager);
@@ -570,13 +570,13 @@ static BOOL Task_UnusedHoOhAnim(TaskManager *taskman) {
         *pState = UNUSED_HO_OH_ANIM_TASK_STATE_1;
         break;
     case UNUSED_HO_OH_ANIM_TASK_STATE_1:
-        unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->birdModelNum);
+        birdRenderObj = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->birdModelNum);
         if (MapPropAnimationData_IsAnimationLoopFinished(MapPropAnimationManager_GetAnimationData(taskData->birdModelNum, 0, fieldSystem->mapPropAnimationManager))) {
             for (i = 0; i < 2; ++i) {
-                MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &unkC0_SubC->renderObj, taskData->birdModelNum, i);
+                MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &birdRenderObj->renderObj, taskData->birdModelNum, i);
             }
             for (i = 0; i < 2; ++i) {
-                MapPropAnimationManager_AddAnimationToRenderObj(taskData->birdModelNum, i + 2, 1, &unkC0_SubC->renderObj, fieldSystem->mapPropAnimationManager);
+                MapPropAnimationManager_AddAnimationToRenderObj(taskData->birdModelNum, i + 2, 1, &birdRenderObj->renderObj, fieldSystem->mapPropAnimationManager);
             }
             *pState = UNUSED_HO_OH_ANIM_TASK_STATE_2;
         }
