@@ -14,24 +14,24 @@ struct SND_WORK {
     /* 0x00094 */ NNSSndHeapHandle heap;
     /* 0x00098 */ u8 heap_buf[SND_HEAP_SIZE];
     /* 0xBEB78 */ NNSSndHandle soundHandles[SND_HANDLE_MAX];
-    /* 0xBEB9C */ u32 unk_BEB9C;
-    /* 0xBEBA0 */ u32 unk_BEBA0;
-    /* 0xBEBA4 */ u32 unk_BEBA4;
+    /* 0xBEB9C */ u32 waveOut14Handle;
+    /* 0xBEBA0 */ u32 waveOut15Handle;
+    /* 0xBEBA4 */ u32 queuedBankInfo;
     /* 0xBEBA8 */ u8 unk_BEBA8[0x18];
     /* 0xBEBC0 */ u8 unk_BEBC0[16];
     /* 0xBEBD0 */ u8 unk_BEBD0[28];
     /* 0xBEBEC */ u16 unk_BEBEC;
     /* 0xBEBEE */ u8 bgmDisabled;
-    /* 0xBEBEF */ u8 unk_BEBEF;
+    /* 0xBEBEF */ u8 cryQueueNo;
     /* 0xBEBF0 */ int fadeTimer;
-    /* 0xBEBF4 */ int unk_BEBF4;
+    /* 0xBEBF4 */ int afterFadeDelayTimer;
     /* 0xBEBF8 */ int queuedSeqFadeInDuration;
     /* 0xBEBFC */ u16 currentSeqNo;
     /* 0xBEBFE */ u16 queuedSeqNo;
     /* 0xBEC00 */ u8 fieldPlayerPaused;
     /* 0xBEBC1 */ u8 bgmPlayerPaused;
     /* 0xBEC02 */ u16 afterFanfareWaitTimer;
-    /* 0xBEC04 */ u8 unk_BEC04;
+    /* 0xBEC04 */ u8 reversedCryStarted;
     /* 0xBEC05 */ u8 waveOut14Allocated;
     /* 0xBEC06 */ u8 waveOut15Allocated;
     /* 0xBEC07 */ u8 useChorus;
@@ -44,7 +44,7 @@ struct SND_WORK {
     /* 0xBEC29 */ u8 chatotForceDefaultCry;
     /* 0xBEC2A */ u16 fieldSeqNo;
     /* 0xBEC2C */ u32 unk_BEC2C;
-    /* 0xBEC30 */ u8 unk_BEC30[8];
+    /* 0xBEC30 */ u8 reversedWaveBuffer[8];
     /* 0xBEC38 */ u32 cryStopTask;
     /* 0xBEC3C */ SOUND_CHATOT *myChatot;
     /* 0xBEC40 */ SOUND_CHATOT *otherChatots[4];
@@ -54,9 +54,9 @@ struct SND_WORK {
     /* 0xBEC68 */ u32 cryHeapId[2];
     /* 0xBEC70 */ u16 cryNo[2];
     /* 0xBEC74 */ u8 cryDelayTimer[2];
-    /* 0xBEC76 */ u8 unk_BEC76;
+    /* 0xBEC76 */ u8 keepPlayingCries;
     /* 0xBEC77 */ u8 chatotRecordingDisabled;
-    /* 0xBEC78 */ u8 unk_BEC78;
+    /* 0xBEC78 */ u8 footstepVariation;
     /* 0xBEC79 */ u8 selectSEMuted;
     /* 0xBEC7A */ u16 gbSoundsEnabled;
     /* 0xBEC7C */ u32 playingGBSeqNo;
@@ -215,13 +215,13 @@ void *GF_SdatGetAttrPtr(u32 attr) {
     case 5:
         return &work->bgmDisabled;
     case 6:
-        return &work->unk_BEBEF;
+        return &work->cryQueueNo;
     case 0:
-        return &work->unk_BEB9C;
+        return &work->waveOut14Handle;
     case 1:
-        return &work->unk_BEBA0;
+        return &work->waveOut15Handle;
     case 2:
-        return &work->unk_BEBA4;
+        return &work->queuedBankInfo;
     case 3:
         return &work->unk_BEBC0;
     case 4:
@@ -229,7 +229,7 @@ void *GF_SdatGetAttrPtr(u32 attr) {
     case 7:
         return &work->fadeTimer;
     case 8:
-        return &work->unk_BEBF4;
+        return &work->afterFadeDelayTimer;
     case 9:
         return &work->queuedSeqFadeInDuration;
     case 10:
@@ -243,7 +243,7 @@ void *GF_SdatGetAttrPtr(u32 attr) {
     case 14:
         return &work->afterFanfareWaitTimer;
     case 15:
-        return &work->unk_BEC04;
+        return &work->reversedCryStarted;
     case 16:
         return &work->waveOut14Allocated;
     case 17:
@@ -281,7 +281,7 @@ void *GF_SdatGetAttrPtr(u32 attr) {
     case 33:
         return &work->unk_BEC2C;
     case 34:
-        return &work->unk_BEC30;
+        return &work->reversedWaveBuffer;
     case 35:
         return &work->cryStopTask;
     case 36:
@@ -319,11 +319,11 @@ void *GF_SdatGetAttrPtr(u32 attr) {
     case 52:
         return &work->cryDelayTimer[1];
     case 53:
-        return &work->unk_BEC76;
+        return &work->keepPlayingCries;
     case 54:
         return &work->chatotRecordingDisabled;
     case 55:
-        return &work->unk_BEC78;
+        return &work->footstepVariation;
     case 56:
         return &work->selectSEMuted;
     case 57:
