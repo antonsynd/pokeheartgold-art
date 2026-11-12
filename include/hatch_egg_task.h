@@ -10,7 +10,7 @@ typedef struct HatchEggArgs {
     Pokemon *mon;
     Options *options;
     PlayerProfile *profile;
-    u16 unkC;
+    u16 fieldBgm;
 } HatchEggArgs;
 
 void CallTask_HatchEggInParty(TaskManager *taskman, HatchEggArgs *args);
