@@ -203,7 +203,7 @@ typedef struct PokemonSummary {
     s8 page;
     u8 moveSlot : 4; // the two move slots being swapped
     u8 swapMoveSlot : 4;
-    u8 unk7BE; // condition stats that changed (bits 0-4); the button flash step
+    u8 subState; // step of the slide and flash animations; one bit per changed condition stat (bits 0-4) after an update
     u8 unk7BF_0 : 4;
     u8 exitRequested : 4; // 1: leave the screen
     u8 sparkleState;      // sheen sparkles

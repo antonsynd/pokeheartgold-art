@@ -1091,7 +1091,7 @@ static enum PokemonSummaryState PokemonSummary_WaitRibbonPageDown(PokemonSummary
     return POKEMON_SUMMARY_STATE_RIBBON_PAGE_DOWN;
 }
 
-// State 16: on A or B, read the condition again; unk7BE gets one bit per stat (cool..tough) that changed.
+// State 16: on A or B, read the condition again; subState gets one bit per stat (cool..tough) that changed.
 static enum PokemonSummaryState PokemonSummary_UpdateCondition(PokemonSummary *summary) {
     Pokemon *mon;
     u8 old;
@@ -1104,31 +1104,31 @@ static enum PokemonSummaryState PokemonSummary_UpdateCondition(PokemonSummary *s
         } else {
             mon = PokemonSummary_GetShownMon(summary);
         }
-        summary->unk7BE = 0;
+        summary->subState = 0;
         old = summary->mon.contestStats[0];
         summary->mon.contestStats[0] = GetMonData(mon, MON_DATA_COOL, NULL);
         if (old != summary->mon.contestStats[0]) {
-            summary->unk7BE |= 1;
+            summary->subState |= 1;
         }
         old = summary->mon.contestStats[1];
         summary->mon.contestStats[1] = GetMonData(mon, MON_DATA_BEAUTY, NULL);
         if (old != summary->mon.contestStats[1]) {
-            summary->unk7BE |= 2;
+            summary->subState |= 2;
         }
         old = summary->mon.contestStats[2];
         summary->mon.contestStats[2] = GetMonData(mon, MON_DATA_CUTE, NULL);
         if (old != summary->mon.contestStats[2]) {
-            summary->unk7BE |= 4;
+            summary->subState |= 4;
         }
         old = summary->mon.contestStats[3];
         summary->mon.contestStats[3] = GetMonData(mon, MON_DATA_SMART, NULL);
         if (old != summary->mon.contestStats[3]) {
-            summary->unk7BE |= 8;
+            summary->subState |= 8;
         }
         old = summary->mon.contestStats[4];
         summary->mon.contestStats[4] = GetMonData(mon, MON_DATA_TOUGH, NULL);
         if (old != summary->mon.contestStats[4]) {
-            summary->unk7BE |= 0x10;
+            summary->subState |= 0x10;
         }
         summary->mon.contestStats[5] = GetMonData(mon, MON_DATA_SHEEN, NULL);
         if (summary->args->monDataType == POKEMON_SUMMARY_BOX_MON_ARRAY) {
@@ -1136,7 +1136,7 @@ static enum PokemonSummaryState PokemonSummary_UpdateCondition(PokemonSummary *s
         }
         LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_19);
         LoadUserFrameGfx2(summary->bgConfig, GF_BG_LYR_MAIN_1, 0x3E2, 13, Options_GetFrame(summary->args->options), HEAP_ID_19);
-        if (summary->unk7BE == 0) {
+        if (summary->subState == 0) {
             PokemonSummary_PrintConditionChangeMessage(summary, 0xFE);
             return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
         }
@@ -1151,14 +1151,14 @@ static enum PokemonSummaryState PokemonSummary_UpdateCondition(PokemonSummary *s
 // State 17: on A or B, show the next changed condition stat.
 static enum PokemonSummaryState PokemonSummary_ShowConditionChanges(PokemonSummary *summary) {
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
-        u8 changes = summary->unk7BE;
+        u8 changes = summary->subState;
         u8 i;
         for (i = 0; i < 5; i++) {
             u32 mask = 1 << i;
             if (changes & mask) {
                 PokemonSummary_PrintConditionChangeMessage(summary, i);
-                summary->unk7BE ^= mask;
-                if (summary->unk7BE == 0) {
+                summary->subState ^= mask;
+                if (summary->subState == 0) {
                     return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
                 }
                 break;
@@ -1187,11 +1187,11 @@ static int PokemonSummary_WaitFadeOut(PokemonSummary *summary) {
 
 // State 15: flash a touched button (see PokemonSummary_StartButtonFlash), then go to flashNextState.
 int PokemonSummary_FlashButton(PokemonSummary *summary) {
-    switch (summary->unk7BE) {
+    switch (summary->subState) {
     case 0:
         BgTilemapRectChangePalette(summary->bgConfig, summary->flashBgId, summary->flashX, summary->flashY, summary->flashWidth, summary->flashHeight, summary->flashPalette);
         ScheduleBgTilemapBufferTransfer(summary->bgConfig, summary->flashBgId);
-        summary->unk7BE++;
+        summary->subState++;
         break;
     case 1:
         summary->flashTimer++;
@@ -1199,13 +1199,13 @@ int PokemonSummary_FlashButton(PokemonSummary *summary) {
             BgTilemapRectChangePalette(summary->bgConfig, summary->flashBgId, summary->flashX, summary->flashY, summary->flashWidth, summary->flashHeight, summary->restorePalette);
             ScheduleBgTilemapBufferTransfer(summary->bgConfig, summary->flashBgId);
             summary->flashTimer = 0;
-            summary->unk7BE++;
+            summary->subState++;
         }
         break;
     case 2:
         summary->flashTimer++;
         if (summary->flashTimer == 2) {
-            summary->unk7BE = 0;
+            summary->subState = 0;
             return summary->flashNextState;
         }
         break;
@@ -1784,19 +1784,19 @@ void *PokemonSummary_GetShownMon(PokemonSummary *summary) {
 
 // Slides the move info panel (sub BG 1) in; TRUE when done.
 static BOOL PokemonSummary_SlideInMoveInfo(PokemonSummary *summary) {
-    switch (summary->unk7BE) {
+    switch (summary->subState) {
     case 0:
         Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], FALSE);
         Sprite_SetAnimCtrlSeq(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], 0);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
         ClearWindowTilemapAndScheduleTransfer(&summary->windows[4]);
-        summary->unk7BE = 1;
+        summary->subState = 1;
         break;
     case 1:
         if (Bg_GetXpos(summary->bgConfig, GF_BG_LYR_SUB_1) >= 128) {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 128);
-            summary->unk7BE = 2;
+            summary->subState = 2;
         } else {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_ADD_X, 64);
         }
@@ -1810,7 +1810,7 @@ static BOOL PokemonSummary_SlideInMoveInfo(PokemonSummary *summary) {
             thunk_Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_TYPE_2], TRUE);
         }
         Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], TRUE);
-        summary->unk7BE = 0;
+        summary->subState = 0;
         return TRUE;
     }
     return FALSE;
@@ -1818,7 +1818,7 @@ static BOOL PokemonSummary_SlideInMoveInfo(PokemonSummary *summary) {
 
 // Slides it out again; TRUE when done.
 static BOOL PokemonSummary_SlideOutMoveInfo(PokemonSummary *summary) {
-    switch (summary->unk7BE) {
+    switch (summary->subState) {
     case 0:
         thunk_Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_TYPE_1], FALSE);
         thunk_Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_TYPE_2], FALSE);
@@ -1827,12 +1827,12 @@ static BOOL PokemonSummary_SlideOutMoveInfo(PokemonSummary *summary) {
         Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], FALSE);
         PokemonSummary_ScheduleMainBg1Transfer(summary);
         PokemonSummary_ClearMoveInfo(summary);
-        summary->unk7BE = 1;
+        summary->subState = 1;
         break;
     case 1:
         if (Bg_GetXpos(summary->bgConfig, GF_BG_LYR_SUB_1) <= 128) {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
-            summary->unk7BE = 2;
+            summary->subState = 2;
         } else {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SUB_X, 64);
         }
@@ -1844,7 +1844,7 @@ static BOOL PokemonSummary_SlideOutMoveInfo(PokemonSummary *summary) {
         ScheduleWindowCopyToVram(&summary->windows[4]);
         Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], TRUE);
         PokemonSummary_UpdatePartySlotSprite(summary);
-        summary->unk7BE = 0;
+        summary->subState = 0;
         return TRUE;
     }
     return FALSE;
@@ -1972,7 +1972,7 @@ static void PokemonSummary_UpdateForgetMovePage(PokemonSummary *summary) {
 
 // Slides the ribbon list (sub BG 1) in; TRUE when done.
 static BOOL PokemonSummary_SlideInRibbonList(PokemonSummary *summary) {
-    switch (summary->unk7BE) {
+    switch (summary->subState) {
     case 0:
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, 0);
         ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
@@ -1982,12 +1982,12 @@ static BOOL PokemonSummary_SlideInRibbonList(PokemonSummary *summary) {
         ClearWindowTilemapAndScheduleTransfer(&summary->windows[23]);
         ClearWindowTilemapAndScheduleTransfer(summary->pageWindows);
         summary->ribbonRow = 0;
-        summary->unk7BE = 1;
+        summary->subState = 1;
         break;
     case 1:
         if (Bg_GetYpos(summary->bgConfig, GF_BG_LYR_SUB_1) >= 72) {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 72);
-            summary->unk7BE = 2;
+            summary->subState = 2;
         } else {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_ADD_Y, 36);
         }
@@ -1996,7 +1996,7 @@ static BOOL PokemonSummary_SlideInRibbonList(PokemonSummary *summary) {
         Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_RIBBON_CURSOR], TRUE);
         Sprite_SetDrawFlag(summary->sprites[66], TRUE);
         PokemonSummary_MoveRibbonCursor(summary, 0);
-        summary->unk7BE = 0;
+        summary->subState = 0;
         return TRUE;
     }
     return FALSE;
@@ -2004,19 +2004,19 @@ static BOOL PokemonSummary_SlideInRibbonList(PokemonSummary *summary) {
 
 // Slides it out again; TRUE when done.
 static BOOL PokemonSummary_SlideOutRibbonList(PokemonSummary *summary) {
-    switch (summary->unk7BE) {
+    switch (summary->subState) {
     case 0:
         summary->ribbonCursor = 0;
         summary->ribbonRow = 0;
         ClearWindowTilemapAndScheduleTransfer(&summary->pageWindows[1]);
         ClearWindowTilemapAndScheduleTransfer(&summary->pageWindows[2]);
         PokemonSummary_ShowRibbonSprites(summary);
-        summary->unk7BE = 1;
+        summary->subState = 1;
         break;
     case 1:
         if (Bg_GetYpos(summary->bgConfig, GF_BG_LYR_SUB_1) <= 0) {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_Y, 0);
-            summary->unk7BE = 2;
+            summary->subState = 2;
         } else {
             ScheduleSetBgPosText(summary->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SUB_Y, 36);
         }
@@ -2027,7 +2027,7 @@ static BOOL PokemonSummary_SlideOutRibbonList(PokemonSummary *summary) {
         ScheduleWindowCopyToVram(summary->pageWindows);
         Sprite_SetPriority(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], 0);
         thunk_Sprite_SetPaletteOverride(summary->sprites[POKEMON_SUMMARY_SPRITE_CURSOR], 2);
-        summary->unk7BE = 0;
+        summary->subState = 0;
         return TRUE;
     }
     return FALSE;
@@ -2737,7 +2737,7 @@ static void PokemonSummary_UpdateMarkingSprites(PokemonSummary *summary) {
 static void PokemonSummary_ShowConditionChangeSprites(PokemonSummary *summary) {
     u8 i;
     for (i = 0; i < 5; i++) {
-        if ((summary->unk7BE & (1 << i)) != 0) {
+        if ((summary->subState & (1 << i)) != 0) {
             Sprite_SetDrawFlag(summary->sprites[POKEMON_SUMMARY_SPRITE_CONDITION_CHANGES + i], TRUE);
         }
     }
