@@ -888,13 +888,13 @@ enum MysteryGiftCheckResult MysteryGift_CheckCanReceive(SaveData *saveData, Wond
     if (header->unique == TRUE && SaveMysteryGift_ReceivedFlagTest(mg, header->id) == TRUE) {
         return MYSTERY_GIFT_CHECK_ALREADY_RECEIVED;
     }
-    if (header->unk8E_2 == TRUE && !SaveMysteryGift_CardFindAvailable(mg)) {
+    if (header->hasCard == TRUE && !SaveMysteryGift_CardFindAvailable(mg)) {
         return MYSTERY_GIFT_CHECK_NO_CARD_SLOT;
     }
     if (!SaveMysteryGift_FindAvailable(mg)) {
         return MYSTERY_GIFT_CHECK_NO_GIFT_SLOT;
     }
-    if (header->unk8E_5 == TRUE) {
+    if (header->isShared == TRUE) {
         return MYSTERY_GIFT_CHECK_OTHER_ROUTE;
     }
     return MYSTERY_GIFT_CHECK_OK;

@@ -62,10 +62,10 @@ typedef struct WonderCardInfo {
     u16 id;        // 8C
     u8 unique : 1; // 8E
     u8 unk8E_1 : 1;
-    u8 unk8E_2 : 1;
-    u8 unk8E_3 : 1;
-    u8 unk8E_4 : 1;
-    u8 unk8E_5 : 1;
+    u8 hasCard : 1;
+    u8 hasGift : 1;
+    u8 shareable : 1;
+    u8 isShared : 1;
     u8 unk8E_6 : 2;
 } WonderCardInfo;
 

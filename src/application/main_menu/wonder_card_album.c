@@ -685,7 +685,7 @@ static BOOL WonderCardAlbum_PrintGiftStatus(void *data, Window *window, u32 colo
     int index = album->cardIndex;
     String *string;
 
-    if (!album->cards[index]->info.unk8E_3) {
+    if (!album->cards[index]->info.hasGift) {
         msgId = msg_0247_00040;
     } else if (album->mysteryGift == NULL || SaveMysteryGift_HasAnyGift(album->mysteryGift, index) == TRUE) {
         msgId = msg_0247_00038;
@@ -1389,8 +1389,8 @@ static int WonderCardAlbum_StartSharing(WonderCardAlbum *album) {
     memcpy(&album->shareCard, card, sizeof(WonderCard));
     memcpy(&album->shareHeader, &card->info, sizeof(WonderCardInfo));
     album->shareCard.shareMax = 0;
-    album->shareHeader.unk8E_4 = 0;
-    album->shareHeader.unk8E_5 = 1;
+    album->shareHeader.shareable = 0;
+    album->shareHeader.isShared = 1;
     MysteryGiftComm_StartParent(album->commOwner, album->saveData, COMM_TYPE_MYSTERY_GIFT);
     return 0;
 }

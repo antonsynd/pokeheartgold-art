@@ -692,7 +692,7 @@ static BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         WonderCardAlbum_DrawCardOnBg(app->bgConfig, &app->wonderCard, HEAP_ID_83);
         MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, CONNECT_TO_RANGER_STATE_WAIT_CARD_INPUT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
-        app->wonderCard.info.unk8E_2 = FALSE;
+        app->wonderCard.info.hasCard = FALSE;
         break;
     case CONNECT_TO_RANGER_STATE_WAIT_CARD_INPUT:
         if (gSystem.newKeys) {
@@ -758,7 +758,7 @@ static void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     wonderCard->info.unk8E_1 = FALSE;
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 4;
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 8;
-    wonderCard->info.unk8E_5 = FALSE;
+    wonderCard->info.isShared = FALSE;
     string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0247_00077, app->heapID);
     CopyStringToU16Array(string, wonderCard->text, NELEMS(wonderCard->text));
     String_Delete(string);

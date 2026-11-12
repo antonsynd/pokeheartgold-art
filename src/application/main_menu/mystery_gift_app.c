@@ -512,12 +512,12 @@ static void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
     MysteryGiftSave *mysteryGift;
     RTCDate date;
 
-    if (header->unk8E_2 == 0) {
+    if (header->hasCard == 0) {
         isCard = FALSE;
     } else {
         card->shareCount = 0;
         isCard = TRUE;
-        if (header->unk8E_4 == 0) {
+        if (header->shareable == 0) {
             card->shareMax = 0;
         }
         GF_RTC_CopyDate(&date);
@@ -525,7 +525,7 @@ static void MysteryGiftApp_SaveReceivedGift(OverlayManager *manager) {
     }
     mysteryGift = Save_MysteryGift_Get(saveData);
     SaveMysteryGift_ReceivedFlagSet(mysteryGift, header->id);
-    if (header->unk8E_2 == 1 && card->tag == MG_TAG_ITEM && card->data.item == ITEM_LOCK_CAPSULE) {
+    if (header->hasCard == 1 && card->tag == MG_TAG_ITEM && card->data.item == ITEM_LOCK_CAPSULE) {
         SaveMysteryGift_TrySetSpecialCard(mysteryGift, card);
     } else if (!isCard) {
         SaveMysteryGift_TryInsertGift(mysteryGift, (MysteryGift *)card, 3);
@@ -1918,7 +1918,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         } else if (result == 3) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_SetSpriteAnim(data, -1);
-            data->receivedHeader.unk8E_2 = 0;
+            data->receivedHeader.hasCard = 0;
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
@@ -2018,7 +2018,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             data->timer = 120;
         } else if (MainMenuUtil_GetSaveState() == 3) {
             MainMenuUtil_CancelSave();
-            data->receivedHeader.unk8E_2 = 0;
+            data->receivedHeader.hasCard = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
@@ -2030,14 +2030,14 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             *state = MYSTERY_GIFT_STATE_FINISH_FRIEND_GIFT;
         } else if (--data->timer == 0) {
             MainMenuUtil_CancelSave();
-            data->receivedHeader.unk8E_2 = 0;
+            data->receivedHeader.hasCard = 0;
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
     case MYSTERY_GIFT_STATE_FRIEND_DISCONNECTED:
         MysteryGiftApp_EraseWindowIfInUse(&data->titleWindow, FALSE);
-        data->receivedHeader.unk8E_2 = 0;
+        data->receivedHeader.hasCard = 0;
         *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00029, MYSTERY_GIFT_STATE_WAIT_FINISH);
         break;
     case MYSTERY_GIFT_STATE_FINISH_FRIEND_GIFT:
@@ -2129,7 +2129,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00008, MYSTERY_GIFT_STATE_WAIT_RECEIVED);
         } else if (MainMenuUtil_GetSaveState() == 3) {
             MysteryGiftApp_SetSpriteAnim(data, -1);
-            data->receivedHeader.unk8E_2 = 0;
+            data->receivedHeader.hasCard = 0;
             *state = MysteryGiftApp_PrintMessageAndWait(manager, &data->messageWindow, msg_0247_00027, MYSTERY_GIFT_STATE_WAIT_FINISH);
         }
         break;
@@ -2175,7 +2175,7 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     case MYSTERY_GIFT_STATE_WAIT_FINISH:
         if (gSystem.newKeys) {
             PlaySE(SEQ_SE_DP_SELECT);
-            if (data->receivedHeader.unk8E_2 == 1) {
+            if (data->receivedHeader.hasCard == 1) {
                 MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_SHOW_WONDER_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
             } else {
                 MainMenuUtil_SetFadeWhite(TRUE);
@@ -2187,13 +2187,13 @@ static BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         MysteryGiftApp_LoadSubScreenBg(data->bgConfig);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
-        if (data->receivedHeader.unk8E_2 == 1 && data->receivedCard.tag == MG_TAG_ITEM && data->receivedCard.data.item == ITEM_LOCK_CAPSULE) {
+        if (data->receivedHeader.hasCard == 1 && data->receivedCard.tag == MG_TAG_ITEM && data->receivedCard.data.item == ITEM_LOCK_CAPSULE) {
             LockCapsuleCard_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         } else {
             WonderCardAlbum_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         }
         MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, MYSTERY_GIFT_STATE_WAIT_FINISH, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
-        data->receivedHeader.unk8E_2 = 0;
+        data->receivedHeader.hasCard = 0;
         break;
     case MYSTERY_GIFT_STATE_RESET:
         OS_ResetSystem(0);
