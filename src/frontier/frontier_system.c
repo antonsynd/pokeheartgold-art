@@ -39,7 +39,7 @@ BOOL FrontierSystem_Main(FrontierSystem *system) {
     if (system->taskCount == 0) {
         return TRUE;
     }
-    if (system->unk_38 == 0) {
+    if (system->tasksPaused == 0) {
         for (i = 0; i < 8; i++) {
             FrontierScriptContext *task = system->tasks[i];
             if (task != NULL && !FrontierScriptContext_Run(task)) {

@@ -23,7 +23,7 @@ typedef struct ArcadeContext {
     u16 round; // winStreak / 7, capped at 8
     u8 cursorSpeed;
     u8 bpGain;
-    u8 unk1E;
+    u8 challengeFlag; // read, then set, by an arcade script action
     u8 eventNoEffect; // set when the event affected no Pokemon
     u16 eventRandom;
     u16 unk22;

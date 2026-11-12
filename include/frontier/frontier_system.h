@@ -16,7 +16,7 @@ typedef struct FrontierSystem {
     struct FrontierScriptContext *tasks[8];
     u16 vars[8]; // script variables 0x8008-0x800F
     enum HeapID heapId;
-    u8 unk_38;      // tasks only run while 0
+    u8 tasksPaused;
     u8 syncAborted; // set while FrtCmd_LinkSyncOrAbort waits when the partner stops the link
     u8 filler_3A[2];
     MsgData *msgData;

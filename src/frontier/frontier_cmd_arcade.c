@@ -420,8 +420,8 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         BattleArcade_SetOpponentParty(arcadeCtx);
         break;
     case 51:
-        *out = arcadeCtx->unk1E;
-        arcadeCtx->unk1E = 1;
+        *out = arcadeCtx->challengeFlag;
+        arcadeCtx->challengeFlag = 1;
         break;
     case 52:
         arcadeCtx->linkMessageCount = 0;

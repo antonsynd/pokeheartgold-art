@@ -435,7 +435,7 @@ void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
     }
 }
 
-// Castle points earned by the last battle: from the party's HP, status and PP left (and data->unk_374).
+// Castle points earned by the last battle: from the party's HP, status and PP left (and the opponents whose level was changed).
 int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
     int points;
     int ppLeft;

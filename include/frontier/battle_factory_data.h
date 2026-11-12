@@ -24,7 +24,7 @@ typedef struct BattleFactoryData {
     u8 unk_007;
     u16 tradeCount;
     u8 hasStreak; // a streak is in progress (saved in the factory flags)
-    u8 unk_00B;
+    u8 challengeFlag; // read, then set, by a factory script action
     u16 winStreak;
     u16 round; // winStreak / 7, at most 8
     u32 unk_010;

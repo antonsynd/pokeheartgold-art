@@ -368,8 +368,8 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         BattleFactory_SetPartyToRentals(data);
         break;
     case 41:
-        *var = data->unk_00B;
-        data->unk_00B = 1;
+        *var = data->challengeFlag;
+        data->challengeFlag = 1;
         break;
     }
     return FALSE;
