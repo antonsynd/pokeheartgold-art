@@ -34,7 +34,7 @@ typedef struct ApricornBoxApp {
     PartyMenuArgs *partyMenuArgs;
     u32 juiceIndex;
     u8 mode;
-    u8 unk_19;
+    u8 fromJuiceStand;
     u8 lastRows[2];
     u8 partySlot;
 } ApricornBoxApp;

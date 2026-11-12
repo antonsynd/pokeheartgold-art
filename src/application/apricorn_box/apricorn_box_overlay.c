@@ -182,12 +182,12 @@ static void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
         app->mode = APRICORN_BOX_MODE_KURT;
         break;
     case APRICORN_BOX_LAUNCH_JUICE_STAND:
-        app->unk_19 = 1;
+        app->fromJuiceStand = 1;
         app->mode = APRICORN_BOX_MODE_VIEW;
         app->juiceIndex = app->args->juiceIndex;
         return;
     }
-    app->unk_19 = 0;
+    app->fromJuiceStand = 0;
     app->juiceIndex = APRICORN_JUICE_OWN;
 }
 
