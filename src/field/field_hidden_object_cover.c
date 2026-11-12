@@ -28,7 +28,7 @@ typedef struct HiddenObjectCoverEffectArgs {
 
 typedef struct HiddenObjectCoverEffect {
     int unk_00;
-    BOOL unk_04;
+    BOOL hidden;
     u32 localMapObjectId;
     u32 mapId;
     HiddenObjectCoverEffectArgs args;
@@ -132,7 +132,7 @@ static void HiddenObjectCoverEffect_Draw(FieldEffect *effect, void *state) {
     HiddenObjectCoverEffect *coverEffect = state;
     VecFx32 translation;
 
-    if (coverEffect->unk_04 != TRUE) {
+    if (coverEffect->hidden != TRUE) {
         FieldEffect_GetPosition(effect, &translation);
         RenderObj_DrawAt(coverEffect->args.renderObj, &translation);
     }
