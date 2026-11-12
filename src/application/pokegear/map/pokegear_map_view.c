@@ -967,7 +967,7 @@ void PokegearMap_DrawMapTilemap(PokegearMapAppData *mapApp) {
         if (flypoint->mapIDforName == MAP_CIANWOOD) {
             continue;
         }
-        if (flypoint->unk_05 == 0xFF) {
+        if (flypoint->patchIndex == 0xFF) {
             continue;
         }
         if (mapApp->mapUnlockLevel < 2 && !Pokegear_RegionFromCoords(flypoint->x, flypoint->y)) {

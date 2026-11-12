@@ -103,7 +103,7 @@ typedef struct MapFlypointParam {
     u16 mapIDforName;
     u16 mapIDforWarp;
     u8 flypoint;
-    u8 unk_05;
+    u8 patchIndex; // 0xFF: no unvisited-town patch
     u8 x;
     u8 y;
     u8 patchSrcX;
