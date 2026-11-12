@@ -166,7 +166,7 @@ BOOL ScrCmd_BattleHallAction(ScriptContext *ctx) {
         if (type == 3) {
             *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a));
         } else {
-            *resultPtr = HallFlags_GetField(hallFlags, 5, type, 0, 0);
+            *resultPtr = HallFlags_GetField(hallFlags, HALL_FLAGS_HAS_STREAK, type, 0, 0);
         }
         break;
     case 2:
@@ -536,9 +536,9 @@ void BattleHall_RecvPartnerSpecies(u32 netId, u32 unused, BattleHallSpeciesCheck
 }
 
 void BattleHall_ResetStreak(SaveData *saveData, u8 *hallFlags, u8 challengeType) {
-    u8 unk0;
-    unk0 = 0;
-    HallFlags_SetField(hallFlags, 5, challengeType, 0, &unk0);
+    u8 hasStreak;
+    hasStreak = 0;
+    HallFlags_SetField(hallFlags, HALL_FLAGS_HAS_STREAK, challengeType, 0, &hasStreak);
     if (challengeType == 3) {
         FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 0x6a, FrontierStat_GetFriendIndex(0x6a), 0);
     }
