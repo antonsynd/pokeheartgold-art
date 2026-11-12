@@ -838,7 +838,7 @@ static s32 MicTest_AverageMicInput(MicTestInput *input) {
 }
 
 static struct {
-    u32 unk0;
+    u32 count;
 } sMicTestCallbackCount;
 
 static void MicTest_MicrophoneCallback(MICResult result, void *data) {
@@ -886,7 +886,7 @@ static void MicTest_MicrophoneCallback(MICResult result, void *data) {
         ManagedSprite_SetAnim(micTest->sprites[1], 0);
     }
 
-    sMicTestCallbackCount.unk0++;
+    sMicTestCallbackCount.count++;
 }
 
 static u32 MicTest_GetVolumeBracket(u8 volume) {
