@@ -974,8 +974,8 @@ static int BagApp_State_ChangePage(BagApp *app, int direction) {
 
 static void BagApp_CalcPocketIconSpacing(BagApp *app) {
     u8 numPockets = app->numPockets;
-    app->unk_617 = (90 - numPockets * 10) / (numPockets + 1) + 6;
-    app->unk_618 = app->unk_617 + 4;
+    app->pocketIconSpacing = (90 - numPockets * 10) / (numPockets + 1) + 6;
+    app->unk_618 = app->pocketIconSpacing + 4;
 }
 
 static int BagApp_DebugCycleSubScreenLayout(BagApp *app) {

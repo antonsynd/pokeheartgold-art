@@ -157,7 +157,7 @@ typedef struct BagApp {
     u8 numPockets;
     u8 trainerGender;
     u8 printerId;
-    u8 unk_617;
+    u8 pocketIconSpacing;
     u8 unk_618;
     BagAppPocketSwitch pocketSwitch;
     u8 unk_621[0x23];
