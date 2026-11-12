@@ -368,8 +368,8 @@ static void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course) {
                 VecFx32 zero = { 0, 0, 0 };
                 VecFx32 result;
 
-                power = work->players[i].moveParams[work->players[i].member].unk00;
-                scaleFactor = work->players[i].moveParams[work->players[i].member].unk04;
+                power = work->players[i].moveParams[work->players[i].member].accel;
+                scaleFactor = work->players[i].moveParams[work->players[i].member].accelScale;
                 maxSpeed = PokeathlonPennantCapture_GetMaxSpeed(&work->players[i], work->players[i].member);
                 scale = power * scaleFactor / 8.0 * 4096.0;
                 VEC_Subtract(&work->players[i].cpuTarget, &work->players[i].cpuFrom, &delta);

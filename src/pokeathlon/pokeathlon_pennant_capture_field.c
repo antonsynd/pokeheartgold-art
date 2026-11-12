@@ -627,8 +627,8 @@ void PokeathlonPennantCapture_SetMoveParams(PokeathlonCourseData *course, const 
 
     player->moveParams[member].knockbackScale = (f32)tables->knockbackScale[levels[0]] / 10.0;
     player->moveParams[member].maxSpeed = tables->maxSpeed[levels[1]];
-    player->moveParams[member].unk00 = (f32)tables->unk00[levels[4]] / 10.0;
-    player->moveParams[member].unk04 = (f32)tables->unk04[levels[1]] / 10.0;
+    player->moveParams[member].accel = (f32)tables->accel[levels[4]] / 10.0;
+    player->moveParams[member].accelScale = (f32)tables->accelScale[levels[1]] / 10.0;
     player->moveParams[member].knockdownTime = tables->knockdownTime[levels[3]];
 }
 

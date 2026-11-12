@@ -25,8 +25,8 @@
 
 // The movement parameters of one of the three Pokemon (one per team member).
 typedef struct PokeathlonPennantCaptureMoveParams {
-    f32 unk00;
-    f32 unk04;
+    f32 accel;      // with accelScale: how fast a CPU Pokemon speeds up toward its target
+    f32 accelScale;
     f32 knockbackScale; // share of the own speed passed on to a Pokemon it knocks down
     s32 knockdownTime;  // base of the frames a knocked-down Pokemon stays down
     u8 maxSpeed;
@@ -238,8 +238,8 @@ typedef struct PokeathlonPennantCaptureDisplay {
 // The per-level move parameter tables (tenths), indexed by the Pokemon's performance levels.
 typedef struct PokeathlonPennantCaptureMoveTables {
     int knockbackScale[5];
-    int unk00[5];
-    int unk04[5];
+    int accel[5];
+    int accelScale[5];
     int knockdownTime[5];
     int maxSpeed[5];
 } PokeathlonPennantCaptureMoveTables;
