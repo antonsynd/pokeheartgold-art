@@ -101,9 +101,9 @@ typedef struct GAME_BOARD_WORK {
     u8 eventPoolCount;
     MsgData *msgData;
     MessageFormat *msgFmt;
-    String *unk70;
-    String *unk74;
-    String *unk78[2];
+    String *expandedString;
+    String *rawString;
+    String *strings[2];
     u16 unk80[8];
     BgConfig *bgConfig;
     Window window[2];

@@ -599,11 +599,11 @@ static void BattleArcadeGameBoard_Delete(GAME_BOARD_WORK *work) {
 
     DestroyMsgData(work->msgData);
     MessageFormat_Delete(work->msgFmt);
-    String_Delete(work->unk70);
-    String_Delete(work->unk74);
+    String_Delete(work->expandedString);
+    String_Delete(work->rawString);
 
     for (i = 0; i < 2; i++) {
-        String_Delete(work->unk78[i]);
+        String_Delete(work->strings[i]);
     }
 
     BattleArcadeGameBoard_RemoveWindows(work->window);
@@ -631,11 +631,11 @@ static void BattleArcadeGameBoard_InitObjects(GAME_BOARD_WORK *work) {
 
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0425_bin, HEAP_ID_GAME_BOARD);
     work->msgFmt = MessageFormat_New(HEAP_ID_GAME_BOARD);
-    work->unk70 = String_New(600, HEAP_ID_GAME_BOARD);
-    work->unk74 = String_New(600, HEAP_ID_GAME_BOARD);
+    work->expandedString = String_New(600, HEAP_ID_GAME_BOARD);
+    work->rawString = String_New(600, HEAP_ID_GAME_BOARD);
 
     for (i = 0; i < 2; i++) {
-        work->unk78[i] = String_New(32, HEAP_ID_GAME_BOARD);
+        work->strings[i] = String_New(32, HEAP_ID_GAME_BOARD);
     }
 
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_GAME_BOARD);
@@ -856,24 +856,24 @@ static u16 BattleArcade_GetWinStreak(GAME_BOARD_WORK *work) {
 }
 
 static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u16 stopPos) {
-    int unkA;
+    int cmd;
 
     switch (type) {
     case ARCADE_BOARD_LINK_LAYOUT:
-        unkA = 71;
+        cmd = FRONTIER_LINK_CMD_ARCADE_BOARD_LAYOUT;
         BattleArcadeGameBoard_PackBoardLayout(work, type);
         break;
     case ARCADE_BOARD_LINK_STOP_POS:
-        unkA = 72;
+        cmd = FRONTIER_LINK_CMD_ARCADE_BOARD_STOP_POS;
         BattleArcadeGameBoard_PackStopPos(work, type, stopPos);
         break;
     case ARCADE_BOARD_LINK_CURSOR_POS:
-        unkA = 73;
+        cmd = FRONTIER_LINK_CMD_ARCADE_BOARD_CURSOR_POS;
         BattleArcadeGameBoard_PackCursorPos(work, type);
         break;
     }
 
-    return Comm_SendCommand(unkA, work->sendBuffer, 40) == TRUE;
+    return Comm_SendCommand(cmd, work->sendBuffer, 40) == TRUE;
 }
 
 static void BattleArcadeGameBoard_PackBoardLayout(GAME_BOARD_WORK *work, u16 type) {
