@@ -38,7 +38,10 @@ enum BattleRegulationValidationResult {
 };
 
 typedef struct MartButtonPressAnim {
-    u8 unk0[4];
+    u8 sprite;
+    u8 state;
+    u8 timer;
+    u8 nextTask;
 } MartButtonPressAnim;
 
 typedef struct MartData {
@@ -59,7 +62,7 @@ typedef struct MartData {
     SaveApricornBox *apricornBox;
     GameStats *gameStats;
     SaveVarsFlags *varsFlags;
-    u32 unk264;
+    u32 countPurchases; // each purchase increments VAR_UNK_4042
     u16 *itemIds;
     const struct MartItem *priceOverrides;
     u8 numItems;

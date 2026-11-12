@@ -58,7 +58,7 @@ static u8 MartData_FinishClose(FieldSystem *fieldSystem, MartData *data);
 static void MartData_DeleteSprites(MartData *data);
 static void MartData_SetScrollArrowPositions(MartData *data, BOOL arg1);
 static void MartData_SetSprite2PaletteOverride(MartData *data, int flag);
-static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2);
+static u8 MartData_StartButtonPressAnim(MartData *data, u8 sprite, u8 nextTask);
 static u8 MartData_AnimateButtonPress(MartData *data);
 static void Mart_FadeOut(FieldSystem *fieldSystem_unused, MartData *data);
 static void Task_Mart_LaunchSellBag(TaskManager *taskManager);
@@ -236,7 +236,7 @@ void Mart_Init(TaskManager *taskManager, FieldSystem *fieldSystem, const u16 *it
     martData->gameStats = Save_GameStats_Get(fieldSystem->saveData);
     martData->varsFlags = Save_VarsFlags_Get(fieldSystem->saveData);
     martData->apricornBox = Save_ApricornBox_Get(fieldSystem->saveData);
-    martData->unk264 = deco_which;
+    martData->countPurchases = deco_which;
     martData->martType = kind;
     martData->pageStart = 0;
     martData->cursorPos = 0;
@@ -970,7 +970,7 @@ static u8 MartData_WaitPurchaseMessage(MartData *data) {
         return TASK_MART_13;
     }
     if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
-        if (data->unk264 == 1) {
+        if (data->countPurchases == 1) {
             Save_VarsFlags_IncrementVar4042(data->varsFlags);
         }
         if (data->martType == MART_TYPE_NORMAL && data->item == ITEM_POKE_BALL && data->quantity >= 10 && Bag_AddItem(data->inventory, ITEM_PREMIER_BALL, 1, HEAP_ID_FIELD2) == TRUE) {
@@ -1464,34 +1464,34 @@ static void MartData_SetSprite2PaletteOverride(MartData *data, int flag) {
     thunk_Sprite_SetPaletteOverride(data->sprites[2], flag);
 }
 
-static u8 MartData_StartButtonPressAnim(MartData *data, u8 arg1, u8 arg2) {
+static u8 MartData_StartButtonPressAnim(MartData *data, u8 sprite, u8 nextTask) {
     MartButtonPressAnim *mini = &data->buttonPressAnim;
-    mini->unk0[0] = arg1;
-    mini->unk0[1] = 0;
-    mini->unk0[2] = 0;
-    mini->unk0[3] = arg2;
+    mini->sprite = sprite;
+    mini->state = 0;
+    mini->timer = 0;
+    mini->nextTask = nextTask;
     return TASK_MART_21;
 }
 
 static u8 MartData_AnimateButtonPress(MartData *data) {
     MartButtonPressAnim *mini = &data->buttonPressAnim;
-    switch (mini->unk0[1]) {
+    switch (mini->state) {
     case 0:
-        thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.unk0[0]], 7);
-        mini->unk0[1]++;
+        thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.sprite], 7);
+        mini->state++;
         break;
     case 1:
-        mini->unk0[2]++;
-        if (mini->unk0[2] == 4) {
-            thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.unk0[0]], 6);
-            mini->unk0[2] = 0;
-            mini->unk0[1]++;
+        mini->timer++;
+        if (mini->timer == 4) {
+            thunk_Sprite_SetPaletteOverride(data->sprites[data->buttonPressAnim.sprite], 6);
+            mini->timer = 0;
+            mini->state++;
         }
         break;
     case 2:
-        mini->unk0[2]++;
-        if (mini->unk0[2] == 2) {
-            return mini->unk0[3];
+        mini->timer++;
+        if (mini->timer == 2) {
+            return mini->nextTask;
         }
         break;
     }
