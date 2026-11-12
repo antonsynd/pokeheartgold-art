@@ -150,10 +150,15 @@ typedef struct PokedexListScrollState {
     u8 wrapCursor;
 } PokedexListScrollState;
 
-typedef struct PokedexSeqU16PairState {
-    u16 unk_0;
-    u16 unk_2;
-} PokedexSeqU16PairState;
+typedef struct PokedexScrollbarTouchState {
+    u16 touchX;
+    u16 touchY;
+} PokedexScrollbarTouchState;
+
+typedef struct PokedexSearchRunState {
+    u16 state;
+    u16 timer;
+} PokedexSearchRunState;
 
 typedef struct PokedexEntryDragState {
     u32 touchX;
@@ -163,11 +168,23 @@ typedef struct PokedexEntryDragState {
 } PokedexEntryDragState;
 
 typedef struct PokedexSearchPageChangeState {
-    u8 unk_0;
-    u8 unk_1;
-    u8 unk_2;
-    u8 unk_3;
+    u8 searchPage;
+    u8 nextSeq;
+    u8 state;
+    u8 initialPos;
 } PokedexSearchPageChangeState;
+
+typedef struct PokedexListStepScrollState {
+    u8 state;
+    u8 frame;
+    u8 rowsLeft;
+    u8 scrollbarStep;
+} PokedexListStepScrollState;
+
+typedef struct PokedexBlendFadeState {
+    u16 state;
+    u16 blend;
+} PokedexBlendFadeState;
 
 typedef struct PokedexSliderState {
     u32 prevValue;
@@ -208,11 +225,14 @@ typedef union PokedexSeqState {
     PokedexEntrySlideState state_09;
     PokedexBasicSeqState state_10;
     PokedexListScrollState state_13;
-    PokedexSeqU16PairState state_16;
+    PokedexScrollbarTouchState state_16;
+    PokedexSearchRunState state_23;
     PokedexEntryDragState state_17;
     PokedexSearchPageChangeState state_26;
+    PokedexListStepScrollState state_71;
     PokedexSliderState state_38;
     PokedexEntryTabSwitchState state_69;
+    PokedexBlendFadeState state_75;
     PokedexWeightCheckState state_77;
     u8 padding[16];
 } PokedexSeqState;
