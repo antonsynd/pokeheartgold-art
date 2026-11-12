@@ -460,7 +460,7 @@ static void Task_StartMenu_DrawCursor(TaskManager *taskManager) {
     startMenu->numActiveButtons = numActiveButtons;
     startMenu->lastButtonSelected = 0;
     for (int i = 0; i < numActiveButtons; ++i) {
-        if (fieldSystem->unk90 == startMenu->insertionOrder[i]) {
+        if (fieldSystem->startMenuCursorAction == startMenu->insertionOrder[i]) {
             startMenu->lastButtonSelected = i;
         }
     }

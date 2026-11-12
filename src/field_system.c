@@ -298,7 +298,7 @@ int FieldSystem_GetBottomScreenState() {
     if (sFieldSysPtr->mapSystems == NULL) {
         return 0;
     }
-    return sFieldSysPtr->mapSystems->unk14;
+    return sFieldSysPtr->mapSystems->hookState;
 }
 
 void FieldSystem_SetSavedBottomScreenAppId(FieldSystem *fieldSystem, int appId) {

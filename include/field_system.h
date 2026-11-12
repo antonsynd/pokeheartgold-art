@@ -99,7 +99,7 @@ typedef struct FieldMapSystems {
     FieldDrawMapNameInfo *drawMapNameInfo;
     WeatherManager *weatherManager;
     FieldTextureManager *textureManager;
-    u32 unk14;
+    u32 hookState; // FieldHookState *
     UnusedFieldModel *unusedFieldModel;
     HBlankSystem *hBlankSystem;
     struct PoisonEffect *poisonEffect;
@@ -241,7 +241,7 @@ struct FieldSystem {
     struct UnionRoom *unionRoom;
     struct UnionRoomObjects *unionRoomObjects;
     u8 filler_88[0x8];
-    int unk90;
+    int startMenuCursorAction; // the start menu opens with the cursor on this action
     BagCursor *bagCursor;
     DynamicTerrainHeightManager *dynamicTerrainHeightManager;
     MapPropManager *mapPropManager;
