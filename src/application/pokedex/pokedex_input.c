@@ -475,7 +475,7 @@ int PokedexApp_HandleListMenuInput(PokedexAppData *pokedexApp) {
     return -1;
 }
 
-// The list: a 5x3 icon grid per page (unk_1859 page, unk_185A cursor).
+// The list: a 5x3 icon grid per page (listPage, listCursor).
 int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
     u32 x;
     u32 y;
@@ -680,7 +680,7 @@ void PokedexApp_UpdateSearchNameCursor(PokedexAppData *pokedexApp, int target) {
     }
 }
 
-typedef void (*GridSetInputsU8Func)(GridInputHandler *inputHandler, u8 nextInput, u8 lastInput, u8 unk0F);
+typedef void (*GridSetInputsU8Func)(GridInputHandler *inputHandler, u8 nextInput, u8 lastInput, u8 returnInput);
 
 // Moving up or down from OK / cancel lands in the letter column the cursor left from.
 void PokedexApp_OnSearchNameGridMove(void *data, int target, int input) {
