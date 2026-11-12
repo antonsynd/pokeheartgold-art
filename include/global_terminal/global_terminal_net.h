@@ -257,7 +257,7 @@ struct GlobalTerminalNet {
 
 // battle video header in the 23001 response
 typedef struct GlobalTerminalNetVideoHeader {
-    u8 unk_00[0x80];
+    u8 header[0x80]; // the uploader's request header
     u8 data[0x58];
     u64 number;
     u16 crc;
